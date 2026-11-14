@@ -1,0 +1,135 @@
+---
+// A node page. In M1 every node is a stub: its place in the tree, its summary,
+// what it needs and what uses it. M2 brings the full node layout.
+import { render } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import { getAtlas } from "../../../lib/atlas";
+import { languages, localePath, t, type Lang } from "../../../lib/i18n";
+import { tiers } from "../../../lib/tiers";
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of languages) {
+    for (const node of await getAtlas(lang)) {
+      paths.push({ params: { lang, slug: node.slug }, props: { id: node.id } });
+    }
+  }
+  return paths;
+}
+
+const lang = Astro.params.lang as Lang;
+const { id } = Astro.props;
+const atlas = await getAtlas(lang);
+const byId = new Map(atlas.map((n) => [n.id, n]));
+const node = byId.get(id);
+if (!node) throw new Error(`no node ${id}`);
+const tier = tiers[node.tier];
+const { Content } = await render(node.entry);
+const hasBody = (node.entry.body ?? "").trim().length > 0;
+const base = import.meta.env.BASE_URL;
+const chips = (list: string[]) =>
+  list.map((x) => byId.get(x)).filter((x) => x !== undefined);
+---
+
+<Base lang={lang} title={`${node.id} ${node.title}`} description={node.summary}>
+  <div class="wrap">
+    <article
+      class={`article t${node.tier}`}
+      data-pagefind-body
+      data-pagefind-meta={`id:${node.id}`}
+    >
+      <nav class="crumbs" aria-label="Breadcrumb" data-pagefind-ignore>
+        <a href={localePath(base, lang, "tree/")}>{t(lang, "nav.tree")}</a>
+        <span aria-hidden="true">›</span>
+        <span class="id">
+          <span class="sq" aria-hidden="true"></span>
+          {tier?.id} · {node.id}
+        </span>
+      </nav>
+      <h1>{node.title}</h1>
+      <p class="summary">{node.summary}</p>
+
+      <dl class="meta" data-pagefind-ignore>
+        <dt>{t(lang, "node.needs")}</dt>
+        <dd>
+          {node.needs.length === 0
+            ? t(lang, "node.start")
+            : chips(node.needs).map((n) => (
+                <a class={`chip t${n.tier}`} href={n.url}>
+                  <span class="sq" aria-hidden="true" />
+                  {n.id} {n.title}
+                </a>
+              ))}
+        </dd>
+        <dt>{t(lang, "node.usedBy")}</dt>
+        <dd>
+          {node.usedBy.length === 0
+            ? t(lang, "node.leaf")
+            : chips(node.usedBy).map((n) => (
+                <a class={`chip t${n.tier}`} href={n.url}>
+                  <span class="sq" aria-hidden="true" />
+                  {n.id} {n.title}
+                </a>
+              ))}
+        </dd>
+      </dl>
+
+      {hasBody ? (
+        <Content />
+      ) : (
+        <p class="callout" data-pagefind-ignore>
+          {t(lang, "node.stub")}
+        </p>
+      )}
+    </article>
+  </div>
+</Base>
+
+<style>
+  /* The reading column is not boxed: an 8px rule in the tier colour, then text. */
+  .article {
+    max-width: 46rem;
+    margin: 40px 0 64px;
+    border-top: 8px solid var(--c);
+    padding-top: 22px;
+  }
+  .crumbs {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    letter-spacing: -0.035em;
+    margin: 16px 0 12px;
+  }
+  .summary {
+    font-size: 1.15rem;
+    margin: 0 0 24px;
+  }
+  .meta {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 16px;
+    align-items: baseline;
+    margin: 0 0 24px;
+    font-size: 14px;
+  }
+  .meta dt {
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .meta dd {
+    margin: 0;
+  }
+  @media (max-width: 480px) {
+    .meta {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 4px;
+    }
+    .meta dd {
+      margin-bottom: 10px;
+    }
+  }
+</style>

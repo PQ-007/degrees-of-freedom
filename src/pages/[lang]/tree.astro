@@ -1,0 +1,371 @@
+---
+import Base from "../../layouts/Base.astro";
+import { getAtlas } from "../../lib/atlas";
+import { format, languages, t, type Lang } from "../../lib/i18n";
+import { tiers } from "../../lib/tiers";
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const atlas = await getAtlas(lang);
+const byTier = tiers.map((tier, n) => ({
+  ...tier,
+  nodes: atlas.filter((node) => node.tier === n),
+}));
+const byId = new Map(atlas.map((n) => [n.id, n]));
+const label = (id: string) => `${id} ${byId.get(id)?.title ?? ""}`;
+---
+
+<Base lang={lang} title={t(lang, "tree.title")}>
+  <div class="wrap wide">
+    <header class="page-head">
+      <div>
+        <h1>{t(lang, "tree.title")}</h1>
+        <p class="lead">{t(lang, "tree.lead")}</p>
+        <p class="label">
+          {format(t(lang, "tree.count"), { n: atlas.length })}
+        </p>
+      </div>
+      <div class="views" role="group" aria-label={t(lang, "tree.view")}>
+        <button
+          class="btn small"
+          type="button"
+          data-view="graph"
+          aria-pressed="false"
+        >
+          {t(lang, "tree.graph")}
+        </button>
+        <button
+          class="btn small"
+          type="button"
+          data-view="list"
+          aria-pressed="false"
+        >
+          {t(lang, "tree.list")}
+        </button>
+      </div>
+    </header>
+
+    <div class="tree-views" data-tree-views>
+      <section class="graph-view" aria-label={t(lang, "tree.graphLabel")}>
+        <p class="hint muted">{t(lang, "tree.hint")}</p>
+        <div
+          class="tree grid-bg"
+          data-tree
+          data-focus-template={t(lang, "tree.focus")}
+          data-nothing={t(lang, "tree.nothing")}
+        >
+          <svg class="edges" aria-hidden="true"></svg>
+          {[...byTier].reverse().map((tier) => (
+            <div class={`band ${tier.className}`}>
+              <div class="band-name">
+                <span class="id">
+                  <span class="sq" aria-hidden="true" />
+                  {tier.id}
+                </span>
+                <span>{t(lang, tier.nameKey)}</span>
+              </div>
+              <ul class="band-nodes">
+                {tier.nodes.map((node) => (
+                  <li>
+                    <a
+                      class={`node t${node.tier}`}
+                      href={node.url}
+                      data-id={node.id}
+                      data-title={node.title}
+                      data-needs={node.needs.join(" ")}
+                      data-used-by={node.usedBy.join(" ")}
+                      title={node.summary}
+                    >
+                      <span class="sq" aria-hidden="true" />
+                      <span class="nid">{node.id}</span>
+                      {node.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+        <p class="focus-status" aria-live="polite" data-focus-status></p>
+      </section>
+
+      <div class="list-view">
+        {byTier.map((tier) => (
+          <section class={`tier ${tier.className}`}>
+            <h2>
+              <span class="id">
+                <span class="sq" aria-hidden="true" />
+                {tier.id}
+              </span>
+              {t(lang, tier.nameKey)}
+            </h2>
+            <ol class="node-list">
+              {tier.nodes.map((node) => (
+                <li>
+                  <a class="node-link" href={node.url}>
+                    <span class="nid">{node.id}</span>
+                    {node.title}
+                  </a>
+                  <p class="summary">{node.summary}</p>
+                  <p class="needs">
+                    <span class="muted">{t(lang, "node.needs")}:</span>{" "}
+                    {node.needs.length === 0
+                      ? t(lang, "node.start")
+                      : node.needs.map((id, i) => (
+                          <>
+                            {i > 0 && ", "}
+                            <a href={byId.get(id)?.url}>{label(id)}</a>
+                          </>
+                        ))}
+                  </p>
+                </li>
+              ))}
+            </ol>
+          </section>
+        ))}
+      </div>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .wide {
+    max-width: 1440px;
+  }
+  .page-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    gap: 16px 32px;
+    flex-wrap: wrap;
+    padding: 40px 0 24px;
+  }
+  .page-head h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+  }
+  .lead {
+    margin: 0 0 10px;
+    font-size: 1.1rem;
+  }
+  .page-head .label {
+    margin: 0;
+  }
+  .views {
+    display: flex;
+    gap: 10px;
+  }
+  .views [aria-pressed="true"] {
+    background: var(--primary-bg);
+    color: var(--primary-fg);
+    border-color: var(--primary-bg);
+  }
+
+  /* Which view shows: the graph on wide screens, the list on phones; a choice
+     made with the buttons (data-view on the container) overrides both. */
+  .list-view {
+    display: none;
+  }
+  @media (max-width: 640px) {
+    .tree-views:not([data-view]) .graph-view {
+      display: none;
+    }
+    .tree-views:not([data-view]) .list-view {
+      display: block;
+    }
+  }
+  .tree-views[data-view="list"] .graph-view {
+    display: none;
+  }
+  .tree-views[data-view="list"] .list-view {
+    display: block;
+  }
+  .tree-views[data-view="graph"] .graph-view {
+    display: block;
+  }
+  .tree-views[data-view="graph"] .list-view {
+    display: none;
+  }
+
+  /* ---- Graph: tiers as bands, T0 at the bottom, compact one-line nodes ---- */
+  .graph-view {
+    border: 0;
+    padding: 0 0 48px;
+  }
+  .hint {
+    font-size: 14px;
+    margin: 0 0 12px;
+  }
+  .tree {
+    position: relative;
+    border: 2px solid var(--line);
+  }
+  .edges {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: visible;
+    z-index: 1;
+  }
+  .edges :global(path) {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.5;
+  }
+  .edges :global(path.unlocks) {
+    stroke-dasharray: 5 4;
+  }
+  .band {
+    display: grid;
+    grid-template-columns: 200px 1fr;
+    border-top: 2px solid var(--line);
+  }
+  .band:first-of-type {
+    border-top: 0;
+  }
+  .band-name {
+    padding: 14px;
+    border-right: 2px solid var(--line);
+    background: var(--bg);
+  }
+  .band-name .id {
+    margin-bottom: 6px;
+  }
+  .band-name span:last-child {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .band-nodes {
+    list-style: none;
+    margin: 0;
+    padding: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    align-content: flex-start;
+  }
+  .node {
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 6px 10px 6px 8px;
+    background: var(--surface);
+    border: 2px solid var(--line);
+    font-size: 14px;
+    line-height: 1.2;
+    text-decoration: none;
+    transition: opacity 0.12s;
+  }
+  .nid {
+    font: 700 11.5px var(--mono);
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+  .node:hover,
+  .node.on {
+    border-color: var(--ink);
+  }
+  .node.on {
+    box-shadow: var(--shadow-sm);
+  }
+  :root[data-theme="dark"] .node.on {
+    outline: 1px solid var(--ink);
+  }
+  .tree.focused .node:not(.on, .rel) {
+    opacity: 0.38;
+  }
+  .focus-status {
+    min-height: 1.6em;
+    margin: 12px 0 0;
+    font-size: 15px;
+  }
+
+  /* ---- List: the accessible equivalent, and the phone default ---- */
+  .list-view {
+    padding-bottom: 48px;
+  }
+  .tier {
+    border-top: 2px solid var(--line);
+    padding: 28px 0 8px;
+  }
+  .tier h2 {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-size: 1.3rem;
+  }
+  .node-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+    gap: 4px 32px;
+  }
+  .node-list li {
+    padding: 10px 0 12px;
+    border-top: 1px solid var(--rule);
+  }
+  .node-link {
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+  .node-link:hover {
+    text-decoration: underline;
+  }
+  .summary {
+    margin: 4px 0;
+    font-size: 15px;
+  }
+  .needs {
+    margin: 0;
+    font-size: 13.5px;
+  }
+
+  @media (max-width: 760px) {
+    .band {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .band-name {
+      border-right: 0;
+      border-bottom: 2px solid var(--line);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 14px;
+    }
+    .band-name .id {
+      margin: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .node {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { format } from "../../lib/i18n";
+  import { initTreeFocus, initViewSwitch } from "../../lib/tree-view";
+
+  const views = document.querySelector<HTMLElement>("[data-tree-views]");
+  if (views)
+    initViewSwitch(
+      views,
+      document.querySelectorAll<HTMLButtonElement>("[data-view]"),
+    );
+  const tree = document.querySelector<HTMLElement>("[data-tree]");
+  const status = document.querySelector<HTMLElement>("[data-focus-status]");
+  if (tree && status) initTreeFocus(tree, status, format);
+</script>

@@ -1,0 +1,128 @@
+---
+// Search runs in the browser on Pagefind's static index (built after the site,
+// one index per language, chosen by the page's lang).
+import Base from "../../layouts/Base.astro";
+import { languages, localePath, t, type Lang } from "../../lib/i18n";
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const base = import.meta.env.BASE_URL;
+---
+
+<Base lang={lang} title={t(lang, "search.title")}>
+  <div class="wrap search">
+    <h1>{t(lang, "search.title")}</h1>
+    <p class="lead">{t(lang, "search.lead")}</p>
+    <form
+      role="search"
+      data-search
+      data-base={base}
+      data-one={t(lang, "search.one")}
+      data-many={t(lang, "search.many")}
+      data-none={t(lang, "search.none")}
+      data-unavailable={t(lang, "search.unavailable")}
+    >
+      <label for="q">{t(lang, "search.label")}</label>
+      <input
+        id="q"
+        name="q"
+        type="search"
+        autocomplete="off"
+        spellcheck="false"
+      />
+    </form>
+    <noscript>
+      <p class="callout">
+        {t(lang, "search.noscript")}
+        <a href={localePath(base, lang, "tree/")}>{t(lang, "nav.tree")}</a>
+      </p>
+    </noscript>
+    <p class="count" aria-live="polite" data-search-status></p>
+    <ol class="results" data-search-results></ol>
+  </div>
+</Base>
+
+<style>
+  .search {
+    max-width: 52rem;
+    padding-top: 40px;
+    padding-bottom: 64px;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+  }
+  .lead {
+    margin: 0 0 24px;
+  }
+  label {
+    display: block;
+    font-weight: 600;
+    margin-bottom: 6px;
+  }
+  input {
+    width: 100%;
+    font: 400 18px/1.4 var(--font);
+    color: var(--ink);
+    background: var(--surface);
+    border: 2px solid var(--line);
+    padding: 12px 14px;
+    border-radius: 0;
+  }
+  input:focus-visible {
+    border-color: var(--ink);
+  }
+  .count {
+    min-height: 1.6em;
+    color: var(--muted);
+    font-size: 15px;
+  }
+  .results {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  .results :global(li) {
+    border-top: 1px solid var(--rule);
+    padding: 14px 0;
+  }
+  .results :global(a) {
+    font-weight: 700;
+    text-decoration: none;
+    display: inline-flex;
+    gap: 8px;
+    align-items: baseline;
+  }
+  .results :global(a:hover) {
+    text-decoration: underline;
+  }
+  .results :global(.nid) {
+    font: 700 11.5px var(--mono);
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+  .results :global(p) {
+    margin: 4px 0 0;
+    font-size: 15px;
+  }
+  .results :global(mark) {
+    background: none;
+    color: inherit;
+    font-weight: 700;
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+  }
+</style>
+
+<script>
+  import { initSearch } from "../../lib/search";
+
+  const form = document.querySelector<HTMLFormElement>("[data-search]");
+  const status = document.querySelector<HTMLElement>("[data-search-status]");
+  const results = document.querySelector<HTMLOListElement>(
+    "[data-search-results]",
+  );
+  if (form && status && results) void initSearch(form, status, results);
+</script>
