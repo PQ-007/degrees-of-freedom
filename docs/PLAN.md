@@ -214,7 +214,7 @@ A Hairline figure made with the `hairline-create` skill.
 | **Robot teardown** | (Chosen by the user, 2026-11-14: drawing + sections.) Breadcrumb, title, summary; the line drawing on the drafting grid with numbered callouts; "The numbered parts" (number, Sense/Think/Act square and word, a link to its section and a topic chip; pointing at one fills its number in the drawing); At a glance; key topics; the 12 template sections with fixed anchors (`{#job}` … `{#start}`), Real examples inside `{#examples}`; Sources. "On this page" on the right, folding into a bar below 900px |
 | **Robots matrix** | Robot types as columns, the template's rows as rows |
 | **Signal chain** | On the drafting grid: three bordered columns (Sense · Think · Act), each headed by its square and name in ink; the steps as bordered blocks; horizontal on wide screens, vertical on phones; clicking a step shows its signal |
-| **Roadmap** | The tree filtered to the roadmap, plus an ordered checklist |
+| **Roadmap** | (Chosen by the user, 2026-11-14: ordered path + checklist.) Title, summary, its robot; a progress bar ("3 of 34 learned", saved in this browser); the path as numbered steps in stages, each a bordered row (number, tier square, ID and title linking to the topic, a Must or Helpful tag, one line on why this goal needs it, a "Learned" checkbox); Later topics folded at the end; then how to use it and the Build. Phones: the checkbox moves under the text |
 | **Build** | A spec card (`BUILD 05`, difficulty, time, nodes used, part categories), then build steps |
 | **Sim demo** | Scene on the left, controls and live plots on the right (stacked on phones), in one bordered frame; traces in the bright data colours |
 
@@ -225,7 +225,7 @@ Not started: an empty square. Reading: a half-filled square. Learned: a filled s
 ### Responsive and accessible (same rules as Sand to Tetris)
 
 - No sideways page scroll at 360 px; wide tables, the tree and sim scenes scroll or scale inside their own frame.
-- Side panels fold into bars below ~1280 px (nav) and ~900 px (ToC); the header menu folds under 640 px.
+- Side panels fold into bars below ~1200 px (nav) and ~900 px (ToC); the header nav and language button fold into a Menu below 960 px (five nav links no longer fit).
 - Everything works from the keyboard, including the tree, demos and sim controls; every diagram has an `aria-label`, every state a text label; `prefers-reduced-motion` respected (sims start paused, hover shifts are turned off).
 - Playwright checks every page type × language × theme × 360/390/768/1024 px, plus axe and a contrast check of every token pair in use.
 

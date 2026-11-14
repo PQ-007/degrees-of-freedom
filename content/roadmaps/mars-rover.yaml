@@ -1,0 +1,233 @@
+# The Mars-rover-style roadmap: an ordered path through the tech tree.
+# The text (how to use it, then build it) is content/roadmaps/<lang>/mars-rover.md.
+#
+# level: must (the core) or helpful (deepens it; can wait). Later topics come
+# after the path, folded. The build checks that every topic comes after any
+# topic it needs that is also on the path (src/lib/roadmaps.ts).
+
+slug: mars-rover
+robot: R5
+
+stages:
+  - key: foundations
+    title:
+      en: "Foundations"
+      mn: "Суурь"
+    steps:
+      - node: F0
+        level: must
+        why:
+          en: "The loop every rover runs, and how this map works."
+          mn: "Роверын ажилладаг давталт, энэ газрын зураг хэрхэн ажилладаг."
+      - node: F1
+        level: must
+        why:
+          en: "Positions, headings and turns are vectors and rotations."
+          mn: "Байрлал, чиглэл, эргэлт бол вектор ба эргэлт."
+      - node: F7
+        level: must
+        why:
+          en: "Every motor, sensor and battery is a circuit."
+          mn: "Хөдөлгүүр, мэдрэгч, батарей бүр хэлхээ."
+      - node: F8
+        level: must
+        why:
+          en: "What the rover does is software you write."
+          mn: "Роверын хийх зүйл бол таны бичих програм."
+      - node: F2
+        level: helpful
+        why:
+          en: "Speeds, accelerations, and how things change over time."
+          mn: "Хурд, хурдатгал, юмс цаг хугацаанд хэрхэн өөрчлөгдөх."
+      - node: F3
+        level: helpful
+        why:
+          en: "Sensors are noisy; probability says how far to trust them."
+          mn: "Мэдрэгч шуугиантай; хэр итгэхийг магадлал хэлнэ."
+      - node: F5
+        level: helpful
+        why:
+          en: "Torque, friction and slopes decide what the wheels can climb."
+          mn: "Момент, үрэлт, налуу нь дугуй юуг давж гарахыг шийднэ."
+  - key: parts
+    title:
+      en: "The parts"
+      mn: "Эд ангиуд"
+    steps:
+      - node: C1
+        level: helpful
+        why:
+          en: "How links and joints make a body that moves."
+          mn: "Холбоос, үе хөдөлдөг биеийг хэрхэн бүтээдэг."
+      - node: C3
+        level: must
+        why:
+          en: "Wheels and the rocker-bogie suspension."
+          mn: "Дугуй ба rocker-bogie түдгэлзүүр."
+      - node: C4
+        level: must
+        why:
+          en: "Six wheels, six motors, plus the steering."
+          mn: "Зургаан дугуй, зургаан хөдөлгүүр, нэмээд жолоодлого."
+      - node: C7
+        level: must
+        why:
+          en: "Solar or nuclear: the choice that shapes the whole rover."
+          mn: "Нар эсвэл цөмийн: роверыг бүхэлд нь тодорхойлох сонголт."
+      - node: C8
+        level: helpful
+        why:
+          en: "Sharing a small power budget safely."
+          mn: "Бага тэжээлийг аюулгүй хуваарилах."
+      - node: C9
+        level: must
+        why:
+          en: "Encoders and an IMU tell the rover how it is moving."
+          mn: "Энкодер ба IMU ровер хэрхэн хөдөлж байгааг хэлнэ."
+      - node: C10
+        level: must
+        why:
+          en: "Cameras see the ground ahead."
+          mn: "Камер урд талын газрыг харна."
+      - node: C11
+        level: must
+        why:
+          en: "Choosing the computers that run it all."
+          mn: "Бүгдийг ажиллуулах компьютерийг сонгох."
+      - node: C12
+        level: helpful
+        why:
+          en: "The radio link home."
+          mn: "Гэр рүүгээ холбогдох радио."
+  - key: moving
+    title:
+      en: "Making it move"
+      mn: "Хөдөлгөх"
+    steps:
+      - node: L1
+        level: must
+        why:
+          en: "Reading sensors and driving motors from a microcontroller."
+          mn: "Микроконтроллероос мэдрэгч уншиж, хөдөлгүүр удирдах."
+      - node: L3
+        level: must
+        why:
+          en: "The electronics between the computer and each motor."
+          mn: "Компьютер ба хөдөлгүүр бүрийн хоорондох электроник."
+      - node: L4
+        level: helpful
+        why:
+          en: "Holding each wheel at the speed you ask for."
+          mn: "Дугуй бүрийг хүссэн хурдад барих."
+      - node: L5
+        level: must
+        why:
+          en: "Turning raw sensor signals into measurements."
+          mn: "Түүхий дохиог хэмжилт болгох."
+      - node: M1
+        level: must
+        why:
+          en: "Keeping track of where the rover and its cameras point."
+          mn: "Ровер ба камерууд хаашаа чиглэж байгааг мэдэх."
+      - node: M2
+        level: must
+        why:
+          en: "How six wheels and four steering motors move the body."
+          mn: "Зургаан дугуй, дөрвөн жолооны хөдөлгүүр биеийг хэрхэн хөдөлгөх."
+      - node: M5
+        level: must
+        why:
+          en: "Feedback loops that keep the motors on target."
+          mn: "Хөдөлгүүрийг зорилтод нь барих эргэх холбоо."
+  - key: where
+    title:
+      en: "Knowing where it is"
+      mn: "Хаана байгаагаа мэдэх"
+    steps:
+      - node: P1
+        level: must
+        why:
+          en: "Combining sensors into one best guess of where it is."
+          mn: "Мэдрэгчүүдийг нэгтгэж хаана байгаагаа хамгийн сайн таамаглах."
+      - node: P2
+        level: helpful
+        why:
+          en: "The standard tool for making that guess."
+          mn: "Тэр таамаглалыг хийх стандарт хэрэгсэл."
+      - node: P4
+        level: helpful
+        why:
+          en: "Wheels slip; cameras and the IMU correct them."
+          mn: "Дугуй гулсдаг; камер ба IMU засна."
+      - node: P5
+        level: helpful
+        why:
+          en: "Finding rocks and slopes in images."
+          mn: "Зургаас чулуу, налуу олох."
+  - key: deciding
+    title:
+      en: "Deciding where to go"
+      mn: "Хаашаа явахаа шийдэх"
+    steps:
+      - node: I1
+        level: must
+        why:
+          en: "Finding a route to the next target."
+          mn: "Дараагийн зорилт хүрэх замыг олох."
+      - node: I3
+        level: must
+        why:
+          en: "Steering around hazards on the way."
+          mn: "Замдаа саадыг тойрох."
+      - node: I4
+        level: must
+        why:
+          en: "Carrying out a day's plan alone, between messages from Earth."
+          mn: "Дэлхийн мессежүүдийн хооронд өдрийн төлөвлөгөөг ганцаараа гүйцэтгэх."
+      - node: S1
+        level: helpful
+        why:
+          en: "How the pieces of software fit together."
+          mn: "Програм хангамжийн хэсгүүд хэрхэн уялдах."
+  - key: far
+    title:
+      en: "Surviving far away"
+      mn: "Холын газар тэсч үлдэх"
+    steps:
+      - node: S4
+        level: helpful
+        why:
+          en: "Finding faults on Earth, before they happen far away."
+          mn: "Алдааг холын газар гарахаас өмнө Дэлхий дээр олох."
+      - node: S5
+        level: must
+        why:
+          en: "Detecting faults and staying safe until help arrives."
+          mn: "Гэмтлийг илрүүлж, тусламж иртэл аюулгүй байх."
+      - node: S6
+        level: must
+        why:
+          en: "Commanding a robot that is minutes away."
+          mn: "Хэдэн минутын зайтай роботыг удирдах."
+
+later:
+  - node: P3
+    why:
+      en: "Another way to estimate where it is."
+      mn: "Байршлаа тооцох өөр арга."
+  - node: P8
+    why:
+      en: "Building maps of the terrain."
+      mn: "Газрын гадаргын зураг байгуулах."
+  - node: P9
+    why:
+      en: "Mapping and finding itself in the map at the same time."
+      mn: "Зураглах ба зураг дээрээ байршлаа тогтоохыг зэрэг хийх."
+  - node: I5
+    why:
+      en: "The full navigation pipeline, end to end."
+      mn: "Навигацийн бүрэн дамжлага, эхнээс нь эцэс хүртэл."
+  - node: S2
+    why:
+      en: "The common software framework for bigger rovers."
+      mn: "Том роверуудад түгээмэл програм хангамжийн суурь."
