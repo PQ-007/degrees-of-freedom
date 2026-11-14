@@ -37,7 +37,7 @@ Draft 2, 2026-11-14. The content is in `CONTENT_PLAN.md`; this file covers the t
 | Small 2D models | Own TS models where a full engine is overkill (a single wheel's PID loop, a Kalman train, an RC circuit) | Readable, testable, instant to load |
 | Learned policies | Trained offline (in Python, outside the site), exported to ONNX, run in the browser with **ONNX Runtime Web** inside a MuJoCo scene | Shows a real RL policy driving a real-physics robot (the quadruped and humanoid demos, the Signal Chain's RL walkthrough) |
 | Plots | Plain SVG for static figures; **uPlot** for live time-series | uPlot is tiny and fast enough for 60 fps traces |
-| Tech-tree layout | **elkjs** layered layout computed at **build time** → static SVG; pan/zoom and highlighting at runtime | No layout cost in the browser; a list view covers everything |
+| Tech-tree layout | Tier bands of node links in ID order, wrapping to the width; lines drawn only for the focused node, at runtime, in one SVG | Real links (keyboard, search, screen readers), any width without pan/zoom, no layout library. Changed from elkjs in M1: the agreed design shows no lines at rest, so a graph-layout engine wasn't needed |
 | Math | KaTeX (remark-math + rehype-katex), rendered at build time | No math JS in the browser |
 | Search | **Pagefind** (static index built after the site) | Runs in the browser, multilingual, no server |
 | Progress | localStorage (learned nodes, chosen roadmap), export/import as a file | Same as Sand to Tetris; no accounts |
@@ -66,7 +66,8 @@ degrees-of-freedom/
   CLAUDE.md
   docs/                    PLAN.md, CONTENT_PLAN.md, TERMS (per language)
   content/                 everything learners read
-    nodes/en/F0-what-is-robotics.md      one file per tech-tree node
+    tree/nodes.yaml                       the tree's structure: ID, tier, slug, needs (one file, no language)
+    nodes/en/F0-what-is-robotics.md      one file per node: title, summary, text (<ID>-<slug>.md)
     nodes/mn/…                            same file names per language
     compare/actuators.yaml                rows + columns (data)
     compare/en/actuators.md               prose: how to choose, notes per option
@@ -118,6 +119,7 @@ Slugs are English in every language, so a page's link is the same apart from the
 
 - Every prerequisite, "used by", compare link, robot link, roadmap entry and Build's node list points to a node that exists.
 - The prerequisite graph has no cycles, and a node's prerequisites sit in the same or lower tiers.
+- A node lists only direct prerequisites: one that another prerequisite already brings in is an error.
 - Every compare row has every column of its table.
 - Every glossary term is linked from at least one page; every `[[link]]` resolves.
 - Every source cited exists in `sources.yaml` with a checked date.
@@ -240,4 +242,4 @@ Not started: an empty square. Reading: a half-filled square. Learned: a filled s
 2. **Languages:** English and Mongolian complete from launch (every page needs its Mongolian text in the same change, as in Sand to Tetris); Japanese added later in stages.
 3. **Repo:** its own repo. The existing GitHub repo `PQ-007/sand-to-robot` is renamed to `degrees-of-freedom`; the site is served at `/degrees-of-freedom/`.
 
-M0 done (2026-11-14), on the `dev` branch. Next: M1.
+M0 done (2026-11-14), on the `dev` branch. M1 done (2026-11-14): 71 node stubs in English and Mongolian, the checked tree data, the tech-tree page (graph + list), stub node pages and Pagefind search. The prerequisites are a first draft for review. Next: M2.

@@ -1,9 +1,12 @@
-// Every page × language × theme × width: no sideways scroll, no axe violations.
+// Every page type × language × theme × width: no sideways scroll, no axe violations.
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 const pages = [
   { name: "home", path: "{lang}/" },
+  { name: "tree", path: "{lang}/tree/" },
+  { name: "node", path: "{lang}/node/classical-control/" },
+  { name: "search", path: "{lang}/search/?q=control" },
   { name: "404", path: "404.html" },
 ];
 const langs = ["en", "mn"] as const;
@@ -29,6 +32,10 @@ for (const p of pages) {
             "data-theme",
             theme,
           );
+          if (p.name === "search")
+            await expect(
+              page.locator("[data-search-results] li").first(),
+            ).toBeVisible();
 
           const overflow = await page.evaluate(
             () =>

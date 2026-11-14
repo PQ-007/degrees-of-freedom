@@ -13,14 +13,15 @@ Degrees of Freedom (DOF): a static, browser-only atlas of the whole of robotics,
 ## Status
 
 - M0 (scaffold): done. Astro (static), strict TypeScript, en/mn routing, tokens and the look from the style preview, self-hosted Geist fonts, light/dark theme, Vitest, Playwright + axe, lint, CI, GitHub Pages deploy from `main`.
-- Next: M1 (content model, ~75 node stubs, the tech-tree page, search). Keep this section up to date when a milestone lands.
+- M1 (content model): done. 71 nodes (`content/tree/nodes.yaml` + `content/nodes/<lang>/`), build-time checks, the tech-tree page (graph + list), stub node pages, Pagefind search, header nav with a phone menu. The prerequisites are a first draft awaiting the user's review.
+- Next: M2 (page types with one real example each). Keep this section up to date when a milestone lands.
 
 ## Commands
 
 ```bash
 npm install
 npm run dev                  # http://localhost:4321/degrees-of-freedom/
-npm run build                # static site into dist/ (BASE_PATH=/repo-name/ overrides the base)
+npm run build                # static site into dist/, then the Pagefind index (BASE_PATH=/repo-name/ overrides the base)
 npm test                     # Vitest unit tests (tests/unit)
 npm run test:e2e             # Playwright on the built site (build first); serves dist/ with tests/e2e/serve.mjs
 npm run lint                 # astro check, eslint, prettier --check, markdownlint-cli2
@@ -41,6 +42,9 @@ npx playwright test -g "home · mn · dark · 360px"    # one e2e test
 - `src/pages/[lang]/…` is every page, generated once per language from `languages` in `src/lib/i18n.ts`. `src/pages/index.astro` sends readers to `/mn/` or `/en/` by browser language; `src/pages/404.astro` is bilingual (GitHub Pages has one 404 page).
 - Interface strings: `src/i18n/en.ts` is the source; `src/i18n/mn.ts` is typed `Record<MessageKey, string>`, so a missing key fails the type check. Use `t(lang, key)`. Slugs are English in every language; only the `/en/` or `/mn/` prefix changes (`localePath`, `switchLang`).
 - Styles: `src/styles/tokens.css` (colours, fonts, both themes; tier carriers `.t0`–`.t6`, `.sense/.think/.act` set `--c` mark and `--d` data colour), `base.css` (elements), `layout.css` (frame, header, footer), `look.css` (labels, IDs, tier square/bar, buttons, chips, cards, drafting grid). Page-specific CSS lives in the page's `<style>`.
+- Tech tree: `content/tree/nodes.yaml` holds the language-independent structure (ID, tier, slug, needs); `content/nodes/<lang>/<ID>-<slug>.md` holds each node's title, summary and text. `src/lib/tree.ts` (pure, unit-tested) checks everything: missing or higher-tier needs, cycles, needs implied by other needs, a page per node per language, stray files. `src/lib/atlas.ts` loads the collections, runs the checks and throws, so a broken tree fails the build. Pages call `getAtlas(lang)`.
+- Tree page (`src/pages/[lang]/tree.astro` + `src/lib/tree-view.ts`): bands of node links, T0 at the bottom; focusing a node marks its needs and unlocks and draws lines in an SVG overlay; a Graph/List switch (list by default under 640px, choice in `localStorage["dof-tree-view"]`).
+- Search: Pagefind indexes only elements with `data-pagefind-body` (node pages), one index per `<html lang>`; `src/lib/search.ts` drives our own results list. It works only on a build (`npm run build`), not in `npm run dev`.
 - Theme: an inline script in `Base.astro` sets `data-theme` before first paint (stored choice in `localStorage["dof-theme"]`, else the system preference); `src/lib/theme.ts` + `ThemeToggle.astro` switch it.
 
 ## Rules
