@@ -1,0 +1,12 @@
+<!-- Hardware: pneumatic. A line drawing with no words, so it suits every language; the part the entry is about is in the accent colour. The group with a motion class (spin, swing, step…) moves on hover (look.css). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <path d="M120,30 C120,14 90,12 70,16 C50,20 40,12 20,10" class="thick"/>
+  <rect x="78" y="30" width="84" height="40" rx="5" class="soft thick"/>
+  <circle cx="120" cy="114" r="8" class="soft thick"/>
+  <g class="grip-left">
+    <rect x="84" y="70" width="20" height="62" rx="3" class="accent-fill thick"/>
+  </g>
+  <g class="grip-right">
+    <rect x="136" y="70" width="20" height="62" rx="3" class="accent-fill thick"/>
+  </g>
+</svg>

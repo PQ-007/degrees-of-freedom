@@ -1,0 +1,16 @@
+<!-- Hardware: bus-servo. A line drawing with no words, so it suits every language; the part the entry is about is in the accent colour. The group with a motion class (spin, swing, step…) moves on hover (look.css). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <g class="flow">
+    <path d="M8,92 C20,92 22,100 30,100" class="under"/><path d="M8,92 C20,92 22,100 30,100" class="accent-stroke"/>
+    <path d="M96,100 C116,100 122,92 144,92" class="under"/><path d="M96,100 C116,100 122,92 144,92" class="accent-stroke"/>
+    <path d="M210,92 C222,92 226,84 236,80" class="under"/><path d="M210,92 C222,92 226,84 236,80" class="accent-stroke"/>
+  </g>
+  <rect x="30" y="66" width="66" height="54" rx="5" class="soft thick"/>
+  <circle cx="74" cy="60" r="10" class="soft thick"/>
+  <rect x="30" y="94" width="10" height="12" class="soft thin"/>
+  <rect x="86" y="94" width="10" height="12" class="soft thin"/>
+  <rect x="144" y="58" width="66" height="54" rx="5" class="soft thick"/>
+  <circle cx="188" cy="52" r="10" class="soft thick"/>
+  <rect x="144" y="86" width="10" height="12" class="soft thin"/>
+  <rect x="200" y="86" width="10" height="12" class="soft thin"/>
+</svg>

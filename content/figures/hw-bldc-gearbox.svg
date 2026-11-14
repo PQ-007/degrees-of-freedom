@@ -1,0 +1,55 @@
+<!-- Hardware: bldc-gearbox. A line drawing with no words, so it suits every language; the part the entry is about is in the accent colour. The group with a motion class (spin, swing, step…) moves on hover (look.css). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <circle cx="120" cy="80" r="62" class="soft thin"/>
+  <circle cx="120" cy="80" r="54" class="thick"/>
+  <line x1="170.0" y1="80.0" x2="174.0" y2="80.0" class="thin"/>
+  <line x1="169.4" y1="87.8" x2="173.3" y2="88.4" class="thin"/>
+  <line x1="167.6" y1="95.5" x2="171.4" y2="96.7" class="thin"/>
+  <line x1="164.6" y1="102.7" x2="168.1" y2="104.5" class="thin"/>
+  <line x1="160.5" y1="109.4" x2="163.7" y2="111.7" class="thin"/>
+  <line x1="155.4" y1="115.4" x2="158.2" y2="118.2" class="thin"/>
+  <line x1="149.4" y1="120.5" x2="151.7" y2="123.7" class="thin"/>
+  <line x1="142.7" y1="124.6" x2="144.5" y2="128.1" class="thin"/>
+  <line x1="135.5" y1="127.6" x2="136.7" y2="131.4" class="thin"/>
+  <line x1="127.8" y1="129.4" x2="128.4" y2="133.3" class="thin"/>
+  <line x1="120.0" y1="130.0" x2="120.0" y2="134.0" class="thin"/>
+  <line x1="112.2" y1="129.4" x2="111.6" y2="133.3" class="thin"/>
+  <line x1="104.5" y1="127.6" x2="103.3" y2="131.4" class="thin"/>
+  <line x1="97.3" y1="124.6" x2="95.5" y2="128.1" class="thin"/>
+  <line x1="90.6" y1="120.5" x2="88.3" y2="123.7" class="thin"/>
+  <line x1="84.6" y1="115.4" x2="81.8" y2="118.2" class="thin"/>
+  <line x1="79.5" y1="109.4" x2="76.3" y2="111.7" class="thin"/>
+  <line x1="75.4" y1="102.7" x2="71.9" y2="104.5" class="thin"/>
+  <line x1="72.4" y1="95.5" x2="68.6" y2="96.7" class="thin"/>
+  <line x1="70.6" y1="87.8" x2="66.7" y2="88.4" class="thin"/>
+  <line x1="70.0" y1="80.0" x2="66.0" y2="80.0" class="thin"/>
+  <line x1="70.6" y1="72.2" x2="66.7" y2="71.6" class="thin"/>
+  <line x1="72.4" y1="64.5" x2="68.6" y2="63.3" class="thin"/>
+  <line x1="75.4" y1="57.3" x2="71.9" y2="55.5" class="thin"/>
+  <line x1="79.5" y1="50.6" x2="76.3" y2="48.3" class="thin"/>
+  <line x1="84.6" y1="44.6" x2="81.8" y2="41.8" class="thin"/>
+  <line x1="90.6" y1="39.5" x2="88.3" y2="36.3" class="thin"/>
+  <line x1="97.3" y1="35.4" x2="95.5" y2="31.9" class="thin"/>
+  <line x1="104.5" y1="32.4" x2="103.3" y2="28.6" class="thin"/>
+  <line x1="112.2" y1="30.6" x2="111.6" y2="26.7" class="thin"/>
+  <line x1="120.0" y1="30.0" x2="120.0" y2="26.0" class="thin"/>
+  <line x1="127.8" y1="30.6" x2="128.4" y2="26.7" class="thin"/>
+  <line x1="135.5" y1="32.4" x2="136.7" y2="28.6" class="thin"/>
+  <line x1="142.7" y1="35.4" x2="144.5" y2="31.9" class="thin"/>
+  <line x1="149.4" y1="39.5" x2="151.7" y2="36.3" class="thin"/>
+  <line x1="155.4" y1="44.6" x2="158.2" y2="41.8" class="thin"/>
+  <line x1="160.5" y1="50.6" x2="163.7" y2="48.3" class="thin"/>
+  <line x1="164.6" y1="57.3" x2="168.1" y2="55.5" class="thin"/>
+  <line x1="167.6" y1="64.5" x2="171.4" y2="63.3" class="thin"/>
+  <line x1="169.4" y1="72.2" x2="173.3" y2="71.6" class="thin"/>
+  <g class="orbit" style="transform-origin: 120px 80px">
+    <path d="M120,48 L147.7,96 L92.3,96 Z" class="thin"/>
+    <circle cx="120" cy="48" r="17" class="soft thick"/>
+    <circle cx="147.7" cy="96" r="17" class="soft thick"/>
+    <circle cx="92.3" cy="96" r="17" class="soft thick"/>
+  </g>
+  <g class="spin" style="transform-origin: 120px 80px">
+    <circle cx="120" cy="80" r="14" class="accent-fill thick"/>
+    <line x1="120" y1="80" x2="120" y2="66" class="thick"/>
+  </g>
+</svg>

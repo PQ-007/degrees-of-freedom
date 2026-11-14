@@ -1,0 +1,15 @@
+<!-- Hardware: hydraulic. A line drawing with no words, so it suits every language; the part the entry is about is in the accent colour. The group with a motion class (spin, swing, step…) moves on hover (look.css). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <path d="M44,96 C44,126 40,134 58,134" class="thick"/>
+  <rect x="58" y="120" width="44" height="28" rx="4" class="soft thick"/>
+  <circle cx="80" cy="134" r="7" class="thin"/>
+  <rect x="30" y="58" width="122" height="40" rx="6" class="soft thick"/>
+  <g class="fill" style="transform-origin: 34px 78px">
+    <rect x="34" y="62" width="50" height="32" rx="3" class="accent-fill area"/>
+  </g>
+  <g class="extend">
+    <line x1="86" y1="60" x2="86" y2="96" class="thick"/>
+    <rect x="86" y="72" width="96" height="12" class="soft thick"/>
+    <circle cx="190" cy="78" r="9" class="soft thick"/>
+  </g>
+</svg>

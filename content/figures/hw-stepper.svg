@@ -1,0 +1,37 @@
+<!-- Hardware: stepper. A line drawing with no words, so it suits every language; the part the entry is about is in the accent colour. The group with a motion class (spin, swing, step…) moves on hover (look.css). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <rect x="68" y="28" width="104" height="104" rx="8" class="soft thick"/>
+  <circle cx="84" cy="44" r="5" class="thin"/>
+  <circle cx="156" cy="44" r="5" class="thin"/>
+  <circle cx="84" cy="116" r="5" class="thin"/>
+  <circle cx="156" cy="116" r="5" class="thin"/>
+  <circle cx="120" cy="80" r="26" class="soft thin"/>
+  <line x1="150.0" y1="80.0" x2="158.0" y2="80.0" class="accent-tick"/>
+  <line x1="149.0" y1="87.8" x2="156.7" y2="89.8" class="accent-tick"/>
+  <line x1="146.0" y1="95.0" x2="152.9" y2="99.0" class="accent-tick"/>
+  <line x1="141.2" y1="101.2" x2="146.9" y2="106.9" class="accent-tick"/>
+  <line x1="135.0" y1="106.0" x2="139.0" y2="112.9" class="accent-tick"/>
+  <line x1="127.8" y1="109.0" x2="129.8" y2="116.7" class="accent-tick"/>
+  <line x1="120.0" y1="110.0" x2="120.0" y2="118.0" class="accent-tick"/>
+  <line x1="112.2" y1="109.0" x2="110.2" y2="116.7" class="accent-tick"/>
+  <line x1="105.0" y1="106.0" x2="101.0" y2="112.9" class="accent-tick"/>
+  <line x1="98.8" y1="101.2" x2="93.1" y2="106.9" class="accent-tick"/>
+  <line x1="94.0" y1="95.0" x2="87.1" y2="99.0" class="accent-tick"/>
+  <line x1="91.0" y1="87.8" x2="83.3" y2="89.8" class="accent-tick"/>
+  <line x1="90.0" y1="80.0" x2="82.0" y2="80.0" class="accent-tick"/>
+  <line x1="91.0" y1="72.2" x2="83.3" y2="70.2" class="accent-tick"/>
+  <line x1="94.0" y1="65.0" x2="87.1" y2="61.0" class="accent-tick"/>
+  <line x1="98.8" y1="58.8" x2="93.1" y2="53.1" class="accent-tick"/>
+  <line x1="105.0" y1="54.0" x2="101.0" y2="47.1" class="accent-tick"/>
+  <line x1="112.2" y1="51.0" x2="110.2" y2="43.3" class="accent-tick"/>
+  <line x1="120.0" y1="50.0" x2="120.0" y2="42.0" class="accent-tick"/>
+  <line x1="127.8" y1="51.0" x2="129.8" y2="43.3" class="accent-tick"/>
+  <line x1="135.0" y1="54.0" x2="139.0" y2="47.1" class="accent-tick"/>
+  <line x1="141.2" y1="58.8" x2="146.9" y2="53.1" class="accent-tick"/>
+  <line x1="146.0" y1="65.0" x2="152.9" y2="61.0" class="accent-tick"/>
+  <line x1="149.0" y1="72.2" x2="156.7" y2="70.2" class="accent-tick"/>
+  <g class="step" style="transform-origin: 120px 80px">
+    <circle cx="120" cy="80" r="11" class="accent-fill thick"/>
+    <line x1="120" y1="80" x2="120" y2="57" class="thick"/>
+  </g>
+</svg>

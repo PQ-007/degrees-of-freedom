@@ -1,0 +1,21 @@
+<!-- Hardware: gearmotor. A line drawing with no words, so it suits every language; the part the entry is about is in the accent colour. The group with a motion class (spin, swing, step…) moves on hover (look.css). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <path d="M38,72 C24,72 20,58 8,56" class="thick"/>
+  <path d="M38,90 C24,90 20,104 8,108" class="thick"/>
+  <rect x="36" y="54" width="86" height="54" rx="12" class="soft thick"/>
+  <line x1="56" y1="54" x2="56" y2="108" class="thin"/>
+  <rect x="122" y="48" width="46" height="66" rx="4" class="accent-fill thick"/>
+  <line x1="137" y1="48" x2="137" y2="114" class="thin"/>
+  <line x1="152" y1="48" x2="152" y2="114" class="thin"/>
+  <rect x="168" y="75" width="30" height="12" rx="2" class="soft thick"/>
+  <g class="spin" style="transform-origin: 212px 81px">
+    <circle cx="212" cy="81" r="22" class="soft thick"/>
+    <circle cx="212" cy="81" r="15" class="thin"/>
+    <line x1="216.0" y1="81.0" x2="227.0" y2="81.0" class="thick"/>
+  <line x1="214.0" y1="84.5" x2="219.5" y2="94.0" class="thick"/>
+  <line x1="210.0" y1="84.5" x2="204.5" y2="94.0" class="thick"/>
+  <line x1="208.0" y1="81.0" x2="197.0" y2="81.0" class="thick"/>
+  <line x1="210.0" y1="77.5" x2="204.5" y2="68.0" class="thick"/>
+  <line x1="214.0" y1="77.5" x2="219.5" y2="68.0" class="thick"/>
+  </g>
+</svg>

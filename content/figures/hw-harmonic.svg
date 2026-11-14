@@ -1,0 +1,58 @@
+<!-- Hardware: harmonic. A line drawing with no words, so it suits every language; the part the entry is about is in the accent colour. The group with a motion class (spin, swing, step…) moves on hover (look.css). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <circle cx="120" cy="80" r="62" class="soft thick"/>
+  <line x1="172.0" y1="80.0" x2="178.0" y2="80.0" class="thin"/>
+  <line x1="171.6" y1="86.8" x2="177.5" y2="87.6" class="thin"/>
+  <line x1="170.2" y1="93.5" x2="176.0" y2="95.0" class="thin"/>
+  <line x1="168.0" y1="99.9" x2="173.6" y2="102.2" class="thin"/>
+  <line x1="165.0" y1="106.0" x2="170.2" y2="109.0" class="thin"/>
+  <line x1="161.3" y1="111.7" x2="166.0" y2="115.3" class="thin"/>
+  <line x1="156.8" y1="116.8" x2="161.0" y2="121.0" class="thin"/>
+  <line x1="151.7" y1="121.3" x2="155.3" y2="126.0" class="thin"/>
+  <line x1="146.0" y1="125.0" x2="149.0" y2="130.2" class="thin"/>
+  <line x1="139.9" y1="128.0" x2="142.2" y2="133.6" class="thin"/>
+  <line x1="133.5" y1="130.2" x2="135.0" y2="136.0" class="thin"/>
+  <line x1="126.8" y1="131.6" x2="127.6" y2="137.5" class="thin"/>
+  <line x1="120.0" y1="132.0" x2="120.0" y2="138.0" class="thin"/>
+  <line x1="113.2" y1="131.6" x2="112.4" y2="137.5" class="thin"/>
+  <line x1="106.5" y1="130.2" x2="105.0" y2="136.0" class="thin"/>
+  <line x1="100.1" y1="128.0" x2="97.8" y2="133.6" class="thin"/>
+  <line x1="94.0" y1="125.0" x2="91.0" y2="130.2" class="thin"/>
+  <line x1="88.3" y1="121.3" x2="84.7" y2="126.0" class="thin"/>
+  <line x1="83.2" y1="116.8" x2="79.0" y2="121.0" class="thin"/>
+  <line x1="78.7" y1="111.7" x2="74.0" y2="115.3" class="thin"/>
+  <line x1="75.0" y1="106.0" x2="69.8" y2="109.0" class="thin"/>
+  <line x1="72.0" y1="99.9" x2="66.4" y2="102.2" class="thin"/>
+  <line x1="69.8" y1="93.5" x2="64.0" y2="95.0" class="thin"/>
+  <line x1="68.4" y1="86.8" x2="62.5" y2="87.6" class="thin"/>
+  <line x1="68.0" y1="80.0" x2="62.0" y2="80.0" class="thin"/>
+  <line x1="68.4" y1="73.2" x2="62.5" y2="72.4" class="thin"/>
+  <line x1="69.8" y1="66.5" x2="64.0" y2="65.0" class="thin"/>
+  <line x1="72.0" y1="60.1" x2="66.4" y2="57.8" class="thin"/>
+  <line x1="75.0" y1="54.0" x2="69.8" y2="51.0" class="thin"/>
+  <line x1="78.7" y1="48.3" x2="74.0" y2="44.7" class="thin"/>
+  <line x1="83.2" y1="43.2" x2="79.0" y2="39.0" class="thin"/>
+  <line x1="88.3" y1="38.7" x2="84.7" y2="34.0" class="thin"/>
+  <line x1="94.0" y1="35.0" x2="91.0" y2="29.8" class="thin"/>
+  <line x1="100.1" y1="32.0" x2="97.8" y2="26.4" class="thin"/>
+  <line x1="106.5" y1="29.8" x2="105.0" y2="24.0" class="thin"/>
+  <line x1="113.2" y1="28.4" x2="112.4" y2="22.5" class="thin"/>
+  <line x1="120.0" y1="28.0" x2="120.0" y2="22.0" class="thin"/>
+  <line x1="126.8" y1="28.4" x2="127.6" y2="22.5" class="thin"/>
+  <line x1="133.5" y1="29.8" x2="135.0" y2="24.0" class="thin"/>
+  <line x1="139.9" y1="32.0" x2="142.2" y2="26.4" class="thin"/>
+  <line x1="146.0" y1="35.0" x2="149.0" y2="29.8" class="thin"/>
+  <line x1="151.7" y1="38.7" x2="155.3" y2="34.0" class="thin"/>
+  <line x1="156.8" y1="43.2" x2="161.0" y2="39.0" class="thin"/>
+  <line x1="161.3" y1="48.3" x2="166.0" y2="44.7" class="thin"/>
+  <line x1="165.0" y1="54.0" x2="170.2" y2="51.0" class="thin"/>
+  <line x1="168.0" y1="60.1" x2="173.6" y2="57.8" class="thin"/>
+  <line x1="170.2" y1="66.5" x2="176.0" y2="65.0" class="thin"/>
+  <line x1="171.6" y1="73.2" x2="177.5" y2="72.4" class="thin"/>
+  <ellipse cx="120" cy="80" rx="50" ry="42" class="soft thick"/>
+  <g class="spin slow" style="transform-origin: 120px 80px">
+    <ellipse cx="120" cy="80" rx="38" ry="28" class="accent-fill thick"/>
+    <line x1="120" y1="80" x2="152" y2="80" class="thick"/>
+  </g>
+  <circle cx="120" cy="80" r="9" class="soft thick"/>
+</svg>

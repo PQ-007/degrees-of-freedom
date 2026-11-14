@@ -1,0 +1,15 @@
+<!-- Hardware: hobby-servo. A line drawing with no words, so it suits every language; the part the entry is about is in the accent colour. The group with a motion class (spin, swing, step…) moves on hover (look.css). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <path d="M60,104 C40,104 32,116 14,124" class="thick"/>
+  <path d="M60,110 C42,110 34,122 18,132" class="thick"/>
+  <path d="M60,116 C44,116 38,128 24,140" class="thick"/>
+  <rect x="42" y="74" width="156" height="12" rx="3" class="soft thick"/>
+  <circle cx="52" cy="80" r="3" class="thin"/>
+  <circle cx="188" cy="80" r="3" class="thin"/>
+  <rect x="60" y="60" width="120" height="66" rx="5" class="soft thick"/>
+  <circle cx="148" cy="52" r="13" class="soft thick"/>
+  <g class="swing" style="transform-origin: 148px 52px">
+    <rect x="110" y="45" width="78" height="15" rx="7.5" class="accent-fill thick" transform="rotate(-12 148 52)"/>
+    <circle cx="148" cy="52" r="3.5" class="soft thin"/>
+  </g>
+</svg>

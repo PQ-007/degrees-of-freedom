@@ -1,0 +1,32 @@
+<!-- Hardware: qdd. A line drawing with no words, so it suits every language; the part the entry is about is in the accent colour. The group with a motion class (spin, swing, step…) moves on hover (look.css). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <circle cx="80" cy="62" r="46" class="soft thick"/>
+  <g class="spin slow" style="transform-origin: 80px 62px">
+    <circle cx="80" cy="62" r="30" class="thin"/>
+    <line x1="110.0" y1="62.0" x2="120.0" y2="62.0" class="thin"/>
+  <line x1="108.2" y1="72.3" x2="117.6" y2="75.7" class="thin"/>
+  <line x1="103.0" y1="81.3" x2="110.6" y2="87.7" class="thin"/>
+  <line x1="95.0" y1="88.0" x2="100.0" y2="96.6" class="thin"/>
+  <line x1="85.2" y1="91.5" x2="86.9" y2="101.4" class="thin"/>
+  <line x1="74.8" y1="91.5" x2="73.1" y2="101.4" class="thin"/>
+  <line x1="65.0" y1="88.0" x2="60.0" y2="96.6" class="thin"/>
+  <line x1="57.0" y1="81.3" x2="49.4" y2="87.7" class="thin"/>
+  <line x1="51.8" y1="72.3" x2="42.4" y2="75.7" class="thin"/>
+  <line x1="50.0" y1="62.0" x2="40.0" y2="62.0" class="thin"/>
+  <line x1="51.8" y1="51.7" x2="42.4" y2="48.3" class="thin"/>
+  <line x1="57.0" y1="42.7" x2="49.4" y2="36.3" class="thin"/>
+  <line x1="65.0" y1="36.0" x2="60.0" y2="27.4" class="thin"/>
+  <line x1="74.8" y1="32.5" x2="73.1" y2="22.6" class="thin"/>
+  <line x1="85.2" y1="32.5" x2="86.9" y2="22.6" class="thin"/>
+  <line x1="95.0" y1="36.0" x2="100.0" y2="27.4" class="thin"/>
+  <line x1="103.0" y1="42.7" x2="110.6" y2="36.3" class="thin"/>
+  <line x1="108.2" y1="51.7" x2="117.6" y2="48.3" class="thin"/>
+  </g>
+  <g class="swing" style="transform-origin: 80px 62px">
+    <path d="M80,62 L160,108" class="under"/><path d="M80,62 L160,108" class="accent-stroke"/>
+    <path d="M160,108 L132,148" class="under"/><path d="M160,108 L132,148" class="accent-stroke"/>
+    <circle cx="160" cy="108" r="7" class="soft thick"/>
+    <circle cx="132" cy="148" r="6" class="accent-fill thick"/>
+  </g>
+  <circle cx="80" cy="62" r="8" class="soft thick"/>
+</svg>
