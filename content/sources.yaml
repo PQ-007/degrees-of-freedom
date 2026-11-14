@@ -245,3 +245,40 @@
     - title: "Preventing fire and/or explosion injury from small and wearable lithium battery powered devices (OSHA SHIB 06-20-2019)"
       url: https://www.osha.gov/sites/default/files/publications/shib011819.pdf
   checked: web (the bulletin's PDF, read in full), 2026-11-14
+
+- id: pid-common
+  claim: >-
+    PID control is by far the most common way of using feedback in engineering
+    systems. In a survey of over eleven thousand controllers in the refining,
+    chemicals and pulp and paper industries, 97% of regulatory controllers used
+    a PID algorithm (Desborough and Miller, 2002, quoted by Åström and Murray).
+  sources:
+    - title: "Feedback Systems, 2nd edition, chapter 11: PID Control (K. J. Åström and R. M. Murray, Princeton University Press; free on the authors' site, version of 24 July 2020)"
+      url: https://www.cds.caltech.edu/~murray/books/AM08/pdf/fbs-pid_24Jul2020.pdf
+  checked: web (the chapter's PDF), 2026-11-14
+
+- id: pid-terms
+  claim: >-
+    In a PID controller the proportional term depends on the present error, the
+    integral term on past errors and the derivative term on anticipated future
+    errors. Integral action removes a steady error; derivative action damps
+    oscillation but amplifies measurement noise. While the actuator is
+    saturated the integral keeps growing (integrator windup) and causes large
+    transients unless the controller prevents it (anti-windup).
+  sources:
+    - title: "Feedback Systems, 2nd edition, chapter 11: PID Control, sections 11.1 and 11.4 (K. J. Åström and R. M. Murray)"
+      url: https://www.cds.caltech.edu/~murray/books/AM08/pdf/fbs-pid_24Jul2020.pdf
+    - title: "Feedback Systems: the book's wiki, with the free PDF (Caltech)"
+      url: https://fbswiki.org/wiki/index.php/Feedback_Systems:_An_Introduction_for_Scientists_and_Engineers
+  checked: web (the chapter's PDF), 2026-11-14
+
+- id: mujoco
+  claim: >-
+    MuJoCo (Multi-Joint dynamics with Contact) is a general-purpose physics
+    engine for research and development in robotics, biomechanics, graphics,
+    animation and machine learning. Roboti LLC first developed it; Google
+    DeepMind acquired it and made it open source in May 2022.
+  sources:
+    - title: "MuJoCo documentation: Overview"
+      url: https://mujoco.readthedocs.io/en/stable/overview.html
+  checked: web, 2026-11-14

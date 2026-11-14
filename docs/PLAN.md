@@ -33,7 +33,7 @@ Draft 2, 2026-11-14. The content is in `CONTENT_PLAN.md`; this file covers the t
 | Data | YAML for nodes, compare tables, robots, roadmaps, glossary, sources | Easy to edit and translate; one source of truth for tables, cards and the graph |
 | Demos | Web Components (a pure, tested model in TS + a thin element), loaded when they scroll into view | Sand to Tetris's demo pattern (`kit.ts`), ported |
 | **Physics simulation** | **MuJoCo WebAssembly build** (official bindings; package and version pinned at setup) for anything with rigid bodies, joints, contacts or legs: pendulum, cart-pole, arms, grippers, rocker-bogie, quadruped, humanoid balance | The same engine robotics researchers use, so what the learner sees behaves like the real tools; robots are described in MJCF, which the Simulation node (S3) teaches |
-| 3D rendering | **Three.js**, drawing MuJoCo's state each frame; also static 3D views in teardowns | Standard and well supported |
+| 3D rendering | **Three.js**, drawing MuJoCo's state each frame (chosen by the user for the cart-pole, 2026-11-14, over a 2D drawing); also static 3D views in teardowns. The look follows the site: flat shading, ink outlines, theme colours, colour only on the geoms a demo marks as accent | Standard and well supported |
 | Small 2D models | Own TS models where a full engine is overkill (a single wheel's PID loop, a Kalman train, an RC circuit) | Readable, testable, instant to load |
 | Learned policies | Trained offline (in Python, outside the site), exported to ONNX, run in the browser with **ONNX Runtime Web** inside a MuJoCo scene | Shows a real RL policy driving a real-physics robot (the quadruped and humanoid demos, the Signal Chain's RL walkthrough) |
 | Plots | Plain SVG for static figures; **uPlot** for live time-series | uPlot is tiny and fast enough for 60 fps traces |
@@ -46,17 +46,18 @@ Draft 2, 2026-11-14. The content is in `CONTENT_PLAN.md`; this file covers the t
 | Lint | ESLint, Prettier, markdownlint, `astro check` | |
 | CI / hosting | GitHub Actions → GitHub Pages | Free and static |
 
-Versions are pinned exactly (M0, 2026-11-14). Astro is held at 7.3.8 because 7.4.x needs Node ≥ 22.23.4 and the local Node is 22.22.2; bump it when Node is upgraded. TypeScript is 6.0.x (typescript-eslint supports < 6.1). Fonts (Geist, Geist Mono, with Cyrillic) are self-hosted from Fontsource, not loaded from Google.
+Versions are pinned exactly (M0, 2026-11-14). Astro is held at 7.3.8 because 7.4.x needs Node ≥ 22.23.4 and the local Node is 22.22.2; bump it when Node is upgraded. TypeScript is 6.0.x (typescript-eslint supports < 6.1). Fonts (Geist, Geist Mono, with Cyrillic) are self-hosted from Fontsource, not loaded from Google. M3 (2026-11-14): `@mujoco/mujoco` 3.17.0 (the official Google DeepMind bindings; 4.0.x was days old, so the last 3.x was chosen), `three` 0.187.0, `uplot` 1.6.32.
 
 ### How MuJoCo demos load
 
 The MuJoCo WebAssembly module is several megabytes, so it never loads by accident:
 
-1. A sim demo first shows a still frame of its scene (rendered at build time or a saved picture) and a **Run simulation** button.
+1. A sim demo first shows its scene as a flat line drawing at the starting position (drawn by the demo, in ink) and a **Run simulation** button that says how much it downloads.
 2. On click, the WASM module and the scene's MJCF model load once per page visit and are cached by the browser.
 3. Controls under the scene (sliders for gains, torque limits, noise; play / pause / step / reset; speed) and live plots of the signals beside it.
-4. If WebAssembly or WebGL is unavailable, the demo shows a recorded replay of the same scene with a note.
-5. One shared `<mujoco-scene>` element handles loading, the render loop, pausing when off-screen, `prefers-reduced-motion` (starts paused) and cleanup; each demo only supplies its model, its controller and its controls.
+4. It degrades in two steps, each with a note in words: without WebGL the real simulation runs, drawn flat; without WebAssembly it plays a replay recorded at build time by running the same model and controller in MuJoCo in Node (`src/pages/sim/<demo>-replay.json.ts`), with the controls off.
+5. One shared `<mujoco-scene>` element (`src/sim/`) handles loading, the render loop, pausing when off-screen (the reader's Play/Pause choice is kept), `prefers-reduced-motion` (loads paused) and cleanup; each demo only supplies its model, its controller, its flat drawing and its controls. The physics and the controller run through `SimRunner` (`src/sim/runner.ts`), which has no DOM, so the browser, the replay and the unit tests share it; the controller runs at its own rate (100 Hz for the cart-pole) between 500 Hz physics steps.
+6. Demos are custom elements written into the Markdown (`<cartpole-demo>`, with a no-JS note inside); `src/demos/registry.ts` lists them and loads each as it nears the screen.
 
 Models live in `content/models/*.xml` (MJCF), each with a short note on what it simplifies.
 
@@ -217,7 +218,7 @@ A Hairline figure made with the `hairline-create` skill.
 | **Roadmap** | (Chosen by the user, 2026-11-14: ordered path + checklist.) Title, summary, its robot; a progress bar ("3 of 34 learned", saved in this browser); the path as numbered steps in stages, each a bordered row (number, tier square, ID and title linking to the topic, a Must or Helpful tag, one line on why this goal needs it, a "Learned" checkbox); Later topics folded at the end; then how to use it and the Build. Phones: the checkbox moves under the text |
 | **Build** | (Chosen by the user, 2026-11-14: spec card + steps.) Title and summary; the spec card (BUILD 08, difficulty as dots with a word, rough time, robot, roadmap, topics used; a resting hard shadow, like the home entry cards); parts by kind, each with its topic and Compare page; the block diagram (Sense → Think → Act columns with their squares, power underneath); numbered steps in stages with Done checkboxes and a progress bar (saved in this browser); then common failures, safety (cited), make it harder; sources |
 | **Glossary** | (Chosen by the user, 2026-11-14: grouped by tier.) Title and lead; a filter box (the term in either language, or the definition) with a live count; tier chips to jump; one bordered block per tier with its tier bar, T0 first, the terms sorted in the page's language. Each entry: the term (on the Mongolian page also the English one, for books and datasheets), a short definition, the topic that teaches it, See also. `#id` frames the entry. Linked from the footer, from every `[[~id]]` in the text (the definition as a tooltip) and from the Terms row on each topic's page |
-| **Sim demo** | Scene on the left, controls and live plots on the right (stacked on phones), in one bordered frame; traces in the bright data colours |
+| **Sim demo** | (Chosen by the user, 2026-11-14: stacked.) One bordered frame in the article column: a SIMULATION eyebrow and title; the scene (16:9); the live plot (last 10 s, two scales, the main trace in the page's data colour, the other dashed ink, a legend in words); presets (pressed state), gain sliders with values, Play/Pause, Step, Reset, Push; readouts and a status in words; a note saying which mode runs |
 
 ### Status of a node
 
