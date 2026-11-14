@@ -1,6 +1,6 @@
 ---
 import Base from "../../layouts/Base.astro";
-import { languages, t, type Lang } from "../../lib/i18n";
+import { languages, localePath, t, type Lang } from "../../lib/i18n";
 import { tiers } from "../../lib/tiers";
 
 export function getStaticPaths() {
@@ -18,6 +18,14 @@ const lang = Astro.params.lang as Lang;
         <h1>{t(lang, "site.name")}</h1>
         <p class="lead">{t(lang, "home.lead")}</p>
         <p class="callout status">{t(lang, "home.status")}</p>
+        <p class="actions">
+          <a
+            class="btn primary"
+            href={localePath(import.meta.env.BASE_URL, lang, "tree/")}
+          >
+            {t(lang, "home.cta")}
+          </a>
+        </p>
       </div>
       <ol class="tiers" aria-label={t(lang, "tiers.label")}>
         {tiers.map((tier) => (
@@ -53,6 +61,9 @@ const lang = Astro.params.lang as Lang;
     font-size: 1.2rem;
     max-width: 34ch;
     margin: 0 0 26px;
+  }
+  .actions {
+    margin: 22px 0 0;
   }
   .status {
     margin: 0;

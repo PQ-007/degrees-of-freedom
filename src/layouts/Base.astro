@@ -28,6 +28,10 @@ const siteName = t(lang, "site.name");
 const fullTitle = title ? `${title} · ${siteName}` : siteName;
 const other = otherLang(lang);
 const pathname = Astro.url.pathname;
+const nav = [
+  { href: localePath(base, lang, "tree/"), label: t(lang, "nav.tree") },
+  { href: localePath(base, lang, "search/"), label: t(lang, "nav.search") },
+];
 ---
 
 <!doctype html>
@@ -46,6 +50,7 @@ const pathname = Astro.url.pathname;
       />
     ))}
     <script is:inline>
+      document.documentElement.classList.add("js");
       // Before first paint: stored choice, else the system preference.
       try {
         const stored = localStorage.getItem("dof-theme");
@@ -74,7 +79,19 @@ const pathname = Astro.url.pathname;
           <span class="brand-mark" aria-hidden="true"></span>
           <span class="brand-name">{siteName}</span>
         </a>
-        <div class="header-tools">
+        <div class="header-panel" id="header-panel">
+          <nav class="site-nav" aria-label={t(lang, "nav.label")}>
+            {nav.map((item) => (
+              <a
+                href={item.href}
+                aria-current={
+                  pathname.startsWith(item.href) ? "page" : undefined
+                }
+              >
+                {item.label}
+              </a>
+            ))}
+          </nav>
           <a
             class="lang-link"
             href={switchLang(base, pathname, other)}
@@ -84,7 +101,17 @@ const pathname = Astro.url.pathname;
           >
             {t(lang, "lang.other")}
           </a>
+        </div>
+        <div class="header-tools">
           <ThemeToggle lang={lang} />
+          <button
+            class="btn small menu-toggle"
+            type="button"
+            aria-expanded="false"
+            aria-controls="header-panel"
+          >
+            {t(lang, "nav.menu")}
+          </button>
         </div>
       </div>
     </header>
@@ -100,5 +127,24 @@ const pathname = Astro.url.pathname;
         </a>
       </div>
     </footer>
+    <script>
+      // Phones: the nav and the language link fold into a menu.
+      const header = document.querySelector<HTMLElement>(".site-header");
+      const toggle = header?.querySelector<HTMLButtonElement>(".menu-toggle");
+      toggle?.addEventListener("click", () => {
+        const open = toggle.getAttribute("aria-expanded") !== "true";
+        toggle.setAttribute("aria-expanded", String(open));
+        header?.classList.toggle("menu-open", open);
+      });
+      document.addEventListener("keydown", (event) => {
+        if (
+          event.key === "Escape" &&
+          toggle?.getAttribute("aria-expanded") === "true"
+        ) {
+          toggle.click();
+          toggle.focus();
+        }
+      });
+    </script>
   </body>
 </html>

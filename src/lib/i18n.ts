@@ -18,6 +18,16 @@ export function t(lang: Lang, key: MessageKey): string {
   return messages[lang][key];
 }
 
+/** Fills {name} placeholders: format("{n} results", { n: 3 }). */
+export function format(
+  template: string,
+  values: Record<string, string | number>,
+): string {
+  return template.replace(/\{(\w+)\}/g, (match, name: string) =>
+    name in values ? String(values[name]) : match,
+  );
+}
+
 /** The other complete language, for the header's language link. */
 export function otherLang(lang: Lang): Lang {
   return lang === "en" ? "mn" : "en";

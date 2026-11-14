@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import { en } from "../../src/i18n/en";
 import { mn } from "../../src/i18n/mn";
-import { localePath, otherLang, switchLang } from "../../src/lib/i18n";
+import { format, localePath, otherLang, switchLang } from "../../src/lib/i18n";
 
 const base = "/degrees-of-freedom/";
 
@@ -19,7 +19,7 @@ describe("interface strings", () => {
   });
 
   // Names and codes stay in Latin letters; everything else should be translated.
-  const sameInBoth = new Set(["site.name"]);
+  const sameInBoth = new Set(["site.name", "nav.tree", "tree.title"]);
   it("Mongolian strings are translated", () => {
     for (const key of Object.keys(en) as (keyof typeof en)[]) {
       if (sameInBoth.has(key)) continue;
@@ -62,5 +62,22 @@ describe("locale paths", () => {
   it("the other language of each is the other one", () => {
     expect(otherLang("en")).toBe("mn");
     expect(otherLang("mn")).toBe("en");
+  });
+});
+
+describe("format", () => {
+  it("fills placeholders and leaves unknown ones", () => {
+    expect(format("{n} results for {q}", { n: 3, q: "PID" })).toBe(
+      "3 results for PID",
+    );
+    expect(format("{n} of {total}", { n: 1 })).toBe("1 of {total}");
+  });
+
+  it("both languages use the same placeholders", () => {
+    const names = (s: string) =>
+      [...s.matchAll(/\{(\w+)\}/g)].map((m) => m[1]).sort();
+    for (const key of Object.keys(en) as (keyof typeof en)[]) {
+      expect(names(mn[key]), `mn: "${key}"`).toEqual(names(en[key]));
+    }
   });
 });
