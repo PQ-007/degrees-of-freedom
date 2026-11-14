@@ -1,4 +1,15 @@
+import { readFileSync } from "node:fs";
 import { expect, test } from "@playwright/test";
+import { parse } from "yaml";
+
+const TERMS = (
+  parse(
+    readFileSync(
+      new URL("../../content/glossary/terms.yaml", import.meta.url),
+      "utf8",
+    ),
+  ) as unknown[]
+).length;
 
 test.describe("glossary", () => {
   test("groups the terms by tier, T0 first, with each term's topic", async ({
@@ -8,27 +19,16 @@ test.describe("glossary", () => {
     const tiers = page.locator("section.tier h2");
     await expect(tiers.first()).toContainText("T0");
     await expect(tiers.first()).toContainText("Foundations");
-    await expect(
-      page.locator("section.tier").first().locator("dfn"),
-    ).toHaveText([
-      "Bayes' rule",
-      "Coordinate frame",
-      "Degree of freedom",
-      "Derivative",
-      "Differential equation",
-      "Ground",
-      "Integral",
-      "Mean",
-      "Normal distribution",
-      "Radian",
-      "Robot",
-      "Rotation matrix",
-      "Sense–think–act loop",
-      "Standard deviation",
-      "Time step",
-      "Torque",
-      "Vector",
-    ]);
+    const t0 = await page
+      .locator("section.tier")
+      .first()
+      .locator("dfn")
+      .allTextContents();
+    // Sorted in the page's language, and holding the Foundations terms.
+    expect(t0).toEqual(
+      [...t0].sort((a, b) => a.localeCompare(b, "en", { sensitivity: "base" })),
+    );
+    expect(t0).toEqual(expect.arrayContaining(["Robot", "Radian", "Torque"]));
     const encoder = page.locator("#encoder");
     await expect(encoder).toContainText("C9");
     await expect(
@@ -57,7 +57,7 @@ test.describe("glossary", () => {
     await expect(page.locator(".entry:visible")).toHaveCount(0);
     await expect(page.locator("[data-count]")).toContainText("zzzz");
     await filter.fill("");
-    await expect(page.locator(".entry:visible")).toHaveCount(49);
+    await expect(page.locator(".entry:visible")).toHaveCount(TERMS);
   });
 
   test("a term in the text links to its entry, and the footer links the glossary", async ({

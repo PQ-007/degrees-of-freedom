@@ -127,10 +127,10 @@ class NoiseDemo extends HTMLElement {
         return svg("polyline", { points: pts.join(" "), class: "bell" });
       };
       curves.replaceChildren(curve(sd), curve(sd / Math.sqrt(n)));
-      out.single.textContent = `${num(lang, std(r.singles), 3)} ${m}`;
-      out.average.textContent = `${num(lang, std(r.averages), 3)} ${m}`;
-      out.predicted.textContent = `${num(lang, sd / Math.sqrt(n), 3)} ${m}`;
-      out.time.textContent = `${num(lang, (n / RATE) * 1000, 0)} ${tr("demo.unit.ms")}`;
+      out.single.textContent = `${num(lang, std(r.singles), 3)}\u00a0${m}`;
+      out.average.textContent = `${num(lang, std(r.averages), 3)}\u00a0${m}`;
+      out.predicted.textContent = `${num(lang, sd / Math.sqrt(n), 3)}\u00a0${m}`;
+      out.time.textContent = `${num(lang, (n / RATE) * 1000, 0)}\u00a0${tr("demo.unit.ms")}`;
     };
 
     const noise = slider({
@@ -139,7 +139,7 @@ class NoiseDemo extends HTMLElement {
       max: 0.2,
       step: 0.01,
       value: sd,
-      format: (v) => `${num(lang, v, 2)} ${m}`,
+      format: (v) => `${num(lang, v, 2)}\u00a0${m}`,
       onInput: (v) => {
         sd = v;
         draw();

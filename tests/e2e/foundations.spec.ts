@@ -142,3 +142,48 @@ test.describe("F3 Probability and statistics", () => {
     expect(axe.violations.map((v) => v.id)).toEqual([]);
   });
 });
+
+test.describe("F4 Optimization", () => {
+  test("presets show rolling, zigzagging and diverging; steps move the line", async ({
+    page,
+  }) => {
+    await page.goto("en/node/optimization/#try");
+    const demo = page.locator("fit-demo");
+    const out = demo.locator(".sim-readouts");
+    await expect(out).toContainText("Steps0");
+    await demo.getByRole("button", { name: "1 step" }).click();
+    await expect(out).toContainText("Steps1");
+    await demo.getByRole("button", { name: "Good: 0.2" }).click();
+    await expect(out).toContainText("Rolls straight downhill");
+    await demo.getByRole("button", { name: "Zigzag: 0.35" }).click();
+    await expect(out).toContainText(
+      "Zigzags across the valley, but gets there",
+    );
+    await demo.getByRole("button", { name: "Too big: 0.45" }).click();
+    await expect(out).toContainText("Bounces higher and higher: diverges");
+    await expect(out).toContainText(
+      "Best (least squares)a = 1.109, b = -0.054",
+    );
+    await demo.getByRole("button", { name: "Reset" }).click();
+    await expect(out).toContainText("Steps0");
+  });
+
+  test("the page passes axe on a phone, with Go deeper open", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto("mn/node/optimization/#try");
+    await page.locator("fit-demo .demo-plot").first().waitFor();
+    await page.getByRole("button", { name: "Хэт том: 0.45" }).click();
+    await page.locator("details.deeper summary").click();
+    await expect(page.locator("details.deeper .katex-display")).toHaveCount(3);
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+    const axe = await new AxeBuilder({ page }).analyze();
+    expect(axe.violations.map((v) => v.id)).toEqual([]);
+  });
+});

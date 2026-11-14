@@ -47,7 +47,7 @@
 
 /* Demos written into the Markdown (<cartpole-demo>…): until the element
    loads, and without JavaScript, its own note shows in a plain frame. */
-.prose :is(cartpole-demo, frames-demo, euler-demo, noise-demo) {
+.prose :is(cartpole-demo, frames-demo, euler-demo, noise-demo, fit-demo) {
   display: block;
 }
 .prose .demo-nojs {

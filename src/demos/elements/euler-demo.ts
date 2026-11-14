@@ -145,7 +145,7 @@ class EulerDemo extends HTMLElement {
           : [];
       steps.replaceChildren(line, ...dots);
       out.steps.textContent = String(pts.length - 1);
-      out.error.textContent = `${num(lang, maxError(h), 2)} ${tr("demo.unit.rads")}`;
+      out.error.textContent = `${num(lang, maxError(h), 2)}\u00a0${tr("demo.unit.rads")}`;
       out.behaviour.textContent = tr(`demo.euler.${behaviour(h)}`);
       for (const b of presetButtons)
         b.setAttribute("aria-pressed", String(Number(b.dataset["h"]) === h));
@@ -157,7 +157,7 @@ class EulerDemo extends HTMLElement {
       max: 0.8,
       step: 0.01,
       value: h,
-      format: (v) => `${num(lang, v, 2)} ${s}`,
+      format: (v) => `${num(lang, v, 2)}\u00a0${s}`,
       onInput: (v) => {
         h = v;
         draw();

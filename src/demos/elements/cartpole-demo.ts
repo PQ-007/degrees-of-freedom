@@ -439,8 +439,8 @@ class CartpoleDemo extends HTMLElement {
           maximumFractionDigits: d,
         });
       this.readouts.angle.textContent = `${n(angle, 1)}${this.t("demo.unit.deg")}`;
-      this.readouts.force.textContent = `${n(force, 1)} ${this.t("demo.unit.n")}`;
-      this.readouts.time.textContent = `${n(f.time, 2)} ${this.t("demo.unit.s")}`;
+      this.readouts.force.textContent = `${n(force, 1)}\u00a0${this.t("demo.unit.n")}`;
+      this.readouts.time.textContent = `${n(f.time, 2)}\u00a0${this.t("demo.unit.s")}`;
     }
     const fallen = isFallen(f.qpos as Float64Array);
     if (fallen !== this.fallen) {

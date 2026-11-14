@@ -92,7 +92,7 @@ class FramesDemo extends HTMLElement {
     );
 
     const deg = (v: number) => `${num(lang, v, 0)}°`;
-    const metres = (v: number) => `${num(lang, v, 2)} ${m}`;
+    const metres = (v: number) => `${num(lang, v, 2)}\u00a0${m}`;
     const sliders: Slider[] = [];
     const robotSet = el(
       "fieldset",
@@ -200,7 +200,7 @@ class FramesDemo extends HTMLElement {
     );
 
     const pair = (v: Vec2) =>
-      `(${num(lang, v[0], 2)}, ${num(lang, v[1], 2)}) ${m}`;
+      `(${num(lang, v[0], 2)}, ${num(lang, v[1], 2)})\u00a0${m}`;
     const draw = () => {
       robot.replaceChildren(
         ...arrow([pose.x, pose.y], toWorld([0.8, 0], pose), "robot-axis"),
@@ -227,7 +227,7 @@ class FramesDemo extends HTMLElement {
       p.setAttribute("cy", String(-w[1]));
       pLabel.setAttribute("x", String(w[0] + 0.13));
       pLabel.setAttribute("y", String(-w[1] - 0.1));
-      out.heading.textContent = `${deg(toDegrees(pose.theta))} = ${num(lang, pose.theta, 2)} ${tr("demo.unit.rad")}`;
+      out.heading.textContent = `${deg(toDegrees(pose.theta))} = ${num(lang, pose.theta, 2)}\u00a0${tr("demo.unit.rad")}`;
       out.robot.textContent = pair(seen);
       out.world.textContent = pair(w);
       const r = rotation(pose.theta);

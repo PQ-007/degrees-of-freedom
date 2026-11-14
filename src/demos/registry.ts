@@ -6,6 +6,7 @@ export const DEMOS: Record<string, () => Promise<unknown>> = {
   "frames-demo": () => import("./elements/frames-demo"),
   "euler-demo": () => import("./elements/euler-demo"),
   "noise-demo": () => import("./elements/noise-demo"),
+  "fit-demo": () => import("./elements/fit-demo"),
 };
 
 export function upgradeDemos(root: ParentNode = document): void {

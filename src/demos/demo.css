@@ -410,9 +410,8 @@
     grid-row: 2;
   }
 }
-.sim-readouts dd {
-  white-space: nowrap;
-}
+/* Numbers keep their units (a no-break space joins them); long readouts may
+   still wrap between parts. */
 
 /* Histograms (noise and averages). */
 .demo-view-hist {
@@ -432,4 +431,45 @@
   fill: none;
   stroke: var(--ink);
   stroke-width: 2;
+}
+
+/* Two drawings side by side (the line and its cost valley); stacked on phones. */
+.demo-pair {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  border-bottom: 2px solid var(--line);
+  background: var(--surface);
+}
+.demo-pair > .demo-view-panel + .demo-view-panel {
+  border-left: 2px solid var(--line);
+}
+.demo-view-panel {
+  aspect-ratio: 320 / 280;
+}
+.demo-plot .dot {
+  fill: var(--surface);
+  stroke: var(--ink);
+  stroke-width: 1.75;
+}
+.demo-plot .contour {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.25;
+}
+.demo-plot .cross {
+  stroke: var(--ink);
+  stroke-width: 2.5;
+}
+@media (max-width: 560px) {
+  .demo-pair {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .demo-pair > .demo-view-panel + .demo-view-panel {
+    border-left: 0;
+    border-top: 2px solid var(--line);
+  }
+  .demo-pair .tick-px,
+  .demo-pair .label-px {
+    font-size: 15px;
+  }
 }
