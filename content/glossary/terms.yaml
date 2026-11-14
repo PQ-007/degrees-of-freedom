@@ -168,6 +168,43 @@
       түгээмэл байсныг ашигладаг дүрэм.
   see: [state-estimate]
 
+- id: cost-function
+  node: F4
+  term:
+    en: Cost function
+    mn: Зорилгын функц
+  def:
+    en: A number that is small when things are good, such as the total squared error of a fit. Optimization means finding the inputs that make it smallest.
+    mn: Бүх зүйл сайн үед бага байх тоо, жишээ нь тохиролын нийт квадрат алдаа. Оновчлол гэдэг нь түүнийг хамгийн бага болгох оролтыг олох юм.
+  see: [gradient-descent, least-squares]
+- id: gradient-descent
+  node: F4
+  term:
+    en: Gradient descent
+    mn: Градиент бууралт
+  def:
+    en: Finding a minimum by stepping again and again against the gradient, the direction in which the cost rises fastest. The step size decides whether it creeps, zigzags or overshoots.
+    mn: Зорилгын функц хамгийн хурдан өсөх чиглэл болох градиентын эсрэг дахин дахин алхаж минимумыг олох арга. Алхмын хэмжээ нь аажуухан явах, зигзаг хийх, хэтрэх эсэхийг шийднэ.
+  see: [cost-function, local-minimum]
+- id: least-squares
+  node: F4
+  term:
+    en: Least squares
+    mn: Хамгийн бага квадратын арга
+  def:
+    en: Fitting a model to data by making the sum of squared errors as small as possible. For a straight line there is a direct formula, with no stepping needed.
+    mn: Квадрат алдааны нийлбэрийг аль болох бага болгож загварыг өгөгдөлд тохируулах арга. Шулууны хувьд алхам хийх шаардлагагүй шууд томьёо бий.
+  see: [cost-function, mean]
+- id: local-minimum
+  node: F4
+  term:
+    en: Local minimum
+    mn: Локал минимум
+  def:
+    en: A point lower than everything near it but not necessarily the lowest overall. Gradient descent can stop in one; in a convex problem every local minimum is the lowest.
+    mn: Ойр орчмынхоосоо доогуур боловч заавал хамгийн доод биш цэг. Градиент бууралт түүн дээр зогсож болно; гүдгэр бодлогод локал минимум бүр хамгийн доод нь байдаг.
+  see: [gradient-descent]
+
 # T1 Components
 - id: gear-ratio
   node: C2

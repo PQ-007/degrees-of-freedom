@@ -380,3 +380,36 @@
     - title: "18.05 Introduction to Probability and Statistics, class 3: Conditional Probability, Independence and Bayes' Theorem (J. Orloff and J. Bloom, MIT OpenCourseWare, Spring 2022)"
       url: https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class03-prep.pdf
   checked: web (the reading's PDF), 2026-11-14
+
+- id: gradient-descent
+  claim: >-
+    Gradient descent (the method of steepest descent) decreases a function by
+    stepping against its gradient, x' = x − ε∇f(x), where the learning rate ε
+    is a positive number setting the size of the step; a local minimum is a
+    point lower than all its neighbours, where small steps can no longer
+    decrease the function.
+  sources:
+    - title: "Deep Learning, section 4.3: Gradient-Based Optimization (I. Goodfellow, Y. Bengio and A. Courville, MIT Press, 2016; free online)"
+      url: https://www.deeplearningbook.org/contents/numerical.html
+  checked: web, 2026-11-14
+
+- id: least-squares
+  claim: >-
+    The least squares problem chooses x to minimize ‖Ax − b‖², the sum of the
+    squares of the residuals; its solution satisfies the normal equations
+    AᵀAx = Aᵀb. Fitting a straight line to data points is a standard use.
+  sources:
+    - title: "Introduction to Applied Linear Algebra: Vectors, Matrices, and Least Squares, chapters 12 and 13 (S. Boyd and L. Vandenberghe, Cambridge University Press, 2018; free from the authors)"
+      url: https://web.stanford.edu/~boyd/vmls/
+  checked: web (the book's PDF), 2026-11-14
+
+- id: convex-optimization
+  claim: >-
+    An optimization problem minimizes an objective function f0(x) subject to
+    constraints fi(x) ≤ bi; convex optimization, which includes least squares,
+    has the fundamental property that any locally optimal point is also
+    globally optimal.
+  sources:
+    - title: "Convex Optimization, sections 1.1 and 4.2.2 (S. Boyd and L. Vandenberghe, Cambridge University Press, 2004; free from the authors)"
+      url: https://web.stanford.edu/~boyd/cvxbook/
+  checked: web (the book's PDF), 2026-11-14
