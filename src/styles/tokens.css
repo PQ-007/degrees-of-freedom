@@ -29,6 +29,9 @@
   --selected-fg: #f4f3ee;
   --selected-line: #0b0b10;
 
+  /* The border of something you can press, while hovered. */
+  --hover-line: #0b0b10;
+
   /* T0 Foundations has no hue: grey in both themes. */
   --t0: #8a8a96;
 
@@ -78,11 +81,13 @@
   /* Selected things (the current tier step): raised, not filled with light. */
   --selected-bg: #2c2c35;
   --selected-fg: #ececf0;
-  --selected-line: #d6d6dc;
+  --selected-line: #77778a;
 
   /* Shadows: light grey, softer than white on dark. Under the light primary
      button, a darker grey (--shade). */
   --shade: #44444f;
+  /* Hovered borders: grey, not white (the user, 2026-11-14). */
+  --hover-line: #77778a;
   --shadow: 4px 4px 0 #77778a;
   --shadow-sm: 2px 2px 0 #77778a;
 

@@ -85,11 +85,8 @@
   font-size: 14px;
   padding: 8px 12px;
 }
-:root[data-theme="dark"] .btn:hover {
-  border-color: var(--ink);
-}
-:root[data-theme="dark"] .btn.primary:hover {
-  background: var(--ink);
+.btn:not(.primary):hover {
+  border-color: var(--hover-line);
 }
 
 .chip {
@@ -104,7 +101,7 @@
   margin: 0 6px 6px 0;
 }
 a.chip:hover {
-  border-color: var(--ink);
+  border-color: var(--hover-line);
   box-shadow: var(--shadow-sm);
   transform: translate(-2px, -2px);
 }
@@ -126,8 +123,8 @@ a.card:hover {
   box-shadow: var(--shadow);
   transform: translate(-2px, -2px);
 }
-:root[data-theme="dark"] a.card:hover {
-  border-color: var(--ink);
+a.card:hover {
+  border-color: var(--hover-line);
 }
 .card.bar {
   padding-top: 26px;
