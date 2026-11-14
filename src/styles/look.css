@@ -227,6 +227,15 @@ a.card:hover {
   :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .grip-left {
     animation: art-grip 1.4s ease-in-out infinite;
   }
+  :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .blink {
+    animation: art-blink 0.9s steps(1) infinite;
+  }
+  :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .waves {
+    animation: art-waves 1.3s ease-out infinite;
+  }
+  :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .wobble {
+    animation: art-wobble 2s ease-in-out infinite;
+  }
   :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .grip-right {
     animation: art-grip-right 1.4s ease-in-out infinite;
   }
@@ -302,5 +311,29 @@ a.card:hover {
   }
   50% {
     transform: translateX(-7px);
+  }
+}
+@keyframes art-blink {
+  50% {
+    opacity: 0.15;
+  }
+}
+@keyframes art-waves {
+  from {
+    transform: scale(0.6);
+    opacity: 1;
+  }
+  to {
+    transform: scale(1.15);
+    opacity: 0;
+  }
+}
+@keyframes art-wobble {
+  0%,
+  100% {
+    transform: rotate(-9deg);
+  }
+  50% {
+    transform: rotate(9deg);
   }
 }

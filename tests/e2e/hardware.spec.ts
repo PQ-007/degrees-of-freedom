@@ -150,4 +150,24 @@ test.describe("Hardware", () => {
     expect(await moving("no-preference")).toBe("art-turn");
     expect(await moving("reduce")).toBe("none");
   });
+
+  test("the computers row opens pages with their own comparison", async ({
+    page,
+  }) => {
+    await page.goto("en/hardware/");
+    const row = page.getByRole("region", {
+      name: "Microcontrollers and computers",
+    });
+    await expect(row.locator(".tile")).toHaveCount(6);
+    await row.locator(".tile", { hasText: "Single-board computer" }).click();
+    await expect(page).toHaveURL(/\/en\/hardware\/computers\/sbc\/$/);
+    await expect(page.locator("aside.examples")).toContainText(
+      "Raspberry Pi 5",
+    );
+    await expect(page.locator("li#src-linux-preempt-rt")).toBeAttached();
+    await page.locator("details.compare-fold summary").click();
+    await expect(
+      page.locator("details.compare-fold table.compare tbody tr"),
+    ).toHaveCount(6);
+  });
 });

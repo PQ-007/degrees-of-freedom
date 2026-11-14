@@ -55,7 +55,7 @@ export const en = {
   "hardware.title": "Hardware",
   "hardware.lead":
     "The parts robots are built from, one row per kind. Pick a card to see how it works, what it's good for, and real models.",
-  "hardware.next": "Coming next: microcontrollers, then sensors.",
+  "hardware.next": "Coming next: sensors.",
   "hardware.types": "Types",
   "hardware.compare": "Compare side by side",
   "hardware.compareLead":

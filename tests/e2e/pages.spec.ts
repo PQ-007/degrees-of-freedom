@@ -16,6 +16,7 @@ const pages = [
   { name: "signal-chain", path: "{lang}/signal-chain/" },
   { name: "hardware-index", path: "{lang}/hardware/" },
   { name: "hardware-type", path: "{lang}/hardware/motors/stepper/" },
+  { name: "hardware-computer", path: "{lang}/hardware/computers/sbc/" },
   { name: "robots-index", path: "{lang}/robots/" },
   { name: "robot", path: "{lang}/robots/planetary-rover/" },
   { name: "roadmaps-index", path: "{lang}/roadmaps/" },
