@@ -1,0 +1,16 @@
+{
+  // Prose is hand-formatted: long lines, inline HTML and repeated headings are fine.
+  "config": {
+    "default": true,
+    "MD013": false,
+    "MD024": { "siblings_only": true },
+    "MD033": false,
+    "MD041": false,
+    // Separator rows like |---|---| are the house style.
+    "MD060": false,
+    // Bold lead-in lines ("**Teardown template**") are used as labels, not headings.
+    "MD036": false,
+  },
+  "globs": ["**/*.md"],
+  "ignores": ["node_modules/**", "dist/**", ".astro/**"],
+}

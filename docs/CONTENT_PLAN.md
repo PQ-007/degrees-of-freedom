@@ -233,6 +233,7 @@ Each Compare page is a table plus a short "how to choose" decision guide and lin
 Each robot type gets a teardown page in the same template, so they can be compared directly (and there is a matrix view of all of them side by side).
 
 **Teardown template**
+
 1. Job and environment (what it must survive and do).
 2. Body: DOF, mechanisms, materials, mass.
 3. Actuators and transmissions, and *why* these were chosen.
@@ -304,6 +305,7 @@ Real builds from easy to hard. Each Build page (titled "Build 05: Self-balancing
 ## 7. Templates
 
 **Node page (doc)**
+
 1. One-line summary and prerequisites.
 2. What it is and why robots need it.
 3. How it works (plain language first; equations in go-deeper boxes).

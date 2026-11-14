@@ -1,0 +1,9 @@
+dist
+.astro
+package-lock.json
+test-results
+playwright-report
+# Prose is hand-formatted; prettier would rewrap tables and lists.
+*.md
+# The agreed visual reference, kept exactly as reviewed.
+docs/style-preview.html
