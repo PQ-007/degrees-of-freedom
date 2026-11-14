@@ -202,6 +202,29 @@ const buildPages = defineCollection({
   schema: z.object({ title: z.string().min(1), summary: z.string().min(1) }),
 });
 
+// The signal chain: the stages (one YAML, every language inside) and the text
+// around them per language (content/signal-chain/<lang>.md).
+const chainStages = defineCollection({
+  loader: file("content/signal-chain/stages.yaml"),
+  schema: z.object({
+    id: z.string(),
+    role: z.enum(["sense", "think", "act"]),
+    node: z.string(),
+    name: localized,
+    in: localized,
+    out: localized,
+    text: localized,
+  }),
+});
+const chainPages = defineCollection({
+  loader: glob({
+    pattern: "*.md",
+    base: "content/signal-chain",
+    generateId: ({ entry }) => entry.replace(/\.md$/, ""),
+  }),
+  schema: z.object({ title: z.string().min(1), summary: z.string().min(1) }),
+});
+
 export const collections = {
   tree,
   nodes,
@@ -214,4 +237,6 @@ export const collections = {
   roadmapPages,
   buildData,
   buildPages,
+  chainStages,
+  chainPages,
 };

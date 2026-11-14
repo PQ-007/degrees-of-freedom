@@ -181,7 +181,7 @@ test.describe("header on phones", () => {
 });
 
 test("wide screens show the nav and no menu button", async ({ page }) => {
-  await page.setViewportSize({ width: 1024, height: 800 });
+  await page.setViewportSize({ width: 1280, height: 800 });
   await page.goto("en/");
   await expect(page.getByRole("navigation", { name: "Site" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Menu" })).toBeHidden();

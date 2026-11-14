@@ -4,7 +4,9 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import { languages, localePath, type Lang } from "./i18n";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { parse } from "yaml";
 import { checkBuild, type Build } from "./builds";
+import { checkChain, type Stage } from "./chain";
 import { checkCompare, type CompareTable } from "./compare";
 import { checkRoadmap, type Roadmap } from "./roadmaps";
 import { checkRobot, type RobotData } from "./robots";
@@ -324,4 +326,48 @@ export async function getBuilds(lang: Lang): Promise<BuildPage[]> {
       entry,
     };
   });
+}
+
+let chainChecked:
+  | Promise<{ stages: Stage[]; pages: CollectionEntry<"chainPages">[] }>
+  | undefined;
+
+/** The signal chain's stages, in order, and its text in `lang`. */
+export async function getChain(lang: Lang) {
+  chainChecked ??= (async () => {
+    const { nodes } = await load();
+    // Collections come back sorted by ID; the chain's order is the file's.
+    const order = (
+      parse(
+        readFileSync(
+          join(process.cwd(), "content/signal-chain/stages.yaml"),
+          "utf8",
+        ),
+      ) as { id: string }[]
+    ).map((s) => s.id);
+    const stages = (await getCollection("chainStages"))
+      .map((e) => e.data as Stage)
+      .sort((a, b) => order.indexOf(a.id) - order.indexOf(b.id));
+    const pages = await getCollection("chainPages");
+    const errors = checkChain(
+      stages,
+      new Set(nodes.map((n) => n.id)),
+      languages,
+      pages.map((p) => p.id),
+    );
+    if (errors.length > 0) {
+      throw new Error(
+        `The signal chain has ${errors.length} problem(s):\n- ${errors.join("\n- ")}`,
+      );
+    }
+    return { stages, pages };
+  })();
+  const { stages, pages } = await chainChecked;
+  const entry = pages.find((p) => p.id === lang);
+  if (!entry) throw new Error(`the signal chain has no ${lang} page`); // checkChain rules this out
+  return {
+    stages,
+    entry,
+    url: localePath(import.meta.env.BASE_URL, lang, "signal-chain/"),
+  };
 }

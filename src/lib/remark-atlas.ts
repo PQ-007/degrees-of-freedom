@@ -98,6 +98,14 @@ export function transformAtlasRefs(tree: MdNode, refs: AtlasRefs): string[] {
 
   const walk = (node: MdNode) => {
     if (node.type === "heading") setHeadingId(node);
+    // Tables scroll sideways on narrow screens, so keyboard users must be able
+    // to focus them to scroll (WCAG; axe's scrollable-region-focusable).
+    if (node.type === "table") {
+      node.data = {
+        ...node.data,
+        hProperties: { ...node.data?.hProperties, tabIndex: 0 },
+      };
+    }
     if (!node.children || SKIP.has(node.type)) return;
     const next: MdNode[] = [];
     for (const child of node.children) {
@@ -160,7 +168,9 @@ export const remarkAtlas: RemarkPlugin<[{ base: string; root: string }]> = (
   return (tree, vfile) => {
     const file = vfile as unknown as VFileLike;
     const path = file.path ?? "";
-    const lang = /[/\\](en|mn)[/\\]/.exec(path)?.[1];
+    // The language is a folder (content/nodes/en/…) or the file's name
+    // (content/signal-chain/en.md).
+    const lang = /[/\\](en|mn)(?:[/\\]|\.md$)/.exec(path)?.[1];
     if (!lang) return;
     const cited = transformAtlasRefs(tree as unknown as MdNode, {
       ...loadRefs(options.root, lang),

@@ -133,6 +133,22 @@ describe("the real content", () => {
         }
       }
     }
+    for (const lang of ["en", "mn"]) {
+      const body = readFileSync(
+        `${root}content/signal-chain/${lang}.md`,
+        "utf8",
+      )
+        .split("---")
+        .slice(2)
+        .join("---");
+      const cited = transformAtlasRefs(para(body), {
+        ...loadRefs(root, lang),
+        base: "/",
+        lang,
+        file: `content/signal-chain/${lang}.md`,
+      });
+      (citedBy["signal-chain"] ??= {})[lang] = [...cited].sort();
+    }
     for (const [f, byLang] of Object.entries(citedBy)) {
       expect(byLang["mn"], `${f}: Mongolian cites different sources`).toEqual(
         byLang["en"],

@@ -1,0 +1,374 @@
+---
+// The signal chain (chosen by the user, 2026-11-14: chain + step-through). The
+// whole chain in Sense · Think · Act columns on the drafting grid; the chosen
+// stage below (what comes in, what goes out, its topic) with Previous / Next;
+// then the loops, a rover walked end to end, and where chains break.
+// Without JS every stage's detail shows, one after another.
+import { render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import SourceList from "../../components/SourceList.astro";
+import { getAtlas, getChain } from "../../lib/atlas";
+import { CHAIN_ROLES } from "../../lib/chain";
+import { languages, t, type Lang } from "../../lib/i18n";
+import type { MessageKey } from "../../i18n/en";
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const { stages, entry } = await getChain(lang);
+const byId = new Map((await getAtlas(lang)).map((n) => [n.id, n]));
+const { Content, remarkPluginFrontmatter } = await render(entry);
+const citedIds =
+  (remarkPluginFrontmatter["citations"] as string[] | undefined) ?? [];
+const numbered = stages.map((s, i) => ({
+  ...s,
+  n: i + 1,
+  topic: byId.get(s.node),
+}));
+const columns = CHAIN_ROLES.map((role) => ({
+  role,
+  name: t(lang, `role.${role}` as MessageKey),
+  stages: numbered.filter((s) => s.role === role),
+}));
+const roleName = (role: string) => t(lang, `role.${role}` as MessageKey);
+---
+
+<Base lang={lang} title={entry.data.title} description={entry.data.summary}>
+  <div class="wrap page" data-chain>
+    <h1>{entry.data.title}</h1>
+    <p class="lead">{entry.data.summary}</p>
+
+    <section class="band grid-bg" aria-label={t(lang, "chain.stages")}>
+      <p class="hint muted js-only">{t(lang, "chain.hint")}</p>
+      <div class="columns">
+        {columns.map((col) => (
+          <div class={`col ${col.role}`}>
+            <h2>
+              <span class="sq" aria-hidden="true" />
+              {col.name}
+            </h2>
+            <ol>
+              {col.stages.map((s) => (
+                <li>
+                  <a class="stage" href={`#stage-${s.id}`} data-stage={s.id}>
+                    <span class="num">{s.n}</span>
+                    <span class="name">{s.name[lang]}</span>
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </div>
+        ))}
+      </div>
+      <p class="again">
+        <span aria-hidden="true">↺</span> {t(lang, "chain.again")}
+      </p>
+    </section>
+
+    <div class="details" aria-live="polite">
+      {numbered.map((s, i) => {
+        const prev = numbered[i - 1];
+        const next = numbered[i + 1] ?? numbered[0];
+        return (
+          <article
+            class={`detail ${s.role}`}
+            id={`stage-${s.id}`}
+            data-detail={s.id}
+          >
+            <header>
+              <span class="num" aria-hidden="true">
+                {s.n}
+              </span>
+              <span class="role">
+                <span class="sq" aria-hidden="true" />
+                {roleName(s.role)}
+              </span>
+            </header>
+            <h3 tabindex="-1">
+              <span class="visually-hidden">{s.n}. </span>
+              {s.name[lang]}
+            </h3>
+            <dl class="io">
+              <dt>{t(lang, "chain.in")}</dt>
+              <dd>{s.in[lang]}</dd>
+              <dt>{t(lang, "chain.out")}</dt>
+              <dd>{s.out[lang]}</dd>
+            </dl>
+            <p class="text">{s.text[lang]}</p>
+            {s.topic && (
+              <p class="topic">
+                <span class="muted">{t(lang, "chain.topic")}:</span>{" "}
+                <a class={`chip t${s.topic.tier}`} href={s.topic.url}>
+                  <span class="sq" aria-hidden="true" />
+                  {s.topic.id} {s.topic.title}
+                </a>
+              </p>
+            )}
+            <nav class="pager" aria-label={t(lang, "chain.stages")}>
+              {prev ? (
+                <a
+                  class="btn small"
+                  href={`#stage-${prev.id}`}
+                  data-stage={prev.id}
+                >
+                  ← {prev.n} {prev.name[lang]}
+                </a>
+              ) : (
+                <span />
+              )}
+              {next && (
+                <a
+                  class="btn small primary"
+                  href={`#stage-${next.id}`}
+                  data-stage={next.id}
+                >
+                  {next.n} {next.name[lang]} →
+                </a>
+              )}
+            </nav>
+          </article>
+        );
+      })}
+    </div>
+
+    <div class="prose" data-pagefind-body>
+      <Content />
+    </div>
+    <SourceList lang={lang} ids={citedIds} />
+  </div>
+</Base>
+
+<style>
+  .page {
+    max-width: 1120px;
+    padding-top: 40px;
+    padding-bottom: 64px;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+  }
+  .lead {
+    font-size: 1.15rem;
+    margin: 0 0 24px;
+  }
+  :global(html:not(.js)) .js-only {
+    display: none;
+  }
+
+  /* The chain: three bordered columns on the drafting grid. */
+  .band {
+    border: 2px solid var(--line);
+    padding: 16px;
+  }
+  .hint {
+    margin: 0 0 12px;
+    font-size: 14px;
+  }
+  .columns {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    border: 2px solid var(--line);
+    background: var(--bg);
+  }
+  .col {
+    padding: 0 12px 12px;
+    border-right: 2px solid var(--line);
+  }
+  .col:last-child {
+    border-right: 0;
+  }
+  .col h2 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1rem;
+    margin: 0 -12px 12px;
+    padding: 12px;
+    border-bottom: 2px solid var(--line);
+    background: var(--surface);
+  }
+  .col ol {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .stage {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    border: 2px solid var(--line);
+    background: var(--surface);
+    padding: 8px 10px;
+    font-size: 14.5px;
+    text-decoration: none;
+  }
+  .stage:hover {
+    border-color: var(--hover-line);
+    box-shadow: var(--shadow-sm);
+    transform: translate(-2px, -2px);
+  }
+  .stage[aria-current] {
+    background: var(--selected-bg);
+    color: var(--selected-fg);
+    border-color: var(--selected-line);
+  }
+  .stage .num,
+  .detail .num {
+    font: 700 12px var(--mono);
+    min-width: 22px;
+    height: 22px;
+    display: inline-grid;
+    place-items: center;
+    border: 2px solid currentColor;
+  }
+  .again {
+    margin: 12px 0 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
+
+  /* The chosen stage. */
+  .details {
+    margin: 24px 0 8px;
+  }
+  .detail {
+    border: 2px solid var(--line);
+    background: var(--surface);
+    padding: 16px 18px;
+    margin-bottom: 16px;
+    scroll-margin-top: 84px;
+  }
+  :global(.js) .detail:not(.current) {
+    display: none;
+  }
+  .detail header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .detail .num {
+    min-width: 28px;
+    height: 28px;
+    font-size: 13px;
+  }
+  .role {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-size: 14px;
+    color: var(--muted);
+  }
+  .detail h3 {
+    font-size: 1.4rem;
+    margin: 12px 0 10px;
+    outline-offset: 4px;
+  }
+  .io {
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 6px 16px;
+    margin: 0 0 12px;
+  }
+  .io dt {
+    font-weight: 700;
+  }
+  .io dd {
+    margin: 0;
+  }
+  .text {
+    margin: 0 0 12px;
+  }
+  .topic {
+    margin: 0;
+    font-size: 14px;
+  }
+  .pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 16px;
+  }
+
+  @media (max-width: 760px) {
+    .columns {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .col {
+      border-right: 0;
+      border-bottom: 2px solid var(--line);
+    }
+    .col:last-child {
+      border-bottom: 0;
+    }
+    .band {
+      padding: 10px;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .stage:hover {
+      transform: none;
+    }
+  }
+</style>
+
+<script>
+  // One stage at a time: the hash (#stage-control) picks it; stage blocks and
+  // Previous / Next are anchors, so the page also works without JS.
+  const root = document.querySelector<HTMLElement>("[data-chain]");
+  if (root) {
+    const details = new Map<string, HTMLElement>();
+    for (const d of root.querySelectorAll<HTMLElement>("[data-detail]"))
+      details.set(d.dataset["detail"] ?? "", d);
+    const blocks = [
+      ...root.querySelectorAll<HTMLAnchorElement>(".stage[data-stage]"),
+    ];
+    const first = blocks[0]?.dataset["stage"] ?? "";
+
+    const show = (id: string, moveFocus: boolean) => {
+      const key = details.has(id) ? id : first;
+      for (const [k, d] of details) d.classList.toggle("current", k === key);
+      for (const b of blocks) {
+        if (b.dataset["stage"] === key) b.setAttribute("aria-current", "step");
+        else b.removeAttribute("aria-current");
+      }
+      if (moveFocus) {
+        const detail = details.get(key);
+        detail
+          ?.querySelector<HTMLElement>("h3")
+          ?.focus({ preventScroll: true });
+        const r = detail?.getBoundingClientRect();
+        if (r && (r.top < 70 || r.bottom > window.innerHeight))
+          detail?.scrollIntoView({ block: "nearest" });
+      }
+    };
+
+    root.addEventListener("click", (event) => {
+      const a = (event.target as Element).closest<HTMLAnchorElement>(
+        "a[data-stage]",
+      );
+      if (
+        !a ||
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey
+      )
+        return;
+      event.preventDefault();
+      const id = a.dataset["stage"] ?? "";
+      history.replaceState(null, "", `#stage-${id}`);
+      show(id, true);
+    });
+    // Back/forward, and links to a stage from elsewhere on the page.
+    window.addEventListener("hashchange", () => {
+      if (location.hash.startsWith("#stage-"))
+        show(location.hash.replace(/^#stage-/, ""), true);
+    });
+    show(location.hash.replace(/^#stage-/, ""), false);
+  }
+</script>
