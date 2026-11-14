@@ -203,6 +203,24 @@ export const en = {
   "demo.frames.view":
     "Map: the world's axes at the corner, the robot as a triangle with its own axes, and the point P it sees, joined to the robot by a dashed line",
   "demo.label": "Demo",
+  "demo.unit.rads": "rad/s",
+  "demo.euler.title": "Euler steps: a motor spinning up",
+  "demo.euler.view":
+    "Plot of a motor's speed over 2 seconds: the exact curve rising smoothly to its final speed, and Euler's steps as straight segments with a dot at each step",
+  "demo.euler.legend":
+    "Thin line: the exact speed. Thick segments and dots: Euler's steps. Dashed: the final speed, 10 rad/s. The time constant τ is 0.3 s.",
+  "demo.euler.step": "Step size h",
+  "demo.euler.preset.small": "Small step: 0.05 s",
+  "demo.euler.preset.tau": "h = τ: 0.3 s",
+  "demo.euler.preset.big": "Too big: 0.7 s",
+  "demo.euler.steps": "Steps",
+  "demo.euler.error": "Largest error",
+  "demo.euler.behaviour": "What happens",
+  "demo.euler.follows": "Follows the curve",
+  "demo.euler.overshoots": "Overshoots, then settles",
+  "demo.euler.unstable": "Swings wider and wider: unstable",
+  "demo.euler.axisT": "t (s)",
+  "demo.euler.axisV": "speed (rad/s)",
   "footer.license": "Code: MIT. Text: CC BY-SA 4.0.",
   "footer.source": "Source on GitHub",
 } as const;

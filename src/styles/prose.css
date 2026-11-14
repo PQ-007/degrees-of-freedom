@@ -47,7 +47,7 @@
 
 /* Demos written into the Markdown (<cartpole-demo>…): until the element
    loads, and without JavaScript, its own note shows in a plain frame. */
-.prose :is(cartpole-demo, frames-demo) {
+.prose :is(cartpole-demo, frames-demo, euler-demo) {
   display: block;
 }
 .prose .demo-nojs {
@@ -65,9 +65,9 @@
   max-width: 46rem;
 }
 .prose .fig svg {
+  /* Each figure's own width attribute is its natural size; narrow screens shrink it. */
   display: block;
-  width: 100%;
-  max-width: 380px;
+  max-width: 100%;
   height: auto;
   margin: 0 auto;
   fill: none;
@@ -98,6 +98,10 @@
   fill: var(--d, var(--ink));
   stroke: var(--ink);
   stroke-width: 1.5;
+}
+.prose .fig .area {
+  fill-opacity: 0.35;
+  stroke: none;
 }
 .prose .fig .ink-fill {
   fill: var(--ink);

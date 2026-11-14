@@ -9,6 +9,7 @@ const pages = [
   { name: "node", path: "{lang}/node/classical-control/" },
   { name: "node-full", path: "{lang}/node/what-is-robotics/" },
   { name: "node-f1", path: "{lang}/node/geometry-and-linear-algebra/" },
+  { name: "node-f2", path: "{lang}/node/calculus-and-differential-equations/" },
   { name: "node-sim", path: "{lang}/node/classical-control/" },
   { name: "signal-chain", path: "{lang}/signal-chain/" },
   { name: "compare-index", path: "{lang}/compare/" },

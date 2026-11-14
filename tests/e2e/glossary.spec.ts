@@ -13,11 +13,15 @@ test.describe("glossary", () => {
     ).toHaveText([
       "Coordinate frame",
       "Degree of freedom",
+      "Derivative",
+      "Differential equation",
       "Ground",
+      "Integral",
       "Radian",
       "Robot",
       "Rotation matrix",
       "Sense–think–act loop",
+      "Time step",
       "Torque",
       "Vector",
     ]);
@@ -49,7 +53,7 @@ test.describe("glossary", () => {
     await expect(page.locator(".entry:visible")).toHaveCount(0);
     await expect(page.locator("[data-count]")).toContainText("zzzz");
     await filter.fill("");
-    await expect(page.locator(".entry:visible")).toHaveCount(41);
+    await expect(page.locator(".entry:visible")).toHaveCount(45);
   });
 
   test("a term in the text links to its entry, and the footer links the glossary", async ({

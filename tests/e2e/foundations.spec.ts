@@ -57,3 +57,42 @@ test.describe("F1 Geometry and linear algebra", () => {
     ]);
   });
 });
+
+test.describe("F2 Calculus and differential equations", () => {
+  test("the step slider and presets show following, overshooting and blowing up", async ({
+    page,
+  }) => {
+    await page.goto("en/node/calculus-and-differential-equations/#try");
+    const demo = page.locator("euler-demo");
+    const what = demo.locator(".sim-readouts");
+    await expect(what).toContainText("Follows the curve");
+    await demo.getByRole("button", { name: "h = τ: 0.3 s" }).click();
+    await expect(
+      demo.getByRole("button", { name: "h = τ: 0.3 s" }),
+    ).toHaveAttribute("aria-pressed", "true");
+    await expect(what).toContainText("Steps6");
+    await demo.getByLabel("Step size h").fill("0.45");
+    await expect(what).toContainText("Overshoots, then settles");
+    await demo.getByRole("button", { name: "Too big: 0.7 s" }).click();
+    await expect(what).toContainText("Swings wider and wider: unstable");
+    await expect(demo.locator("circle.point")).toHaveCount(3);
+  });
+
+  test("Go deeper opens with its equations, and the page passes axe on a phone", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto("mn/node/calculus-and-differential-equations/#try");
+    await page.locator("euler-demo .demo-plot").waitFor();
+    await page.locator("details.deeper summary").click();
+    await expect(page.locator("details.deeper .katex-display")).toHaveCount(4);
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+    const axe = await new AxeBuilder({ page }).analyze();
+    expect(axe.violations.map((v) => v.id)).toEqual([]);
+  });
+});

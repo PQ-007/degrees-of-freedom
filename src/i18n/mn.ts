@@ -207,6 +207,24 @@ export const mn: Record<MessageKey, string> = {
   "demo.frames.view":
     "Газрын зураг: буланд ертөнцийн тэнхлэгүүд, өөрийн тэнхлэгтэй гурвалжин робот, түүний харж буй P цэг, роботтой тасархай шугамаар холбогдсон",
   "demo.label": "Туршилт",
+  "demo.unit.rads": "рад/с",
+  "demo.euler.title": "Эйлерийн алхам: хөдөлгүүр эргэлтээ авах нь",
+  "demo.euler.view":
+    "Хөдөлгүүрийн хурдны 2 секундын график: эцсийн хурддаа жигд өсөх жинхэнэ муруй, алхам бүрт цэгтэй шулуун хэрчмүүдээр Эйлерийн алхмууд",
+  "demo.euler.legend":
+    "Нимгэн шугам: жинхэнэ хурд. Зузаан хэрчим ба цэгүүд: Эйлерийн алхмууд. Тасархай: эцсийн хурд, 10 рад/с. Хугацааны тогтмол τ нь 0.3 с.",
+  "demo.euler.step": "Алхмын хэмжээ h",
+  "demo.euler.preset.small": "Жижиг алхам: 0.05 с",
+  "demo.euler.preset.tau": "h = τ: 0.3 с",
+  "demo.euler.preset.big": "Хэт том: 0.7 с",
+  "demo.euler.steps": "Алхам",
+  "demo.euler.error": "Хамгийн их алдаа",
+  "demo.euler.behaviour": "Юу болох вэ",
+  "demo.euler.follows": "Муруйг дагана",
+  "demo.euler.overshoots": "Хэтэрч, дараа нь тогтворжино",
+  "demo.euler.unstable": "Улам их савлана: тогтворгүй",
+  "demo.euler.axisT": "t (с)",
+  "demo.euler.axisV": "хурд (рад/с)",
   "footer.license": "Код: MIT. Бичвэр: CC BY-SA 4.0.",
   "footer.source": "GitHub дээрх эх код",
 };

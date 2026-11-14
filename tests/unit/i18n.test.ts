@@ -25,6 +25,7 @@ describe("interface strings", () => {
     "tree.title",
     "build.roadmap",
     "demo.unit.deg",
+    "demo.euler.preset.tau",
   ]);
   it("Mongolian strings are translated", () => {
     for (const key of Object.keys(en) as (keyof typeof en)[]) {

@@ -341,3 +341,65 @@
   font: 600 13px var(--mono);
   text-align: right;
 }
+
+/* Plots drawn in SVG pixels (Euler's steps). */
+.demo-view-plot {
+  aspect-ratio: 640 / 350;
+}
+.demo-plot .tick-px {
+  font-size: 13px;
+  fill: var(--muted);
+  font-family: var(--mono);
+}
+.demo-plot .label-px {
+  font-size: 13px;
+  fill: var(--muted);
+}
+.demo-plot .middle {
+  text-anchor: middle;
+}
+.demo-plot .end {
+  text-anchor: end;
+}
+.demo-plot .axis-px {
+  stroke: var(--muted);
+  stroke-width: 1.5;
+}
+.demo-plot .target {
+  stroke: var(--ink);
+  stroke-width: 1.5;
+  stroke-dasharray: 6 5;
+}
+.demo-plot .exact {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+.demo-plot .euler {
+  fill: none;
+  stroke: var(--d, var(--ink));
+  stroke-width: 4;
+}
+.demo-plot .point {
+  fill: var(--d, var(--ink));
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+.demo-controls-one {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* Phones: drawings shrink to the screen, so their text grows to stay legible
+   (about 11px on a 360px screen). */
+@media (max-width: 560px) {
+  .demo-plot .tick-px,
+  .demo-plot .label-px {
+    font-size: 24px;
+  }
+  .demo-svg .tick {
+    font-size: 0.3px;
+  }
+  .demo-svg .name {
+    font-size: 0.34px;
+  }
+}
