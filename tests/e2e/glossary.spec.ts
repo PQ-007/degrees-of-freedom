@@ -11,16 +11,20 @@ test.describe("glossary", () => {
     await expect(
       page.locator("section.tier").first().locator("dfn"),
     ).toHaveText([
+      "Bayes' rule",
       "Coordinate frame",
       "Degree of freedom",
       "Derivative",
       "Differential equation",
       "Ground",
       "Integral",
+      "Mean",
+      "Normal distribution",
       "Radian",
       "Robot",
       "Rotation matrix",
       "Sense–think–act loop",
+      "Standard deviation",
       "Time step",
       "Torque",
       "Vector",
@@ -53,7 +57,7 @@ test.describe("glossary", () => {
     await expect(page.locator(".entry:visible")).toHaveCount(0);
     await expect(page.locator("[data-count]")).toContainText("zzzz");
     await filter.fill("");
-    await expect(page.locator(".entry:visible")).toHaveCount(45);
+    await expect(page.locator(".entry:visible")).toHaveCount(49);
   });
 
   test("a term in the text links to its entry, and the footer links the glossary", async ({

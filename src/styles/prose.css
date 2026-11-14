@@ -47,7 +47,7 @@
 
 /* Demos written into the Markdown (<cartpole-demo>…): until the element
    loads, and without JavaScript, its own note shows in a plain frame. */
-.prose :is(cartpole-demo, frames-demo, euler-demo) {
+.prose :is(cartpole-demo, frames-demo, euler-demo, noise-demo) {
   display: block;
 }
 .prose .demo-nojs {
@@ -102,6 +102,9 @@
 .prose .fig .area {
   fill-opacity: 0.35;
   stroke: none;
+}
+.prose .fig .area.light {
+  fill-opacity: 0.15;
 }
 .prose .fig .ink-fill {
   fill: var(--ink);

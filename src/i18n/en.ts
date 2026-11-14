@@ -221,6 +221,20 @@ export const en = {
   "demo.euler.unstable": "Swings wider and wider: unstable",
   "demo.euler.axisT": "t (s)",
   "demo.euler.axisV": "speed (rad/s)",
+  "demo.unit.ms": "ms",
+  "demo.noise.title": "Averaging noisy readings",
+  "demo.noise.view":
+    "Histograms of 500 tries: single readings of a wall 2 m away, spread wide, and averages of N readings, bunched more tightly around 2 m, each with the bell curve it should follow",
+  "demo.noise.legend":
+    "Outlined bars: single readings. Filled bars: averages of N readings. Curves: the bell curves they should follow. The wall is 2.00 m away (dashed line), and the sensor takes 50 readings a second.",
+  "demo.noise.sd": "Sensor noise σ",
+  "demo.noise.n": "Readings averaged, N",
+  "demo.noise.again": "New readings",
+  "demo.noise.single": "One reading spreads by",
+  "demo.noise.average": "The average spreads by",
+  "demo.noise.predicted": "σ/√N predicts",
+  "demo.noise.time": "N readings take",
+  "demo.noise.axis": "reading (m)",
   "footer.license": "Code: MIT. Text: CC BY-SA 4.0.",
   "footer.source": "Source on GitHub",
 } as const;

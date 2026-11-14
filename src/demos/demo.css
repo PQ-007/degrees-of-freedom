@@ -402,4 +402,34 @@
   .demo-svg .name {
     font-size: 0.34px;
   }
+  .demo-slider {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .demo-slider input {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+}
+.sim-readouts dd {
+  white-space: nowrap;
+}
+
+/* Histograms (noise and averages). */
+.demo-view-hist {
+  aspect-ratio: 640 / 320;
+}
+.demo-plot .bar-fill {
+  fill: var(--d, var(--ink));
+  fill-opacity: 0.55;
+  stroke: none;
+}
+.demo-plot .bar-outline {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 1.25;
+}
+.demo-plot .bell {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
 }

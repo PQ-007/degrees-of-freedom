@@ -96,3 +96,49 @@ test.describe("F2 Calculus and differential equations", () => {
     expect(axe.violations.map((v) => v.id)).toEqual([]);
   });
 });
+
+test.describe("F3 Probability and statistics", () => {
+  test("averaging N readings narrows the spread to about σ/√N, at a cost in time", async ({
+    page,
+  }) => {
+    await page.goto("en/node/probability-and-statistics/#try");
+    const demo = page.locator("noise-demo");
+    const out = demo.locator(".sim-readouts dd");
+    await demo.getByLabel("Readings averaged, N").fill("1");
+    // One reading at a time: both spreads are about σ = 0.08 m.
+    expect(
+      Math.abs(parseFloat((await out.nth(1).textContent()) ?? "") - 0.08),
+    ).toBeLessThan(0.01);
+    await demo.getByLabel("Readings averaged, N").fill("16");
+    await expect(out.nth(2)).toHaveText("0.020 m");
+    expect(
+      Math.abs(parseFloat((await out.nth(1).textContent()) ?? "") - 0.02),
+    ).toBeLessThan(0.004);
+    await expect(out.nth(3)).toHaveText("320 ms");
+    const before = await out.nth(0).textContent();
+    await demo.getByRole("button", { name: "New readings" }).click();
+    await expect(out.nth(0)).not.toHaveText(before ?? "");
+  });
+
+  test("the bell-curve figure is described, and the page passes axe on a phone", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto("mn/node/probability-and-statistics/#try");
+    await page.locator("noise-demo .demo-plot").waitFor();
+    await expect(page.locator(".fig svg")).toHaveAttribute(
+      "aria-label",
+      /хонх/,
+    );
+    await page.locator("details.deeper summary").click();
+    await expect(page.locator("details.deeper .katex-display")).toHaveCount(6);
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+    const axe = await new AxeBuilder({ page }).analyze();
+    expect(axe.violations.map((v) => v.id)).toEqual([]);
+  });
+});
