@@ -117,7 +117,11 @@
   claim: >-
     A strain-wave (harmonic) gear gives a large reduction in a single stage,
     with almost no backlash: its teeth stay engaged under a permanent preload.
+    It is built from three parts: a wave generator, a flexspline and a
+    circular spline.
   sources:
+    - title: "Harmonic Drive strain wave gearing (Harmonic Drive LLC)"
+      url: https://www.harmonicdrive.net/technology/harmonicdrive
     - title: "Harmonic Drive technology (Harmonic Drive LLC)"
       url: https://www.harmonicdrive.net/technology
     - title: "Harmonic Drive gears (Harmonic Drive SE)"
@@ -413,3 +417,58 @@
     - title: "Convex Optimization, sections 1.1 and 4.2.2 (S. Boyd and L. Vandenberghe, Cambridge University Press, 2004; free from the authors)"
       url: https://web.stanford.edu/~boyd/cvxbook/
   checked: web (the book's PDF), 2026-11-14
+
+- id: pololu-micro-gearmotor
+  claim: >-
+    Pololu's Micro Metal Gearmotors are small brushed DC gearmotors with a
+    10 × 12 mm gearbox cross-section, offered in gear ratios from 5:1 to
+    1000:1 for 6 V or 12 V; extended-shaft versions take Pololu's encoders.
+  sources:
+    - title: "Micro Metal Gearmotors (Pololu)"
+      url: https://www.pololu.com/category/60/micro-metal-gearmotors
+  checked: web, 2026-11-14
+
+- id: sparkfun-servo
+  claim: >-
+    A hobby servo is commanded by pulses repeated every 20 ms (50 Hz), 1 to 2 ms
+    wide, with 1.5 ms for the middle position; inside are a DC motor, gears, a
+    potentiometer on the output shaft and a small control board. A continuous
+    rotation servo turns the same signal into speed and direction instead of a
+    position.
+  sources:
+    - title: "Hobby Servo Tutorial (SparkFun)"
+      url: https://learn.sparkfun.com/tutorials/hobby-servo-tutorial/all
+  checked: web, 2026-11-14
+
+- id: dynamixel-xl430
+  claim: >-
+    The ROBOTIS DYNAMIXEL XL430-W250-T smart servo: stall torque 1.4 N·m at
+    11.1 V, gear ratio 258.5:1, resolution 4096 pulses per turn, a TTL
+    multidrop half-duplex serial bus from 9,600 bps to 4.5 Mbps, feedback of
+    position, velocity, load, temperature and input voltage, and a weight of
+    57.2 g.
+  sources:
+    - title: "XL430-W250-T e-Manual (ROBOTIS)"
+      url: https://emanual.robotis.com/docs/en/dxl/x/xl430-w250/
+  checked: web, 2026-11-14
+
+- id: pololu-nema17
+  claim: >-
+    Pololu's bipolar stepper motor #2267 is a NEMA 17 hybrid stepper, 42.3 mm
+    square, with a 1.8° step angle (200 steps per revolution); each phase draws
+    1.7 A at 2.8 V, its holding torque is 3.7 kg·cm, and it weighs 285 g.
+  sources:
+    - title: "Stepper Motor: Bipolar, 200 Steps/Rev, 42×38mm, 2.8V, 1.7 A/Phase (Pololu item 2267)"
+      url: https://www.pololu.com/product/2267
+  checked: web, 2026-11-14
+
+- id: cubemars-ak80
+  claim: >-
+    The CubeMars AK80-9 actuator, as listed by its maker: a 10:1 reduction,
+    rated output up to 8.3 N·m and peak up to 24.8 N·m, 621 g, designed for
+    exoskeletons, quadruped robots, collaborative arms and other dynamic
+    robots.
+  sources:
+    - title: "AK80-9 robotic actuator (CubeMars)"
+      url: https://www.cubemars.com/goods-1031-AK80-9.html
+  checked: web, 2026-11-14

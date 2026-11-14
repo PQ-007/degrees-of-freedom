@@ -1,0 +1,59 @@
+# H1 Motors and actuators: the category's types, in the same order and with
+# the same keys as the rows of compare table X1 (content/compare/actuators.yaml),
+# which is folded in at the end of the page. Each type's entry is a section
+# "## Name {#key}" in content/hardware/<lang>/motors.md.
+id: H1
+slug: motors
+nodes: [C4, C5, C6]
+compare: X1
+types:
+  - key: gearmotor
+    node: C4
+    name:
+      en: Brushed DC gearmotor
+      mn: Араатай сойзтой DC хөдөлгүүр
+  - key: hobby-servo
+    node: C5
+    name:
+      en: Hobby servo
+      mn: Хобби servo
+  - key: bus-servo
+    node: C5
+    name:
+      en: Smart bus servo
+      mn: Ухаалаг bus servo
+  - key: stepper
+    node: C4
+    name:
+      en: Stepper motor
+      mn: Алхамт хөдөлгүүр
+  - key: bldc-gearbox
+    node: C4
+    name:
+      en: Brushless motor + gearbox
+      mn: Сойзгүй хөдөлгүүр + редуктор
+  - key: qdd
+    node: C5
+    name:
+      en: Quasi-direct drive (QDD)
+      mn: Quasi-direct drive (QDD)
+  - key: harmonic
+    node: C2
+    name:
+      en: Harmonic-drive joint
+      mn: Harmonic-drive үе
+  - key: sea
+    node: C5
+    name:
+      en: Series elastic actuator (SEA)
+      mn: Series elastic актуатор (SEA)
+  - key: hydraulic
+    node: C6
+    name:
+      en: Hydraulic actuator
+      mn: Гидравлик актуатор
+  - key: pneumatic
+    node: C6
+    name:
+      en: Pneumatic actuator
+      mn: Пневматик актуатор
