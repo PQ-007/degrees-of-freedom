@@ -1,0 +1,470 @@
+---
+// A robot teardown (chosen by the user, 2026-11-14: drawing + sections). The
+// line drawing with numbered callouts; the numbered parts, each marked Sense,
+// Think or Act and linked to its section and topic; At a glance; then the 12
+// template sections, with the same anchors on every robot.
+import { render } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import SourceList from "../../../components/SourceList.astro";
+import { getAtlas, getRobots } from "../../../lib/atlas";
+import { languages, localePath, t, type Lang } from "../../../lib/i18n";
+import type { MessageKey } from "../../../i18n/en";
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of languages) {
+    for (const robot of await getRobots(lang)) {
+      paths.push({
+        params: { lang, slug: robot.data.slug },
+        props: { id: robot.data.id },
+      });
+    }
+  }
+  return paths;
+}
+
+const lang = Astro.params.lang as Lang;
+const { id } = Astro.props;
+const robot = (await getRobots(lang)).find((r) => r.data.id === id);
+if (!robot) throw new Error(`no robot ${id}`);
+const atlas = await getAtlas(lang);
+const byId = new Map(atlas.map((n) => [n.id, n]));
+const topics = robot.data.nodes
+  .map((n) => byId.get(n))
+  .filter((n) => n !== undefined);
+const { Content, headings, remarkPluginFrontmatter } = await render(
+  robot.entry,
+);
+const citedIds =
+  (remarkPluginFrontmatter["citations"] as string[] | undefined) ?? [];
+const toc = [
+  ...headings
+    .filter((h) => h.depth === 2)
+    .map((h) => ({ slug: h.slug, text: h.text })),
+  ...(citedIds.length
+    ? [{ slug: "sources", text: t(lang, "node.sources") }]
+    : []),
+];
+const sectionTitle = new Map(toc.map((h) => [h.slug, h.text]));
+
+// Inline the drawing so its lines follow the theme's ink colour; label it.
+const escapeAttr = (s: string) =>
+  s.replace(/&/g, "&amp;").replace(/"/g, "&quot;").replace(/</g, "&lt;");
+const svg = robot.svg
+  .replace(/<!--[\s\S]*?-->\s*/g, "")
+  .replace(
+    "<svg ",
+    `<svg role="img" aria-label="${escapeAttr(robot.figureAlt)}" `,
+  );
+const base = import.meta.env.BASE_URL;
+---
+
+<Base lang={lang} title={robot.title} description={robot.summary}>
+  <div class="wrap page">
+    <div
+      class="main"
+      data-pagefind-body
+      data-pagefind-meta={`id:${robot.data.id}`}
+    >
+      <nav class="crumbs" aria-label="Breadcrumb" data-pagefind-ignore>
+        <a href={localePath(base, lang, "robots/")}>
+          {t(lang, "robots.title")}
+        </a>
+        <span aria-hidden="true">›</span>
+        <span class="id">{robot.data.id}</span>
+      </nav>
+      <h1>{robot.title}</h1>
+      <p class="summary">{robot.summary}</p>
+
+      <figure class="drawing grid-bg" set:html={svg} />
+
+      <section class="parts" aria-labelledby="parts">
+        <h2 id="parts">{t(lang, "robots.parts")}</h2>
+        <ol class="legend">
+          {robot.data.callouts.map((c) => {
+            const node = byId.get(c.node);
+            return (
+              <li data-part={c.n}>
+                <span class="num" aria-hidden="true">
+                  {c.n}
+                </span>
+                <span class="visually-hidden">{c.n}.</span>
+                <span class="what">
+                  <a href={`#${c.section}`}>{c.label[lang]}</a>
+                  {c.role !== "none" && (
+                    <span class={`role ${c.role}`}>
+                      <span class="sq" aria-hidden="true" />
+                      {t(lang, `role.${c.role}` as MessageKey)}
+                    </span>
+                  )}
+                </span>
+                {node && (
+                  <a class={`chip t${node.tier}`} href={node.url}>
+                    <span class="sq" aria-hidden="true" />
+                    {node.id} {node.title}
+                  </a>
+                )}
+                <span class="visually-hidden">
+                  {t(lang, "robots.section")}: {sectionTitle.get(c.section)}
+                </span>
+              </li>
+            );
+          })}
+        </ol>
+      </section>
+
+      <section class="glance" aria-labelledby="glance">
+        <h2 id="glance">{t(lang, "robots.glance")}</h2>
+        <dl>
+          {robot.glance.map((g) => (
+            <>
+              <dt>{g.label}</dt>
+              <dd>{g.value}</dd>
+            </>
+          ))}
+        </dl>
+      </section>
+
+      {topics.length > 0 && (
+        <dl class="meta">
+          <dt>{t(lang, "robots.topics")}</dt>
+          <dd>
+            {topics.map((n) => (
+              <a class={`chip t${n.tier}`} href={n.url}>
+                <span class="sq" aria-hidden="true" />
+                {n.id} {n.title}
+              </a>
+            ))}
+          </dd>
+        </dl>
+      )}
+
+      <details class="fold toc-bar" data-pagefind-ignore>
+        <summary>{t(lang, "node.onThisPage")}</summary>
+        <ol>
+          {toc.map((h) => (
+            <li>
+              <a href={`#${h.slug}`}>{h.text}</a>
+            </li>
+          ))}
+        </ol>
+      </details>
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <SourceList lang={lang} ids={citedIds} />
+    </div>
+
+    <nav class="toc side" aria-label={t(lang, "node.onThisPage")} data-toc>
+      <p class="label">{t(lang, "node.onThisPage")}</p>
+      <ol>
+        {toc.map((h) => (
+          <li>
+            <a href={`#${h.slug}`}>{h.text}</a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+  </div>
+</Base>
+
+<style>
+  .page {
+    max-width: 1240px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 220px;
+    gap: 48px;
+    align-items: start;
+    padding-top: 40px;
+    padding-bottom: 64px;
+  }
+  .main {
+    min-width: 0;
+  }
+  .crumbs {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 14px;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    letter-spacing: -0.035em;
+    margin: 16px 0 12px;
+  }
+  .summary {
+    font-size: 1.15rem;
+    margin: 0 0 24px;
+    max-width: 46rem;
+  }
+
+  /* The drawing: ink lines on the drafting grid, in a bordered frame. */
+  .drawing {
+    margin: 0 0 28px;
+    border: 2px solid var(--line);
+    padding: 12px;
+  }
+  .drawing :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+    color: var(--ink);
+  }
+  .drawing :global(.parts *) {
+    fill: none;
+    stroke: currentColor;
+    stroke-width: 2;
+    stroke-linejoin: round;
+    stroke-linecap: round;
+  }
+  .drawing :global(.parts .thin) {
+    stroke-width: 1.2;
+  }
+  .drawing :global(.parts .thick) {
+    stroke-width: 3.5;
+  }
+  .drawing :global(.callout line) {
+    stroke: currentColor;
+    stroke-width: 1.5;
+  }
+  .drawing :global(.callout .dot) {
+    fill: currentColor;
+  }
+  .drawing :global(.callout rect) {
+    fill: var(--surface);
+    stroke: currentColor;
+    stroke-width: 2;
+  }
+  .drawing :global(.callout text) {
+    font: 700 15px var(--mono);
+    fill: currentColor;
+  }
+  /* The part being pointed at in the list is filled in the drawing. */
+  .drawing :global(.callout.hot rect) {
+    fill: var(--ink);
+  }
+  .drawing :global(.callout.hot text) {
+    fill: var(--bg);
+  }
+
+  .parts,
+  .glance {
+    border-top: 0;
+    padding: 0;
+    margin: 0 0 28px;
+  }
+  .parts h2,
+  .glance h2 {
+    font-size: 1.2rem;
+    margin: 0 0 12px;
+  }
+  .legend {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
+    gap: 10px 24px;
+  }
+  .legend li {
+    display: grid;
+    grid-template-columns: 30px minmax(0, 1fr);
+    gap: 4px 12px;
+    align-items: start;
+    font-size: 15px;
+  }
+  .legend .num {
+    grid-row: span 2;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    border: 2px solid var(--line);
+    font: 700 13px var(--mono);
+    background: var(--surface);
+  }
+  .legend .what {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
+    align-items: baseline;
+  }
+  .legend .what a {
+    font-weight: 600;
+  }
+  .legend .chip {
+    justify-self: start;
+    font-size: 13px;
+    padding: 4px 8px 4px 6px;
+    margin: 0;
+  }
+  .role {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .role .sq {
+    width: 10px;
+    height: 10px;
+    border-width: 1.5px;
+  }
+
+  .glance dl {
+    margin: 0;
+    border: 2px solid var(--line);
+    background: var(--surface);
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+  }
+  .glance dt,
+  .glance dd {
+    margin: 0;
+    padding: 9px 14px;
+    border-bottom: 1px solid var(--rule);
+    font-size: 15px;
+  }
+  .glance dt {
+    font-weight: 600;
+    color: var(--muted);
+  }
+  .glance dt:nth-last-of-type(1),
+  .glance dd:last-of-type {
+    border-bottom: 0;
+  }
+
+  .meta {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 16px;
+    align-items: baseline;
+    margin: 0 0 8px;
+    font-size: 14px;
+  }
+  .meta dt {
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .meta dd {
+    margin: 0;
+  }
+  .prose {
+    max-width: 46rem;
+  }
+
+  .side {
+    position: sticky;
+    top: 84px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    font-size: 14px;
+  }
+  .side ol,
+  .fold ol {
+    list-style: none;
+    margin: 10px 0 0;
+    padding: 0;
+  }
+  .side li a,
+  .fold li a {
+    display: block;
+    padding: 5px 0 5px 12px;
+    border-left: 2px solid transparent;
+    text-decoration: none;
+    line-height: 1.35;
+  }
+  .side li a:hover,
+  .fold li a:hover {
+    border-left-color: var(--hover-line);
+  }
+  .side li a[aria-current] {
+    border-left-color: var(--ink);
+    font-weight: 700;
+  }
+  .toc .label {
+    margin: 0;
+  }
+  .fold {
+    display: none;
+    border: 2px solid var(--line);
+    background: var(--surface);
+    padding: 10px 14px;
+    margin: 20px 0;
+    font-size: 14px;
+  }
+  .fold summary {
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  @media (max-width: 900px) {
+    .page {
+      grid-template-columns: minmax(0, 1fr);
+      padding-top: 24px;
+    }
+    .toc.side {
+      display: none;
+    }
+    .fold {
+      display: block;
+    }
+  }
+  @media (max-width: 480px) {
+    .glance dl {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .glance dt {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+    .meta {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 4px;
+    }
+    .drawing {
+      padding: 4px;
+    }
+  }
+</style>
+
+<script>
+  // Pointing at a part in the list fills its number in the drawing.
+  for (const li of document.querySelectorAll<HTMLElement>("[data-part]")) {
+    const callout = document.querySelector(
+      `.drawing [data-callout="${li.dataset["part"]}"]`,
+    );
+    if (!callout) continue;
+    const on = () => callout.classList.add("hot");
+    const off = () => callout.classList.remove("hot");
+    li.addEventListener("mouseenter", on);
+    li.addEventListener("mouseleave", off);
+    li.addEventListener("focusin", on);
+    li.addEventListener("focusout", off);
+  }
+
+  // "On this page": mark the section being read.
+  const toc = document.querySelector<HTMLElement>("[data-toc]");
+  if (toc) {
+    const links = new Map<string, HTMLAnchorElement>();
+    for (const a of toc.querySelectorAll<HTMLAnchorElement>("a[href^='#']")) {
+      links.set(decodeURIComponent(a.hash.slice(1)), a);
+    }
+    const targets = [...links.keys()]
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+    const mark = () => {
+      let current: string | null = null;
+      for (const el of targets)
+        if (el.getBoundingClientRect().top < 120) current = el.id;
+      for (const [id, a] of links) {
+        if (id === current) a.setAttribute("aria-current", "true");
+        else a.removeAttribute("aria-current");
+      }
+    };
+    document.addEventListener("scroll", mark, { passive: true });
+    mark();
+  }
+</script>

@@ -10,6 +10,8 @@ const pages = [
   { name: "node-full", path: "{lang}/node/what-is-robotics/" },
   { name: "compare-index", path: "{lang}/compare/" },
   { name: "compare", path: "{lang}/compare/actuators/" },
+  { name: "robots-index", path: "{lang}/robots/" },
+  { name: "robot", path: "{lang}/robots/planetary-rover/" },
   { name: "search", path: "{lang}/search/?q=control" },
   { name: "404", path: "404.html" },
 ];

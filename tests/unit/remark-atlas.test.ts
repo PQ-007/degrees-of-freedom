@@ -73,6 +73,23 @@ describe("node links", () => {
   });
 });
 
+describe("heading anchors", () => {
+  it("take a fixed id from {#id} and drop it from the text", () => {
+    const tree: MdNode & { children: MdNode[] } = {
+      type: "root",
+      children: [
+        { type: "heading", children: [{ type: "text", value: "Бие {#body}" }] },
+      ],
+    };
+    transformAtlasRefs(tree, refs);
+    expect(tree.children[0]).toEqual({
+      type: "heading",
+      children: [{ type: "text", value: "Бие" }],
+      data: { hProperties: { id: "body" } },
+    });
+  });
+});
+
 describe("the real content", () => {
   const root = fileURLToPath(new URL("../../", import.meta.url));
   const sources = parse(
@@ -95,20 +112,25 @@ describe("the real content", () => {
 
   it("every citation and node link in every page resolves, and both languages cite the same sources", () => {
     const citedBy: Record<string, Record<string, string[]>> = {};
-    for (const lang of ["en", "mn"]) {
-      const loaded = loadRefs(root, lang);
-      for (const f of readdirSync(`${root}content/nodes/${lang}`)) {
-        const body = readFileSync(`${root}content/nodes/${lang}/${f}`, "utf8")
-          .split("---")
-          .slice(2)
-          .join("---");
-        const cited = transformAtlasRefs(para(body), {
-          ...loaded,
-          base: "/",
-          lang,
-          file: `content/nodes/${lang}/${f}`,
-        });
-        (citedBy[f] ??= {})[lang] = [...cited].sort();
+    for (const dir of ["nodes", "compare", "robots"]) {
+      for (const lang of ["en", "mn"]) {
+        const loaded = loadRefs(root, lang);
+        for (const f of readdirSync(`${root}content/${dir}/${lang}`)) {
+          const body = readFileSync(
+            `${root}content/${dir}/${lang}/${f}`,
+            "utf8",
+          )
+            .split("---")
+            .slice(2)
+            .join("---");
+          const cited = transformAtlasRefs(para(body), {
+            ...loaded,
+            base: "/",
+            lang,
+            file: `content/${dir}/${lang}/${f}`,
+          });
+          (citedBy[`${dir}/${f}`] ??= {})[lang] = [...cited].sort();
+        }
       }
     }
     for (const [f, byLang] of Object.entries(citedBy)) {

@@ -2,7 +2,10 @@
 // (src/lib/tree.ts) and fails the build with every problem listed.
 import { getCollection, type CollectionEntry } from "astro:content";
 import { languages, localePath, type Lang } from "./i18n";
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import { checkCompare, type CompareTable } from "./compare";
+import { checkRobot, type RobotData } from "./robots";
 import { checkTree, compareIds, usedBy, type TreeNode } from "./tree";
 
 export interface AtlasNode extends TreeNode {
@@ -111,6 +114,85 @@ export async function getCompares(lang: Lang): Promise<ComparePage[]> {
       title: entry.data.title,
       summary: entry.data.summary,
       url: localePath(base, lang, `compare/${table.slug}/`),
+      entry,
+    };
+  });
+}
+
+export interface RobotPage {
+  data: RobotData;
+  title: string;
+  summary: string;
+  figureAlt: string;
+  glance: { label: string; value: string }[];
+  /** The drawing's SVG markup (inlined, so it follows the theme's ink colour). */
+  svg: string;
+  url: string;
+  entry: CollectionEntry<"robotPages">;
+}
+
+let robotsChecked:
+  | Promise<{
+      robots: RobotData[];
+      svgs: Map<string, string>;
+      pages: CollectionEntry<"robotPages">[];
+    }>
+  | undefined;
+
+function readFigure(file: string): string | null {
+  try {
+    return readFileSync(join(process.cwd(), "content/robots", file), "utf8");
+  } catch {
+    return null;
+  }
+}
+
+function loadRobots() {
+  robotsChecked ??= (async () => {
+    const { nodes } = await load();
+    const robots = (await getCollection("robotData"))
+      .map((e) => e.data as RobotData)
+      .sort((a, b) => Number(a.id.slice(1)) - Number(b.id.slice(1)));
+    const pages = await getCollection("robotPages");
+    const nodeIds = new Set(nodes.map((n) => n.id));
+    const svgs = new Map<string, string>();
+    const errors = robots.flatMap((robot) => {
+      const svg = readFigure(robot.figure);
+      if (svg) svgs.set(robot.slug, svg);
+      const texts = pages
+        .filter((p) => p.id.endsWith(`/${robot.slug}`))
+        .map((p) => ({
+          lang: p.id.split("/")[0] ?? "",
+          body: p.body ?? "",
+          glance: p.data.glance,
+        }));
+      return checkRobot(robot, svg, texts, nodeIds, languages);
+    });
+    if (errors.length > 0) {
+      throw new Error(
+        `The robot teardowns have ${errors.length} problem(s):\n- ${errors.join("\n- ")}`,
+      );
+    }
+    return { robots, svgs, pages };
+  })();
+  return robotsChecked;
+}
+
+/** Every robot teardown, in ID order, with its text in `lang`. */
+export async function getRobots(lang: Lang): Promise<RobotPage[]> {
+  const { robots, svgs, pages } = await loadRobots();
+  const base = import.meta.env.BASE_URL;
+  return robots.map((data) => {
+    const entry = pages.find((p) => p.id === `${lang}/${data.slug}`);
+    if (!entry) throw new Error(`${data.id} has no ${lang} page`); // checkRobot already rules this out
+    return {
+      data,
+      title: entry.data.title,
+      summary: entry.data.summary,
+      figureAlt: entry.data.figureAlt,
+      glance: entry.data.glance,
+      svg: svgs.get(data.slug) ?? "",
+      url: localePath(base, lang, `robots/${data.slug}/`),
       entry,
     };
   });

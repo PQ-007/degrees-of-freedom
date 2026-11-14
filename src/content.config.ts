@@ -89,10 +89,48 @@ const comparePages = defineCollection({
   schema: z.object({ title: z.string().min(1), summary: z.string().min(1) }),
 });
 
+// Robot teardowns: the language-independent data (drawing, callouts) and the
+// text per language (content/robots/<lang>/<slug>.md, the 12 template sections).
+const robotData = defineCollection({
+  loader: glob({ pattern: "*.yaml", base: "content/robots" }),
+  schema: z.object({
+    id: z.string().regex(/^R\d+$/),
+    slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/),
+    figure: z.string().regex(/\.svg$/),
+    nodes: z.array(z.string()),
+    callouts: z.array(
+      z.object({
+        n: z.number().int(),
+        role: z.enum(["sense", "think", "act", "none"]),
+        node: z.string(),
+        section: z.string(),
+        label: localized,
+      }),
+    ),
+  }),
+});
+const robotPages = defineCollection({
+  loader: glob({
+    pattern: "*/*.md",
+    base: "content/robots",
+    generateId: ({ entry }) => entry.replace(/\.md$/, ""),
+  }),
+  schema: z.object({
+    title: z.string().min(1),
+    summary: z.string().min(1),
+    figureAlt: z.string().min(1),
+    glance: z
+      .array(z.object({ label: z.string().min(1), value: z.string().min(1) }))
+      .min(1),
+  }),
+});
+
 export const collections = {
   tree,
   nodes,
   sources,
   compareTables,
   comparePages,
+  robotData,
+  robotPages,
 };

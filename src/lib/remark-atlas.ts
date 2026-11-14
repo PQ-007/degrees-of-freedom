@@ -4,6 +4,8 @@
 //                       the page's Sources list (numbered by first use)
 //   [[C4]]              a link to node C4's page, showing its title in the
 //   [[C4|motors]]       page's language, or the given text
+//   ## Body {#body}     a heading with a fixed anchor, the same in every
+//                       language (robot teardowns use the template's anchors)
 //
 // An unknown source or node fails the build with the file and the fix.
 // The cited IDs, in order, go to the page as remarkPluginFrontmatter.citations.
@@ -33,6 +35,21 @@ export interface AtlasRefs {
 
 const PATTERN = /\[@([a-z0-9-]+)\]|\[\[([A-Z]\d+)(?:\|([^\]]+))?\]\]/g;
 const SKIP = new Set(["link", "linkReference", "code", "inlineCode", "html"]);
+
+const HEADING_ID = /\s*\{#([a-z0-9-]+)\}\s*$/;
+
+/** "## Body {#body}": drop the marker from the text and use it as the heading's id. */
+function setHeadingId(heading: MdNode) {
+  const last = heading.children?.at(-1);
+  if (last?.type !== "text" || !last.value) return;
+  const m = HEADING_ID.exec(last.value);
+  if (!m) return;
+  last.value = last.value.slice(0, m.index);
+  heading.data = {
+    ...heading.data,
+    hProperties: { ...heading.data?.hProperties, id: m[1] },
+  };
+}
 
 /** Rewrites citations and node links in place; returns the cited IDs in order. */
 export function transformAtlasRefs(tree: MdNode, refs: AtlasRefs): string[] {
@@ -80,6 +97,7 @@ export function transformAtlasRefs(tree: MdNode, refs: AtlasRefs): string[] {
   };
 
   const walk = (node: MdNode) => {
+    if (node.type === "heading") setHeadingId(node);
     if (!node.children || SKIP.has(node.type)) return;
     const next: MdNode[] = [];
     for (const child of node.children) {
