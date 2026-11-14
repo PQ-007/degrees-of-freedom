@@ -14,7 +14,8 @@ Degrees of Freedom (DOF): a static, browser-only atlas of the whole of robotics,
 
 - M0 (scaffold): done. Astro (static), strict TypeScript, en/mn routing, tokens and the look from the style preview, self-hosted Geist fonts, light/dark theme, Vitest, Playwright + axe, lint, CI, GitHub Pages deploy from `main`.
 - M1 (content model): done. 71 nodes (`content/tree/nodes.yaml` + `content/nodes/<lang>/`), build-time checks, the tech-tree page (graph + list), stub node pages, Pagefind search, header nav with a phone menu. The prerequisites are a first draft awaiting the user's review.
-- Next: M2 (page types with one real example each). Keep this section up to date when a milestone lands.
+- M2 (page types): in progress, one page type at a time, each shown to the user. Done: the full node page with F0 What is robotics written in English and Mongolian (cited). Next: compare, robot teardown, roadmap, Build, signal chain, glossary.
+- Keep this section up to date when a step lands.
 
 ## Commands
 
@@ -45,13 +46,15 @@ npx playwright test -g "home · mn · dark · 360px"    # one e2e test
 - Tech tree: `content/tree/nodes.yaml` holds the language-independent structure (ID, tier, slug, needs); `content/nodes/<lang>/<ID>-<slug>.md` holds each node's title, summary and text. `src/lib/tree.ts` (pure, unit-tested) checks everything: missing or higher-tier needs, cycles, needs implied by other needs, a page per node per language, stray files. `src/lib/atlas.ts` loads the collections, runs the checks and throws, so a broken tree fails the build. Pages call `getAtlas(lang)`.
 - Tree page (`src/pages/[lang]/tree.astro` + `src/lib/tree-view.ts`): tier steps + topic cards, T0 first (the user asked to begin from the bottom tier and not show the highest on top). One tier shows at a time; the hash picks it (`#T3`) or a topic (`#M5`, its card scrolled to and marked). Rail steps, previous/next and the Needs/Unlocks chips are plain anchors, so without JS every tier shows. Two earlier layouts were rejected as hard to read: chips with lines to the focused topic, and chips with a side panel.
 - Search: Pagefind indexes only elements with `data-pagefind-body` (node pages), one index per `<html lang>`; `src/lib/search.ts` drives our own results list. It works only on a build (`npm run build`), not in `npm run dev`.
+- Node pages (`src/pages/[lang]/node/[slug].astro`): the tier's topics on the left, the article (tier rule, breadcrumb, needs/used-by chips, text, Sources, previous/next) in the middle, "On this page" on the right; below 1200px the left panel folds into a bar above the text, below 900px the right one too. Stubs show a note instead of text.
+- Markdown syntax (`src/lib/remark-atlas.ts`, a remark plugin; Astro 7 needs `@astrojs/markdown-remark` for remark plugins): `[@source-id]` is a citation, numbered by first use, listed under Sources from `content/sources.yaml`; `[[C4]]` links to a node with its title in the page's language, `[[C4|text]]` with your own text (not inside table cells: `|` splits them). An unknown source or node fails the build. Real named products and robots go in `<aside class="examples">` ("Real examples", dated), not in the running text (the user, 2026-11-14).
 - Theme: an inline script in `Base.astro` sets `data-theme` before first paint (stored choice in `localStorage["dof-theme"]`, else the system preference); `src/lib/theme.ts` + `ThemeToggle.astro` switch it.
 
 ## Rules
 
 1. **Colour discipline** (`docs/PLAN.md` §4): colour appears only as tier squares, tier bars, Sense/Think/Act squares and data (plot traces, sim highlights). No coloured buttons, chips, links, headings, text or backgrounds. One accent per reading page. Colour never carries meaning alone: tiers keep their `T3` label, states have words. The user rejected both a colour-heavy and a soft version.
 2. **Both languages in the same change.** Every new string or page gets its Mongolian text in the same commit. Terminology follows Sand to Tetris's rule (`docs/mn/TERMS.md` there): use a Mongolian word only when it is already in use; otherwise keep the English term in Latin letters (e.g. tech tree). Flag new Mongolian wording for the user to review.
-3. **Facts are cited.** Every factual or historical claim in content needs an entry in `content/sources.yaml` with how and when it was checked. Never guess; mark contested items as contested.
+3. **Facts are cited.** Every factual or historical claim in content needs an entry in `content/sources.yaml` (claim, sources, `checked` with a date) and a `[@id]` in the text. Never guess. When sources disagree or a claim is debated, add `uncertain: { en, mn }`; the page shows it as "Debated". Both languages of a page cite the same sources (unit-tested).
 4. **Accessibility:** everything works from the keyboard; every state has a text label; `prefers-reduced-motion` is respected; the e2e suite runs axe on every page type × language × theme × 360/390/768/1024 px and fails on any violation or sideways scroll.
 5. **Original content.** Don't copy text, figures or course structure from other robotics courses or sites.
 

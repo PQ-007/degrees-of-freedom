@@ -39,6 +39,7 @@ Draft 2, 2026-11-14. The content is in `CONTENT_PLAN.md`; this file covers the t
 | Plots | Plain SVG for static figures; **uPlot** for live time-series | uPlot is tiny and fast enough for 60 fps traces |
 | Tech-tree layout | **Tier steps + topic cards**: a step rail with T0–T6 (T0 first), one tier's topics at a time as cards with their needs and unlocks as links | Reads like a course and is easy to navigate. Replaced two earlier versions the user found hard to read (bands of chips with lines to the focused topic, then bands with a side panel), 2026-11-14 |
 | Math | KaTeX (remark-math + rehype-katex), rendered at build time | No math JS in the browser |
+| Markdown | `@astrojs/markdown-remark` (Astro 7's remark pipeline) with our own plugin `remark-atlas`: `[@id]` citations and `[[ID]]` node links, checked at build time | Astro 7's default processor (Sätteri) doesn't run remark plugins |
 | Search | **Pagefind** (static index built after the site) | Runs in the browser, multilingual, no server |
 | Progress | localStorage (learned nodes, chosen roadmap), export/import as a file | Same as Sand to Tetris; no accounts |
 | Tests | Vitest (models, data checks), Playwright (pages × languages × widths), axe for accessibility | |

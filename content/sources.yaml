@@ -1,0 +1,105 @@
+# Citations for every factual or historical claim in the pages.
+#
+# Fields:
+#   id         cited from page text as [@id]
+#   claim      the claim as the pages state it (English; for review)
+#   sources    list of { title, url }
+#   checked    how and when the claim was verified
+#   uncertain  { en, mn } when sources disagree or the claim is debated;
+#              shown under the source on the page
+#
+# "web, 2026-11-14" means the page was opened and the claim read on it then.
+
+- id: iso-8373-robot
+  claim: >-
+    ISO 8373:2021 defines a robot as a programmed actuated mechanism with a
+    degree of autonomy to perform locomotion, manipulation or positioning, and
+    calls a teleoperated remote manipulator a robotic device, not a robot.
+  sources:
+    - title: "ISO 8373:2021 Robotics — Vocabulary, sample pages (iTeh Standards)"
+      url: https://standards.iteh.ai/catalog/standards/iso/45d6d293-56e4-47ad-b09f-b86c54d86371/iso-8373-2021
+  checked: web search (definition text of the 2021 edition), 2026-11-14
+  uncertain:
+    en: A revised edition of ISO 8373 is in preparation; this is the 2021 wording.
+    mn: ISO 8373-ийн шинэчилсэн хувилбар бэлтгэгдэж байна; энэ нь 2021 оны томьёолол.
+
+- id: capek-robot
+  claim: >-
+    The word "robot" first appeared in Karel Čapek's play R.U.R., which debuted
+    in 1921. It comes from the Czech "robota", drudgery, and Karel credited his
+    brother Josef with coining it.
+  sources:
+    - title: "Scientist of the Day: Karel Čapek (Linda Hall Library)"
+      url: https://www.lindahall.org/karel-capek-2/
+    - title: "Robot, the most famous Czech, celebrates 100 years (Czech Ministry of Foreign Affairs)"
+      url: https://mzv.gov.cz/file/4171536/Robot__the_Most_Famous_Czech__Celebrates_100_Years___English.pdf
+  checked: web, 2026-11-14
+  uncertain:
+    en: >-
+      Sources give different premiere dates in January 1921 (an amateur
+      staging in Hradec Králové, then the National Theatre in Prague), so the
+      page gives only the year.
+    mn: >-
+      Эх сурвалжууд 1921 оны 1-р сарын өөр өөр нээлтийн огноо өгдөг (Храдец
+      Кралове дахь сонирхогчдын тайз, дараа нь Прагийн Үндэсний театр), тиймээс
+      зөвхөн оныг нь бичив.
+
+- id: unimate
+  claim: >-
+    The first Unimate went to work at a General Motors factory in Ewing, New
+    Jersey, in 1961, lifting hot metal parts from moulds. George Devol filed
+    the patent behind it on 10 December 1954; it was granted on 13 June 1961.
+  sources:
+    - title: "5 of the most influential early robots (ASME)"
+      url: https://www.asme.org/topics-resources/content/5-most-influential-robots-in-history
+    - title: "US 2,988,237, Programmed article transfer, G. C. Devol (Google Patents)"
+      url: https://patents.google.com/patent/US2988237A/en
+  checked: web, 2026-11-14
+  uncertain:
+    en: >-
+      Accounts differ on its exact first job (moving die castings, or lifting
+      parts from hot moulds into cooling liquid), and the machine GM installed
+      differed in detail from the 1954 patent.
+    mn: >-
+      Анхны ажил нь яг юу байсан талаар (цутгамал зөөх, эсвэл халуун хэвнээс
+      эд анги авч хөргөх шингэнд дүрэх) эх сурвалжууд зөрдөг бөгөөд GM-ийн
+      суурилуулсан машин 1954 оны патентаас нарийн ширийн зүйлээрээ ялгаатай байсан.
+
+- id: moravec-paradox
+  claim: >-
+    Hans Moravec observed (Mind Children, 1988) that it is comparatively easy to
+    make computers perform like adults on intelligence tests or at games, and
+    hard or impossible to give them the perception and mobility of a one-year-old.
+  sources:
+    - title: "Moravec's paradox (Wikipedia, citing Moravec 1988, pp. 15–16)"
+      url: https://en.wikipedia.org/wiki/Moravec%27s_paradox
+    - title: "Fact-checking Moravec's paradox (Normal Technology)"
+      url: https://normaltech.ai/p/fact-checking-moravecs-paradox
+  checked: web search, 2026-11-14
+  uncertain:
+    en: >-
+      It is an observation, not a measured result: critics point out it has
+      never been tested empirically, and the popular one-line version is a
+      paraphrase, not Moravec's wording.
+    mn: >-
+      Энэ нь хэмжсэн үр дүн биш, ажиглалт юм: үүнийг хэзээ ч туршилтаар
+      шалгаагүй гэж шүүмжлэгчид хэлдэг бөгөөд түгээмэл нэг өгүүлбэрийн хувилбар
+      нь Моравекийн өөрийнх нь үг биш.
+
+- id: perseverance-landing
+  claim: NASA's Perseverance rover landed in Jezero Crater, Mars, on 18 February 2021.
+  sources:
+    - title: "Mars 2020: Perseverance rover (NASA Science)"
+      url: https://science.nasa.gov/mission/mars-2020-perseverance/
+  checked: web, 2026-11-14
+
+- id: perseverance-ai-drive
+  claim: >-
+    The distance between Earth and Mars makes real-time remote operation
+    ("joy-sticking") of a rover impossible; people plan drives ahead with
+    waypoints, and on 8 and 10 December 2025 Perseverance drove routes planned
+    by AI.
+  sources:
+    - title: "NASA's Perseverance rover completes first AI-planned drive on Mars (NASA JPL, 30 January 2026)"
+      url: https://www.nasa.gov/centers-and-facilities/jpl/nasas-perseverance-rover-completes-first-ai-planned-drive-on-mars/
+  checked: web, 2026-11-14

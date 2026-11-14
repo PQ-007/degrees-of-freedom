@@ -361,10 +361,16 @@ Same rule as Sand to Tetris: every date, number and claim about a real robot or 
 5. **Three flagship teardowns + roadmaps:** Mars rover, quadruped, humanoid.
 6. Then perception, intelligence, systems, remaining teardowns and Builds.
 
-## 12. Open decisions
+## 12. Decisions
 
-1. **Depth per node:** a short overview (~1 page) everywhere first, or full depth chapter by chapter?
-2. **Hands-on code:** should some nodes include in-browser coding exercises (PID, Kalman, A*, IK), or keep the site to reading + demos + real Builds?
-3. **Languages:** English and Mongolian throughout, with Japanese staged, like Sand to Tetris?
-4. **Flagship robots:** start with Mars rover, quadruped and humanoid, or different ones?
-5. **Real product names:** name specific commercial parts and robots (cited, dated), or keep pages generic with examples in a separate "examples" box?
+Decided by the user, 2026-11-14:
+
+1. **Depth per node:** a short overview (~1 page) for every node first; full depth comes later, node by node.
+2. **Real product names:** the text stays generic ("a quasi-direct-drive actuator"); real named products and robots go in a separate, dated **Real examples** box on the page, each with a source.
+3. **Languages:** English and Mongolian throughout, Japanese staged later (see `PLAN.md` §6).
+4. **First real node page:** F0 What is robotics.
+
+Still open:
+
+1. **Hands-on code:** should some nodes include in-browser coding exercises (PID, Kalman, A*, IK), or keep the site to reading + demos + real Builds?
+2. **Flagship robots:** start with Mars rover, quadruped and humanoid, or different ones?
