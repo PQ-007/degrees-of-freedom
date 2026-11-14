@@ -1,0 +1,556 @@
+---
+// A Build (chosen by the user, 2026-11-14: spec card + steps). The spec card
+// (difficulty, time, topics, robot, roadmap), the parts by kind, a block
+// diagram in Sense / Think / Act columns with power below, numbered steps in
+// stages with checkboxes saved in this browser, then the text and sources.
+import { render } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import SourceList from "../../../components/SourceList.astro";
+import {
+  getAtlas,
+  getBuilds,
+  getCompares,
+  getRoadmaps,
+  getRobots,
+} from "../../../lib/atlas";
+import { dots } from "../../../lib/compare";
+import { format, languages, localePath, t, type Lang } from "../../../lib/i18n";
+import type { MessageKey } from "../../../i18n/en";
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of languages) {
+    for (const b of await getBuilds(lang)) {
+      paths.push({ params: { lang, slug: b.build.slug } });
+    }
+  }
+  return paths;
+}
+
+const lang = Astro.params.lang as Lang;
+const page = (await getBuilds(lang)).find(
+  (b) => b.build.slug === Astro.params.slug,
+);
+if (!page) throw new Error(`no build ${Astro.params.slug}`);
+const { build } = page;
+const atlas = await getAtlas(lang);
+const byId = new Map(atlas.map((n) => [n.id, n]));
+const topics = build.nodes
+  .map((id) => byId.get(id))
+  .filter((n) => n !== undefined);
+const compares = new Map((await getCompares(lang)).map((c) => [c.table.id, c]));
+const robot = (await getRobots(lang)).find((r) => r.data.id === build.robot);
+const roadmaps = (await getRoadmaps(lang)).filter(
+  (r) => r.roadmap.build === build.id,
+);
+const { Content, remarkPluginFrontmatter } = await render(page.entry);
+const citedIds =
+  (remarkPluginFrontmatter["citations"] as string[] | undefined) ?? [];
+
+let n = 0;
+const stages = build.stages.map((s, i) => ({
+  ...s,
+  number: i + 1,
+  steps: s.steps.map((st) => ({
+    ...st,
+    n: ++n,
+    topic: st.node ? byId.get(st.node) : undefined,
+  })),
+}));
+const total = n;
+const columns = (["sense", "think", "act"] as const).map((key) => ({
+  key,
+  name: t(lang, `role.${key}` as MessageKey),
+  boxes: build.diagram[key],
+}));
+const base = import.meta.env.BASE_URL;
+---
+
+<Base
+  lang={lang}
+  title={`${build.id} ${page.title}`}
+  description={page.summary}
+>
+  <div
+    class="wrap page"
+    data-build={build.id}
+    data-total={total}
+    data-progress={t(lang, "build.progress")}
+  >
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href={localePath(base, lang, "builds/")}>{t(lang, "builds.title")}</a>
+      <span aria-hidden="true">›</span>
+      <span class="id">{build.id}</span>
+    </nav>
+    <h1>{page.title}</h1>
+    <p class="summary">{page.summary}</p>
+
+    <section class="spec" aria-label={`Build ${build.id.slice(1)}`}>
+      <p class="label">Build {build.id.slice(1)}</p>
+      <dl>
+        <dt>{t(lang, "build.difficulty")}</dt>
+        <dd>
+          <span class="dots" aria-hidden="true">
+            {dots(build.difficulty)}
+          </span>{" "}
+          {t(lang, `rating.${build.difficulty}` as MessageKey)}
+          <span class="visually-hidden">
+            {" "}
+            ({format(t(lang, "compare.outOf"), { n: build.difficulty })})
+          </span>
+        </dd>
+        <dt>{t(lang, "build.time")}</dt>
+        <dd>{build.time[lang]}</dd>
+        {robot && (
+          <>
+            <dt>{t(lang, "roadmap.robot")}</dt>
+            <dd>
+              <a class="chip" href={robot.url}>
+                {robot.data.id} {robot.title}
+              </a>
+            </dd>
+          </>
+        )}
+        {roadmaps.length > 0 && (
+          <>
+            <dt>{t(lang, "build.roadmap")}</dt>
+            <dd>
+              {roadmaps.map((r) => (
+                <a class="chip" href={r.url}>
+                  {r.title}
+                </a>
+              ))}
+            </dd>
+          </>
+        )}
+        <dt>{t(lang, "build.uses")}</dt>
+        <dd>
+          {topics.map((n) => (
+            <a class={`chip t${n.tier}`} href={n.url}>
+              <span class="sq" aria-hidden="true" />
+              {n.id} {n.title}
+            </a>
+          ))}
+        </dd>
+      </dl>
+    </section>
+
+    <section class="block" aria-labelledby="parts">
+      <h2 id="parts">{t(lang, "build.parts")}</h2>
+      <p class="muted note">{t(lang, "build.partsNote")}</p>
+      <ul class="parts">
+        {build.parts.map((p) => {
+          const node = byId.get(p.node);
+          const cmp = p.compare ? compares.get(p.compare) : undefined;
+          return (
+            <li>
+              <span class="part-name">{p.name[lang]}</span>
+              <span class="part-links">
+                {node && (
+                  <a class={`chip t${node.tier}`} href={node.url}>
+                    <span class="sq" aria-hidden="true" />
+                    {node.id} {node.title}
+                  </a>
+                )}
+                {cmp && (
+                  <a class="chip" href={cmp.url}>
+                    {t(lang, "node.compare")}: {cmp.table.id} {cmp.title}
+                  </a>
+                )}
+              </span>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+
+    <section class="block" aria-labelledby="diagram">
+      <h2 id="diagram">{t(lang, "build.diagram")}</h2>
+      <div class="diagram grid-bg">
+        <div class="flow">
+          {columns.map((col, i) => (
+            <>
+              {i > 0 && (
+                <span class="arrow" aria-hidden="true">
+                  →
+                </span>
+              )}
+              <div class={`col ${col.key}`}>
+                <h3>
+                  <span class="sq" aria-hidden="true" />
+                  {col.name}
+                </h3>
+                <ul>
+                  {col.boxes.map((b) => (
+                    <li>{b[lang]}</li>
+                  ))}
+                </ul>
+              </div>
+            </>
+          ))}
+        </div>
+        <div class="power">
+          <h3>{t(lang, "build.power")}</h3>
+          <ul>
+            {build.diagram.power.map((b) => (
+              <li>{b[lang]}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="block" aria-labelledby="steps">
+      <h2 id="steps">{t(lang, "build.steps")}</h2>
+      <div class="progress js-only" aria-live="polite">
+        <div class="bar-track" aria-hidden="true">
+          <div class="bar-fill" data-fill></div>
+        </div>
+        <p class="count" data-count>
+          {format(t(lang, "build.progress"), { n: 0, total })}
+        </p>
+        <p class="muted saved">{t(lang, "roadmap.saved")}</p>
+      </div>
+      {stages.map((stage) => (
+        <div class="stage">
+          <h3>
+            <span class="label">
+              {format(t(lang, "roadmap.stage"), { n: stage.number })}
+            </span>
+            {stage.title[lang]}
+          </h3>
+          <ol class="steps" start={stage.steps[0]?.n}>
+            {stage.steps.map((st) => (
+              <li class="step">
+                <span class="num" aria-hidden="true">
+                  {st.n}
+                </span>
+                <div class="body">
+                  <p class="text">{st.text[lang]}</p>
+                  {st.topic && (
+                    <a class={`chip t${st.topic.tier}`} href={st.topic.url}>
+                      <span class="sq" aria-hidden="true" />
+                      {st.topic.id} {st.topic.title}
+                    </a>
+                  )}
+                </div>
+                <label class="tick js-only">
+                  <input
+                    type="checkbox"
+                    data-step={`${build.id}:${st.n}`}
+                    aria-label={format(t(lang, "build.doneLabel"), { n: st.n })}
+                  />
+                  <span aria-hidden="true">{t(lang, "build.done")}</span>
+                </label>
+              </li>
+            ))}
+          </ol>
+        </div>
+      ))}
+    </section>
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    <SourceList lang={lang} ids={citedIds} />
+  </div>
+</Base>
+
+<style>
+  .page {
+    max-width: 56rem;
+    padding-top: 40px;
+    padding-bottom: 64px;
+  }
+  .crumbs {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 14px;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    letter-spacing: -0.035em;
+    margin: 16px 0 12px;
+  }
+  .summary {
+    font-size: 1.15rem;
+    margin: 0 0 24px;
+  }
+  :global(html:not(.js)) .js-only {
+    display: none;
+  }
+
+  /* The spec card: the one place a Build shows its numbers at a glance. */
+  .spec {
+    border: 2px solid var(--line);
+    background: var(--surface);
+    padding: 16px 18px;
+    margin: 0 0 32px;
+    box-shadow: var(--shadow);
+  }
+  .spec .label {
+    margin: 0 0 12px;
+  }
+  .spec dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: max-content minmax(0, 1fr);
+    gap: 10px 18px;
+    align-items: baseline;
+    font-size: 15px;
+  }
+  .spec dt {
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .spec dd {
+    margin: 0;
+  }
+  .spec .chip {
+    font-size: 13px;
+  }
+  .dots {
+    font-family: var(--mono);
+    letter-spacing: 1px;
+  }
+
+  .block {
+    border-top: 2px solid var(--line);
+    padding: 24px 0 8px;
+  }
+  .block h2 {
+    font-size: 1.4rem;
+    margin: 0 0 12px;
+  }
+  .note {
+    font-size: 14px;
+    margin: -4px 0 14px;
+  }
+  .parts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .parts li {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 6px 16px;
+    padding: 8px 0;
+    border-bottom: 1px solid var(--rule);
+  }
+  .part-name {
+    font-weight: 600;
+  }
+  .part-links .chip {
+    font-size: 13px;
+    margin: 0 0 0 6px;
+  }
+
+  /* The block diagram: Sense → Think → Act, power underneath. */
+  .diagram {
+    border: 2px solid var(--line);
+    padding: 16px;
+  }
+  .flow {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(
+        0,
+        1fr
+      );
+    gap: 10px;
+    align-items: center;
+  }
+  .arrow {
+    font-size: 1.4rem;
+    color: var(--muted);
+  }
+  .col h3,
+  .power h3 {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95rem;
+    margin: 0 0 8px;
+  }
+  .col ul,
+  .power ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 8px;
+  }
+  .col li,
+  .power li {
+    border: 2px solid var(--line);
+    background: var(--surface);
+    padding: 8px 10px;
+    font-size: 14.5px;
+  }
+  .power {
+    margin-top: 16px;
+    padding-top: 14px;
+    border-top: 2px dashed var(--line);
+  }
+  .power ul {
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 200px), 1fr));
+  }
+
+  .progress {
+    border: 2px solid var(--line);
+    background: var(--surface);
+    padding: 14px 16px;
+    margin: 0 0 20px;
+  }
+  .bar-track {
+    height: 14px;
+    border: 2px solid var(--line);
+    background: var(--bg);
+  }
+  .bar-fill {
+    height: 100%;
+    width: 0;
+    background: var(--ink);
+    transition: width 0.2s;
+  }
+  .count {
+    margin: 10px 0 2px;
+    font-weight: 700;
+  }
+  .saved {
+    margin: 0;
+    font-size: 13.5px;
+  }
+  .stage h3 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 14px;
+    font-size: 1.1rem;
+    margin: 18px 0 10px;
+  }
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    gap: 14px;
+    align-items: start;
+    border: 2px solid var(--line);
+    background: var(--surface);
+    padding: 12px 14px;
+  }
+  .step.done {
+    background: var(--bg);
+  }
+  .num {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 2px solid var(--line);
+    font: 700 13px var(--mono);
+  }
+  .step.done .num {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .text {
+    margin: 4px 0 8px;
+  }
+  .step .chip {
+    font-size: 13px;
+    margin: 0;
+  }
+  .tick {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    padding-top: 4px;
+  }
+  .tick input {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--ink);
+    margin: 0;
+  }
+
+  @media (max-width: 760px) {
+    .flow {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .arrow {
+      transform: rotate(90deg);
+      justify-self: center;
+    }
+  }
+  @media (max-width: 560px) {
+    .spec dl {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 2px;
+    }
+    .spec dd {
+      margin-bottom: 10px;
+    }
+    .step {
+      grid-template-columns: 34px minmax(0, 1fr);
+    }
+    .step .tick {
+      grid-column: 2;
+      padding-top: 0;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bar-fill {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { format } from "../../../lib/i18n";
+  import { buildSteps } from "../../../lib/progress";
+
+  const root = document.querySelector<HTMLElement>("[data-build]");
+  if (root) {
+    const boxes = [
+      ...root.querySelectorAll<HTMLInputElement>("input[data-step]"),
+    ];
+    const total = Number(root.dataset["total"]);
+    const fill = root.querySelector<HTMLElement>("[data-fill]");
+    const count = root.querySelector<HTMLElement>("[data-count]");
+    for (const box of boxes) {
+      box.addEventListener("change", () =>
+        buildSteps.set(box.dataset["step"] ?? "", box.checked),
+      );
+    }
+    buildSteps.onChange((all) => {
+      let done = 0;
+      for (const box of boxes) {
+        const on = all.has(box.dataset["step"] ?? "");
+        box.checked = on;
+        box.closest(".step")?.classList.toggle("done", on);
+        if (on) done++;
+      }
+      if (fill) fill.style.width = `${(100 * done) / total}%`;
+      if (count)
+        count.textContent = format(root.dataset["progress"] ?? "", {
+          n: done,
+          total,
+        });
+    });
+  }
+</script>

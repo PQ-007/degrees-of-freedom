@@ -34,8 +34,20 @@ const roadmap = (steps: string[]): Roadmap => ({
   ],
   later: [],
 });
+const builds = new Set(
+  readdirSync(new URL("builds/", root))
+    .filter((f) => f.endsWith(".yaml"))
+    .map(
+      (f) =>
+        (
+          parse(readFileSync(new URL(`builds/${f}`, root), "utf8")) as {
+            id: string;
+          }
+        ).id,
+    ),
+);
 const check = (r: Roadmap) =>
-  checkRoadmap(r, needsOf, robots, languages, languages);
+  checkRoadmap(r, needsOf, robots, builds, languages, languages);
 
 describe("checkRoadmap", () => {
   it("accepts a path in prerequisite order", () => {
@@ -51,14 +63,18 @@ describe("checkRoadmap", () => {
   it("rejects duplicates, unknown nodes and robots, and missing text", () => {
     const r = roadmap(["F0", "F0", "Z1"]);
     r.robot = "R99";
+    r.build = "B99";
     r.later = [{ node: "F1", why: { en: "x" } }];
-    expect(checkRoadmap(r, needsOf, robots, languages, ["en"])).toEqual([
-      "roadmaps/demo.yaml has no mn text: add content/roadmaps/mn/demo.md",
-      "roadmaps/demo.yaml links robot R99, which has no teardown",
-      "roadmaps/demo.yaml: F0 is on the path twice",
-      "roadmaps/demo.yaml: Z1 is not a node in nodes.yaml",
-      'roadmaps/demo.yaml: F1 has no mn "why"',
-    ]);
+    expect(checkRoadmap(r, needsOf, robots, builds, languages, ["en"])).toEqual(
+      [
+        "roadmaps/demo.yaml has no mn text: add content/roadmaps/mn/demo.md",
+        "roadmaps/demo.yaml ends in Build B99, which doesn't exist",
+        "roadmaps/demo.yaml links robot R99, which has no teardown",
+        "roadmaps/demo.yaml: F0 is on the path twice",
+        "roadmaps/demo.yaml: Z1 is not a node in nodes.yaml",
+        'roadmaps/demo.yaml: F1 has no mn "why"',
+      ],
+    );
   });
 
   it("lists the path with later topics last", () => {
@@ -79,9 +95,9 @@ describe("the real roadmaps", () => {
       const pageLangs = languages.filter((l) =>
         readdirSync(new URL(`roadmaps/${l}/`, root)).includes(`${r.slug}.md`),
       );
-      expect(checkRoadmap(r, needsOf, robots, languages, pageLangs)).toEqual(
-        [],
-      );
+      expect(
+        checkRoadmap(r, needsOf, robots, builds, languages, pageLangs),
+      ).toEqual([]);
     });
   }
 });

@@ -6,7 +6,12 @@
 import { render } from "astro:content";
 import Base from "../../../layouts/Base.astro";
 import SourceList from "../../../components/SourceList.astro";
-import { getAtlas, getRoadmaps, getRobots } from "../../../lib/atlas";
+import {
+  getAtlas,
+  getBuilds,
+  getRoadmaps,
+  getRobots,
+} from "../../../lib/atlas";
 import { languages, localePath, t, type Lang } from "../../../lib/i18n";
 import type { MessageKey } from "../../../i18n/en";
 
@@ -32,6 +37,7 @@ const byId = new Map(atlas.map((n) => [n.id, n]));
 const roadmaps = (await getRoadmaps(lang)).filter(
   (r) => r.roadmap.robot === id,
 );
+const builds = (await getBuilds(lang)).filter((b) => b.build.robot === id);
 const topics = robot.data.nodes
   .map((n) => byId.get(n))
   .filter((n) => n !== undefined);
@@ -137,6 +143,18 @@ const base = import.meta.env.BASE_URL;
                 {roadmaps.map((r) => (
                   <a class="chip" href={r.url}>
                     {r.title}
+                  </a>
+                ))}
+              </dd>
+            </>
+          )}
+          {builds.length > 0 && (
+            <>
+              <dt>{t(lang, "roadmap.build")}</dt>
+              <dd>
+                {builds.map((b) => (
+                  <a class="chip" href={b.url}>
+                    {b.build.id} {b.title}
                   </a>
                 ))}
               </dd>

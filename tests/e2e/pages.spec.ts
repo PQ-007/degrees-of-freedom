@@ -14,6 +14,8 @@ const pages = [
   { name: "robot", path: "{lang}/robots/planetary-rover/" },
   { name: "roadmaps-index", path: "{lang}/roadmaps/" },
   { name: "roadmap", path: "{lang}/roadmaps/mars-rover/" },
+  { name: "builds-index", path: "{lang}/builds/" },
+  { name: "build", path: "{lang}/builds/rocker-bogie-rover/" },
   { name: "search", path: "{lang}/search/?q=control" },
   { name: "404", path: "404.html" },
 ];

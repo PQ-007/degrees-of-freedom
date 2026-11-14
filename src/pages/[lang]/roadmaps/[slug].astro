@@ -5,7 +5,12 @@
 // folded at the end; then the text (how to use it, then build it).
 import { render } from "astro:content";
 import Base from "../../../layouts/Base.astro";
-import { getAtlas, getRoadmaps, getRobots } from "../../../lib/atlas";
+import {
+  getAtlas,
+  getBuilds,
+  getRoadmaps,
+  getRobots,
+} from "../../../lib/atlas";
 import { format, languages, localePath, t, type Lang } from "../../../lib/i18n";
 
 export async function getStaticPaths() {
@@ -27,6 +32,7 @@ const { roadmap } = page;
 const atlas = await getAtlas(lang);
 const byId = new Map(atlas.map((n) => [n.id, n]));
 const robot = (await getRobots(lang)).find((r) => r.data.id === roadmap.robot);
+const build = (await getBuilds(lang)).find((b) => b.build.id === roadmap.build);
 const { Content } = await render(page.entry);
 
 // Number the steps through all stages.
@@ -55,14 +61,28 @@ const base = import.meta.env.BASE_URL;
     </nav>
     <h1>{page.title}</h1>
     <p class="summary">{page.summary}</p>
-    {robot && (
+    {(robot || build) && (
       <dl class="meta">
-        <dt>{t(lang, "roadmap.robot")}</dt>
-        <dd>
-          <a class="chip" href={robot.url}>
-            {robot.data.id} {robot.title}
-          </a>
-        </dd>
+        {robot && (
+          <>
+            <dt>{t(lang, "roadmap.robot")}</dt>
+            <dd>
+              <a class="chip" href={robot.url}>
+                {robot.data.id} {robot.title}
+              </a>
+            </dd>
+          </>
+        )}
+        {build && (
+          <>
+            <dt>{t(lang, "roadmap.build")}</dt>
+            <dd>
+              <a class="chip" href={build.url}>
+                {build.build.id} {build.title}
+              </a>
+            </dd>
+          </>
+        )}
       </dl>
     )}
 

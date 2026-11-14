@@ -4,6 +4,7 @@ import { getCollection, type CollectionEntry } from "astro:content";
 import { languages, localePath, type Lang } from "./i18n";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
+import { checkBuild, type Build } from "./builds";
 import { checkCompare, type CompareTable } from "./compare";
 import { checkRoadmap, type Roadmap } from "./roadmaps";
 import { checkRobot, type RobotData } from "./robots";
@@ -215,17 +216,20 @@ function loadRoadmaps() {
   roadmapsChecked ??= (async () => {
     const { nodes } = await load();
     const { robots } = await loadRobots();
+    const { builds } = await loadBuilds();
     const roadmaps = (await getCollection("roadmapData")).map(
       (e) => e.data as Roadmap,
     );
     const pages = await getCollection("roadmapPages");
     const needsOf = new Map(nodes.map((n) => [n.id, n.needs]));
     const robotIds = new Set(robots.map((r) => r.id));
+    const buildIds = new Set(builds.map((b) => b.id));
     const errors = roadmaps.flatMap((r) =>
       checkRoadmap(
         r,
         needsOf,
         robotIds,
+        buildIds,
         languages,
         pages
           .filter((p) => p.id.endsWith(`/${r.slug}`))
@@ -254,6 +258,69 @@ export async function getRoadmaps(lang: Lang): Promise<RoadmapPage[]> {
       title: entry.data.title,
       summary: entry.data.summary,
       url: localePath(base, lang, `roadmaps/${roadmap.slug}/`),
+      entry,
+    };
+  });
+}
+
+export interface BuildPage {
+  build: Build;
+  title: string;
+  summary: string;
+  url: string;
+  entry: CollectionEntry<"buildPages">;
+}
+
+let buildsChecked:
+  | Promise<{ builds: Build[]; pages: CollectionEntry<"buildPages">[] }>
+  | undefined;
+
+function loadBuilds() {
+  buildsChecked ??= (async () => {
+    const { nodes } = await load();
+    const { robots } = await loadRobots();
+    const { tables } = await loadCompares();
+    const builds = (await getCollection("buildData"))
+      .map((e) => e.data as Build)
+      .sort((a, b) => a.id.localeCompare(b.id));
+    const pages = await getCollection("buildPages");
+    const ids = {
+      nodes: new Set(nodes.map((n) => n.id)),
+      compares: new Set(tables.map((t) => t.id)),
+      robots: new Set(robots.map((r) => r.id)),
+    };
+    const errors = builds.flatMap((b) =>
+      checkBuild(
+        b,
+        ids,
+        languages,
+        pages
+          .filter((p) => p.id.endsWith(`/${b.slug}`))
+          .map((p) => p.id.split("/")[0] ?? ""),
+      ),
+    );
+    if (errors.length > 0) {
+      throw new Error(
+        `The Builds have ${errors.length} problem(s):\n- ${errors.join("\n- ")}`,
+      );
+    }
+    return { builds, pages };
+  })();
+  return buildsChecked;
+}
+
+/** Every Build, in ID order, with its text in `lang`. */
+export async function getBuilds(lang: Lang): Promise<BuildPage[]> {
+  const { builds, pages } = await loadBuilds();
+  const base = import.meta.env.BASE_URL;
+  return builds.map((build) => {
+    const entry = pages.find((p) => p.id === `${lang}/${build.slug}`);
+    if (!entry) throw new Error(`${build.id} has no ${lang} page`); // checkBuild rules this out
+    return {
+      build,
+      title: entry.data.title,
+      summary: entry.data.summary,
+      url: localePath(base, lang, `builds/${build.slug}/`),
       entry,
     };
   });

@@ -1,41 +1,50 @@
-// Which topics the learner has marked as learned, kept in this browser only
-// (localStorage, as in Sand to Tetris; no accounts). Roadmap checkboxes and
-// the node page's "Mark as learned" button share it, and stay in sync across
-// open tabs through the storage event.
+// What the learner has ticked, kept in this browser only (localStorage, as in
+// Sand to Tetris; no accounts). Two lists: learned topics (roadmap checkboxes
+// and the node page's "Learned" share it) and done Build steps ("B08:3").
+// Pages stay in sync with each other and across open tabs.
 
-const KEY = "dof-learned";
-
-export function learned(): Set<string> {
-  try {
-    const raw = localStorage.getItem(KEY);
-    const list: unknown = raw ? JSON.parse(raw) : [];
-    return new Set(
-      Array.isArray(list)
-        ? list.filter((x): x is string => typeof x === "string")
-        : [],
-    );
-  } catch {
-    return new Set();
-  }
+function store(key: string) {
+  const event = `dof-change:${key}`;
+  const read = (): Set<string> => {
+    try {
+      const raw = localStorage.getItem(key);
+      const list: unknown = raw ? JSON.parse(raw) : [];
+      return new Set(
+        Array.isArray(list)
+          ? list.filter((x): x is string => typeof x === "string")
+          : [],
+      );
+    } catch {
+      return new Set();
+    }
+  };
+  return {
+    read,
+    set(id: string, on: boolean): void {
+      const all = read();
+      if (on) all.add(id);
+      else all.delete(id);
+      try {
+        localStorage.setItem(key, JSON.stringify([...all].sort()));
+      } catch {
+        // Storage blocked: the tick lasts for this page only.
+      }
+      window.dispatchEvent(new CustomEvent(event));
+    },
+    /** Calls `fn` now and whenever the list changes (here or in another tab). */
+    onChange(fn: (all: Set<string>) => void): void {
+      fn(read());
+      window.addEventListener(event, () => fn(read()));
+      window.addEventListener("storage", (e) => {
+        if (e.key === key) fn(read());
+      });
+    },
+  };
 }
 
-export function setLearned(id: string, on: boolean): void {
-  const all = learned();
-  if (on) all.add(id);
-  else all.delete(id);
-  try {
-    localStorage.setItem(KEY, JSON.stringify([...all].sort()));
-  } catch {
-    // Storage blocked: the tick lasts for this page only.
-  }
-  window.dispatchEvent(new CustomEvent("dof-learned"));
-}
+const learnedStore = store("dof-learned");
+export const learned = learnedStore.read;
+export const setLearned = learnedStore.set;
+export const onLearnedChange = learnedStore.onChange;
 
-/** Calls `fn` now and whenever progress changes (here or in another tab). */
-export function onLearnedChange(fn: (all: Set<string>) => void): void {
-  fn(learned());
-  window.addEventListener("dof-learned", () => fn(learned()));
-  window.addEventListener("storage", (e) => {
-    if (e.key === KEY) fn(learned());
-  });
-}
+export const buildSteps = store("dof-build-steps");

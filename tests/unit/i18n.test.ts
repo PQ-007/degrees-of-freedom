@@ -19,7 +19,12 @@ describe("interface strings", () => {
   });
 
   // Names and codes stay in Latin letters; everything else should be translated.
-  const sameInBoth = new Set(["site.name", "nav.tree", "tree.title"]);
+  const sameInBoth = new Set([
+    "site.name",
+    "nav.tree",
+    "tree.title",
+    "build.roadmap",
+  ]);
   it("Mongolian strings are translated", () => {
     for (const key of Object.keys(en) as (keyof typeof en)[]) {
       if (sameInBoth.has(key)) continue;

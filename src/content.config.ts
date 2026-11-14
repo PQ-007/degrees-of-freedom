@@ -132,6 +132,7 @@ const roadmapData = defineCollection({
   schema: z.object({
     slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/),
     robot: z.string().optional(),
+    build: z.string().optional(),
     stages: z.array(
       z.object({
         key: z.string(),
@@ -157,6 +158,50 @@ const roadmapPages = defineCollection({
   schema: z.object({ title: z.string().min(1), summary: z.string().min(1) }),
 });
 
+// Builds: the spec card, diagram and steps (one YAML, every language inside)
+// and the text per language (content/builds/<lang>/<slug>.md).
+const buildData = defineCollection({
+  loader: glob({ pattern: "*.yaml", base: "content/builds" }),
+  schema: z.object({
+    id: z.string().regex(/^B\d\d$/),
+    slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/),
+    difficulty: z.number().int(),
+    time: localized,
+    nodes: z.array(z.string()),
+    robot: z.string().optional(),
+    parts: z.array(
+      z.object({
+        node: z.string(),
+        compare: z.string().optional(),
+        name: localized,
+      }),
+    ),
+    diagram: z.object({
+      sense: z.array(localized),
+      think: z.array(localized),
+      act: z.array(localized),
+      power: z.array(localized),
+    }),
+    stages: z.array(
+      z.object({
+        key: z.string(),
+        title: localized,
+        steps: z.array(
+          z.object({ node: z.string().optional(), text: localized }),
+        ),
+      }),
+    ),
+  }),
+});
+const buildPages = defineCollection({
+  loader: glob({
+    pattern: "*/*.md",
+    base: "content/builds",
+    generateId: ({ entry }) => entry.replace(/\.md$/, ""),
+  }),
+  schema: z.object({ title: z.string().min(1), summary: z.string().min(1) }),
+});
+
 export const collections = {
   tree,
   nodes,
@@ -167,4 +212,6 @@ export const collections = {
   robotPages,
   roadmapData,
   roadmapPages,
+  buildData,
+  buildPages,
 };
