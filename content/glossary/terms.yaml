@@ -128,6 +128,46 @@
     mn: Симуляц эсвэл удирдлага шинэчлэл бүрт урагшлах жижиг хугацаа. Жижиг алхам илүү нарийвчлалтай ч илүү их тооцоолол шаарддаг.
   see: [differential-equation, real-time]
 
+- id: mean
+  node: F3
+  term:
+    en: Mean
+    mn: Дундаж
+  def:
+    en: The average of a set of numbers, their sum divided by how many there are; where the readings centre.
+    mn: Тоонуудын дундаж, тэдгээрийн нийлбэрийг тоонд нь хуваасан нь; хэмжилтүүдийн төвлөрөх цэг.
+  see: [standard-deviation]
+- id: standard-deviation
+  node: F3
+  term:
+    en: Standard deviation
+    mn: Стандарт хазайлт
+  def:
+    en: How far values typically lie from their mean, written σ. A sensor's noise is often given this way.
+    mn: Утгууд дунджаасаа ихэвчлэн хэр хол байгааг заах хэмжигдэхүүн, σ гэж тэмдэглэнэ. Мэдрэгчийн шуугианыг ихэвчлэн ингэж илэрхийлдэг.
+  see: [mean, normal-distribution, noise]
+- id: normal-distribution
+  node: F3
+  term:
+    en: Normal distribution
+    mn: Хэвийн тархалт
+  def:
+    en: The bell-shaped spread of values, also called Gaussian. About 68% of values lie within one standard deviation of the mean and about 95% within two.
+    mn: Утгуудын хонх хэлбэрийн тархалт, Гауссын тархалт ч гэдэг. Утгуудын 68 орчим хувь нь дунджаас нэг стандарт хазайлтын дотор, 95 орчим хувь нь хоёрын дотор байна.
+  see: [standard-deviation]
+- id: bayes-rule
+  node: F3
+  term:
+    en: Bayes' rule
+    mn: Байесийн дүрэм
+  def:
+    en: The rule that turns "how likely is this evidence, if the thing is true" into "how likely is the thing, given this evidence", using how common the thing was to begin with.
+    mn: >-
+      "Тухайн зүйл үнэн бол энэ нотолгоо хэр магадлалтай вэ"-г "энэ нотолгоо
+      байхад тухайн зүйл хэр магадлалтай вэ" болгодог, тэр зүйл анхнаасаа хэр
+      түгээмэл байсныг ашигладаг дүрэм.
+  see: [state-estimate]
+
 # T1 Components
 - id: gear-ratio
   node: C2

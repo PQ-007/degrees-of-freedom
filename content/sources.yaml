@@ -347,3 +347,36 @@
     - title: "MuJoCo XML reference: option, timestep and integrator"
       url: https://mujoco.readthedocs.io/en/stable/XMLreference.html#option-timestep
   checked: web (the documentation's source text on GitHub), 2026-11-14
+
+- id: sd-empirical
+  claim: >-
+    The standard deviation measures how far data values are from their mean.
+    For data that are bell-shaped and symmetric, approximately 68% lie within
+    one standard deviation of the mean, approximately 95% within two, and more
+    than 99% within three (the empirical rule).
+  sources:
+    - title: "Introductory Statistics 2e, section 2.7: Measures of the Spread of the Data (B. Illowsky and S. Dean, OpenStax)"
+      url: https://openstax.org/books/introductory-statistics-2e/pages/2-7-measures-of-the-spread-of-the-data
+  checked: web, 2026-11-14
+
+- id: clt-sem
+  claim: >-
+    The mean of many sample means targets the population mean; their standard
+    deviation, the standard error of the mean, is the population's standard
+    deviation divided by the square root of the sample size n; and their
+    distribution approaches a normal distribution as n increases.
+  sources:
+    - title: "Introductory Statistics 2e, section 7.1: The Central Limit Theorem for Sample Means (B. Illowsky and S. Dean, OpenStax)"
+      url: https://openstax.org/books/introductory-statistics-2e/pages/7-1-the-central-limit-theorem-for-sample-means-averages
+  checked: web, 2026-11-14
+
+- id: bayes-base-rate
+  claim: >-
+    Bayes' theorem "inverts" conditional probabilities, turning P(B|A) into
+    P(A|B) using the base rate P(A). When the base rate is low, most positive
+    results of even an accurate test are false (the base rate fallacy): 95% of
+    all tests being accurate does not imply 95% of positive tests are.
+  sources:
+    - title: "18.05 Introduction to Probability and Statistics, class 3: Conditional Probability, Independence and Bayes' Theorem (J. Orloff and J. Bloom, MIT OpenCourseWare, Spring 2022)"
+      url: https://ocw.mit.edu/courses/18-05-introduction-to-probability-and-statistics-spring-2022/mit18_05_s22_class03-prep.pdf
+  checked: web (the reading's PDF), 2026-11-14
