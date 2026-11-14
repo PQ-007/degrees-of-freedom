@@ -10,25 +10,24 @@ export const mn: Record<MessageKey, string> = {
   "site.skip": "Агуулга руу шилжих",
   "nav.label": "Сайт",
   "nav.menu": "Цэс",
-  "nav.tree": "Tech tree",
+  "nav.tree": "Roadmap",
   "nav.chain": "Дохионы гинж",
   "nav.compare": "Харьцуулалт",
   "nav.robots": "Роботууд",
-  "nav.roadmaps": "Roadmap-ууд",
   "nav.builds": "Build-ууд",
   "nav.search": "Хайх",
-  "theme.toDark": "Харанхуй",
-  "theme.toLight": "Гэгээлэг",
-  "theme.toDarkLabel": "Харанхуй загвар руу шилжих",
-  "theme.toLightLabel": "Гэгээлэг загвар руу шилжих",
+  "theme.toDark": "Бараан",
+  "theme.toLight": "Цагаан",
+  "theme.toDarkLabel": "Бараан загвар руу шилжих",
+  "theme.toLightLabel": "Цагаан загвар руу шилжих",
   "lang.other": "English",
   "lang.otherLabel": "Энэ хуудсыг англиар унших",
   "home.eyebrow": "Бүтээгдэж байна",
   "home.lead":
     "Роботыг бүрдүүлдэг бүх зүйл: үндсэн ойлголтоос эхлээд Ангараг гарагийн ровер, хүн дүрст робот хүртэл нэг газрын зурагт. Замаа өөрөө сонго.",
   "home.status":
-    "Tech tree бэлэн боллоо: сэдэв бүр, түүнд юу хэрэгтэй, юуг нээдэг нь. Хуудсууд эндээс цааш бөглөгдөнө.",
-  "home.cta": "Tech tree нээх",
+    "Roadmap бэлэн боллоо: сэдэв бүр, түүнд юу хэрэгтэй, юуг нээдэг нь. Хуудсууд эндээс цааш бөглөгдөнө.",
+  "home.cta": "Roadmap нээх",
   "tiers.label": "Долоон түвшин, T0 Суурь-аас дээш",
   "tier.0": "Суурь",
   "tier.1": "Бүрэлдэхүүн хэсгүүд",
@@ -37,7 +36,7 @@ export const mn: Record<MessageKey, string> = {
   "tier.4": "Мэдрэхүй ба үнэлэлт",
   "tier.5": "Оюун ухаан",
   "tier.6": "Систем ба бодит ертөнц",
-  "tree.title": "Tech tree",
+  "tree.title": "Roadmap",
   "tree.lead":
     "Робот техникийн бүх сэдэв, долоон түвшинд. T0 Суурь-аас эхэлж дээш ахина; сэдэв бүр юу шаарддаг, юуг нээдгээ харуулна.",
   "tree.count": "7 түвшинд {n} сэдэв",
@@ -85,7 +84,7 @@ export const mn: Record<MessageKey, string> = {
   "role.act": "Үйлдэх",
   "roadmaps.title": "Roadmap-ууд",
   "roadmaps.lead":
-    "Юу бүтээхээ сонго. Roadmap бүр tech tree-ээр дамжих дараалсан зам бөгөөд Build-ээр төгсдөг.",
+    "Юу бүтээхээ сонго. Тус бүр сэдвүүдээр дамжих дараалсан зам бөгөөд Build-ээр төгсдөг.",
   "roadmap.robot": "Робот",
   "roadmap.progress": "{total}-аас {n} нь сурсан",
   "roadmap.stage": "{n}-р шат",
@@ -98,7 +97,7 @@ export const mn: Record<MessageKey, string> = {
   "node.roadmaps": "Roadmap-ууд",
   "builds.title": "Build-ууд",
   "builds.lead":
-    "Бодитоор бүтээх роботууд, хялбараас хэцүү рүү. Тус бүр tech tree-ийн сэдвүүдийг ажил хэрэг болгоно.",
+    "Бодитоор бүтээх роботууд, хялбараас хэцүү рүү. Тус бүр roadmap-ийн сэдвүүдийг ажил хэрэг болгоно.",
   "build.difficulty": "Хүндрэл",
   "build.time": "Хугацаа",
   "build.uses": "Ашиглах сэдвүүд",
@@ -130,7 +129,7 @@ export const mn: Record<MessageKey, string> = {
   "search.unavailable":
     "Энд хайлт ажиллахгүй: хайлтын индекс сайттай хамт бүтээгддэг (npm run build).",
   "search.noscript":
-    "Хайлтад JavaScript хэрэгтэй. Оронд нь tech tree-г үзэж болно.",
+    "Хайлтад JavaScript хэрэгтэй. Оронд нь roadmap-ийг үзэж болно.",
   "glossary.title": "Нэр томьёоны толь",
   "glossary.lead":
     "Энэ атласын хэрэглэдэг үгс, тус бүр товч тайлбар болон түүнийг заадаг сэдэвтэйгээ. Нэр томьёог тэр сэдвийн түвшнээр, T0-ээс эхлэн бүлэглэсэн.",

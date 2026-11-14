@@ -36,7 +36,7 @@ test("the theme button switches the theme and remembers it", async ({
   await expect(html).toHaveAttribute("data-theme", "dark");
   await page.goto("mn/");
   await expect(html).toHaveAttribute("data-theme", "dark");
-  await expect(button).toHaveText("Гэгээлэг");
+  await expect(button).toHaveText("Цагаан");
 });
 
 test("the language link goes to the same page in the other language", async ({

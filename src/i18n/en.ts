@@ -8,11 +8,10 @@ export const en = {
   "site.skip": "Skip to content",
   "nav.label": "Site",
   "nav.menu": "Menu",
-  "nav.tree": "Tech tree",
+  "nav.tree": "Roadmap",
   "nav.chain": "Signal chain",
   "nav.compare": "Compare",
   "nav.robots": "Robots",
-  "nav.roadmaps": "Roadmaps",
   "nav.builds": "Builds",
   "nav.search": "Search",
   "theme.toDark": "Dark",
@@ -25,8 +24,8 @@ export const en = {
   "home.lead":
     "Everything a robot is made of, mapped from first principles to Mars rovers and humanoids. Choose your own path.",
   "home.status":
-    "The tech tree is up: every topic, what it needs and what it unlocks. The pages fill in from here.",
-  "home.cta": "Open the tech tree",
+    "The roadmap is up: every topic, what it needs and what it unlocks. The pages fill in from here.",
+  "home.cta": "Open the roadmap",
   "tiers.label": "The seven tiers, from T0 Foundations up",
   "tier.0": "Foundations",
   "tier.1": "Components",
@@ -35,7 +34,7 @@ export const en = {
   "tier.4": "Perception & estimation",
   "tier.5": "Intelligence",
   "tier.6": "Systems & the real world",
-  "tree.title": "Tech tree",
+  "tree.title": "Roadmap",
   "tree.lead":
     "Every topic in robotics, as seven tiers. Start with T0 Foundations and work up; each topic shows what it needs and what it unlocks.",
   "tree.count": "{n} topics in 7 tiers",
@@ -83,7 +82,7 @@ export const en = {
   "role.act": "Act",
   "roadmaps.title": "Roadmaps",
   "roadmaps.lead":
-    "Pick what you want to build. Each roadmap is an ordered path through the tech tree, ending in a Build.",
+    "Pick what you want to build. Each one is an ordered path through the topics, ending in a Build.",
   "roadmap.robot": "Robot",
   "roadmap.progress": "{n} of {total} learned",
   "roadmap.stage": "Stage {n}",
@@ -96,7 +95,7 @@ export const en = {
   "node.roadmaps": "Roadmaps",
   "builds.title": "Builds",
   "builds.lead":
-    "Real robots to make, from easy to hard. Each one puts topics from the tech tree to work.",
+    "Real robots to make, from easy to hard. Each one puts topics from the roadmap to work.",
   "build.difficulty": "Difficulty",
   "build.time": "Time",
   "build.uses": "Topics you'll use",
@@ -127,7 +126,7 @@ export const en = {
   "search.unavailable":
     "Search isn't available here: its index is built with the site (npm run build).",
   "search.noscript":
-    "Search needs JavaScript. You can browse the tech tree instead.",
+    "Search needs JavaScript. You can browse the roadmap instead.",
   "glossary.title": "Glossary",
   "glossary.lead":
     "The words this atlas uses, each with a short definition and the topic that teaches it. Terms are grouped by that topic's tier, T0 first.",

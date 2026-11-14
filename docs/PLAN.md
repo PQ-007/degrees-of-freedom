@@ -227,7 +227,7 @@ Not started: an empty square. Reading: a half-filled square. Learned: a filled s
 ### Responsive and accessible (same rules as Sand to Tetris)
 
 - No sideways page scroll at 360 px; wide tables, the tree and sim scenes scroll or scale inside their own frame.
-- Side panels fold into bars below ~1200 px (nav) and ~900 px (ToC); the header nav and language button fold into a Menu below 1100 px (seven nav links no longer fit).
+- Side panels fold into bars below ~1200 px (nav) and ~900 px (ToC); the header nav and language button fold into a Menu below 1100 px (the nav links no longer fit). Header (the user, 2026-11-14): Roadmap (the tech-tree page, renamed), Signal chain, Compare, Robots, Builds, Search; the Roadmaps tab was removed because its page repeated the robot one, and a robot's roadmap is reached from its teardown and topics.
 - Everything works from the keyboard, including the tree, demos and sim controls; every diagram has an `aria-label`, every state a text label; `prefers-reduced-motion` respected (sims start paused, hover shifts are turned off).
 - Playwright checks every page type × language × theme × 360/390/768/1024 px, plus axe and a contrast check of every token pair in use.
 

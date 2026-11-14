@@ -55,9 +55,9 @@ The real world is also messy. Sensors are noisy, wheels slip, batteries sag, par
 
 ## How to use this map
 
-- **The tech tree** has seven tiers, from T0 Foundations (this one) up to T6 Systems and the real world. Each topic lists what it needs and what it unlocks.
+- **The roadmap** has seven tiers, from T0 Foundations (this one) up to T6 Systems and the real world. Each topic lists what it needs and what it unlocks.
 - **You don't have to go in order.** Pick a topic you care about and follow its *Needs* back down until you reach something you already know.
-- **Three ways in:** by topic (the tech tree), by robot (pick a robot type and see what it is made of), or by question (side-by-side comparisons, such as which motor to use). The robot and question routes arrive later in the atlas.
+- **Three ways in:** by topic (the roadmap), by robot (pick a robot type and see what it is made of), or by question (side-by-side comparisons, such as which motor to use). The robot and question routes arrive later in the atlas.
 
 <aside class="examples" aria-label="Real examples">
 

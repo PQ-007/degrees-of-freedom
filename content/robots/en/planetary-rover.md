@@ -81,4 +81,4 @@ Checked 14 November 2026
 
 ## How to start building a small one {#start}
 
-A small rocker-bogie rover is a good first big project: six small gearmotors, a linkage you can 3D-print or cut from sheet, a [[~microcontroller|microcontroller]], a battery and a camera. On the tech tree, start with [[F7]], [[C4]], [[L1]] and [[L3]], then [[M2]] and [[I3]]. Build 08, linked at the top of this page, walks through one step by step.
+A small rocker-bogie rover is a good first big project: six small gearmotors, a linkage you can 3D-print or cut from sheet, a [[~microcontroller|microcontroller]], a battery and a camera. On the roadmap, start with [[F7]], [[C4]], [[L1]] and [[L3]], then [[M2]] and [[I3]]. Build 08, linked at the top of this page, walks through one step by step.

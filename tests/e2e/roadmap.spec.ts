@@ -64,14 +64,21 @@ test.describe("roadmap", () => {
     await expect(page.locator(".meta")).toContainText("Mars-rover-style robot");
   });
 
-  test("the Roadmaps page and header lead here", async ({ page }) => {
+  test("the header's Roadmap is the topic map; a robot leads to its own roadmap", async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto("en/");
+    const nav = page.getByRole("navigation", { name: "Site" });
+    await expect(nav.getByRole("link", { name: "Roadmaps" })).toHaveCount(0);
+    await nav.getByRole("link", { name: "Roadmap", exact: true }).click();
+    await expect(page).toHaveURL(/\/en\/tree\/$/);
+    await expect(page.locator("h1")).toHaveText("Roadmap");
+    await page.goto("en/robots/planetary-rover/");
     await page
-      .getByRole("navigation", { name: "Site" })
-      .getByRole("link", { name: "Roadmaps" })
+      .getByRole("link", { name: /Mars-rover-style robot/ })
+      .first()
       .click();
-    await page.getByRole("link", { name: /Mars-rover-style robot/ }).click();
     await expect(page).toHaveURL(/\/en\/roadmaps\/mars-rover\/$/);
   });
 });
