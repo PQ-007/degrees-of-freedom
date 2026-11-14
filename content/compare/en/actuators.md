@@ -7,21 +7,21 @@ summary: "Which motor or actuator should move this joint? The common options sid
 
 Start from the job the joint has to do, not from the motor:
 
-- **It only has to point somewhere, and it's small and cheap?** A hobby servo, or a smart bus servo if you want to read its position back and chain many on one cable.
-- **It has to drive a wheel?** A brushed gearmotor for a small robot; a brushless motor with a gearbox when it needs to be efficient or strong.
-- **It has to move to exact positions, slowly, with a light load?** A stepper motor, if you can accept that it doesn't know when it has slipped.
+- **It only has to point somewhere, and it's small and cheap?** A hobby [[~servo|servo]], or a smart bus servo if you want to read its position back and chain many on one cable.
+- **It has to drive a wheel?** A brushed gearmotor for a small robot; a [[~brushless-motor|brushless motor]] with a gearbox when it needs to be efficient or strong.
+- **It has to move to exact positions, slowly, with a light load?** A [[~stepper-motor|stepper motor]], if you can accept that it doesn't know when it has slipped.
 - **It has to be stiff and precise, like a factory arm?** A harmonic-drive joint.
-- **It hits the ground or touches people, and has to feel force?** A quasi-direct-drive actuator or a series elastic actuator: both can be pushed back, and both can sense force.
+- **It hits the ground or touches people, and has to feel force?** A [[~quasi-direct-drive|quasi-direct-drive actuator]] or a [[~series-elastic-actuator|series elastic actuator]]: both can be pushed back, and both can sense force.
 - **It needs huge force from a small part, and you can carry a pump?** Hydraulics.
 - **It only needs to open and close, fast, like a gripper?** Pneumatics.
 
-Two words in the table need a word of explanation. **Backdrivable** means you can turn the output by hand and the motor turns with it; a joint that can be pushed back is safer when it hits something and can feel forces through its motor. **Gear ratio** is the trade at the heart of most of these options: more gearing gives more torque and precision, but less speed and less backdrivability. [[C2|Transmissions]] explains why.
+Two words in the table need a word of explanation. **[[~backdrivable|Backdrivable]]** means you can turn the output by hand and the motor turns with it; a joint that can be pushed back is safer when it hits something and can feel forces through its motor. **[[~gear-ratio|Gear ratio]]** is the trade at the heart of most of these options: more gearing gives more torque and precision, but less speed and less backdrivability. [[C2|Transmissions]] explains why.
 
 ## Each option
 
 ### Brushed DC gearmotor
 
-The simplest choice: a DC motor runs faster with more voltage and pushes harder with more current, and a small gearbox trades its speed for torque. On its own it doesn't know where it is; add an encoder to close the loop. Worm gears lock in place when the power is off, which helps hold a load but means the joint can't be pushed back.
+The simplest choice: a DC motor runs faster with more voltage and pushes harder with more current, and a small gearbox trades its speed for [[~torque|torque]]. On its own it doesn't know where it is; add an encoder to [[~control-loop|close the loop]]. Worm gears lock in place when the power is off, which helps hold a load but means the joint can't be pushed back.
 
 ### Hobby servo
 
@@ -45,7 +45,7 @@ A large, high-torque brushless motor with only a little gearing. With so little 
 
 ### Harmonic-drive joint
 
-A strain-wave gear packs a large reduction into one compact stage with almost no backlash.[@harmonic-drive] That makes joints stiff and precise, which is why industrial and collaborative arms use them. The price is cost, and joints that can hardly be pushed back.
+A strain-wave gear packs a large reduction into one compact stage with almost no [[~backlash|backlash]].[@harmonic-drive] That makes joints stiff and precise, which is why industrial and collaborative arms use them. The price is cost, and joints that can hardly be pushed back.
 
 ### Series elastic actuator (SEA)
 

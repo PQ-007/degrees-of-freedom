@@ -1,0 +1,354 @@
+# The glossary: one entry per term, every language inside.
+#   id    used in links: [[~id]] or [[~id|text]], and as the page anchor (#id)
+#   node  the topic that teaches it; its tier places the term on the page
+#   term  the term in each language (Mongolian keeps the English word when no
+#         Mongolian one is in use, as in Sand to Tetris's TERMS)
+#   def   one or two plain sentences, no claims that need a source
+#   see   related terms
+# Every term must be linked from at least one page in every language.
+
+# T0 Foundations
+- id: robot
+  node: F0
+  term:
+    en: Robot
+    mn: Робот
+  def:
+    en: A machine that senses what is around it, decides what to do and does it, with some of the deciding done by the machine itself rather than by a person.
+    mn: Эргэн тойрноо мэдэрч, юу хийхээ шийдэж, түүнийгээ хийдэг, шийдвэрийн тодорхой хэсгийг хүн биш машин өөрөө гаргадаг машин.
+  see: [sense-think-act, sensor, actuator]
+- id: sense-think-act
+  node: F0
+  term:
+    en: Sense–think–act loop
+    mn: Мэдрэх–бодох–үйлдэх давталт
+  def:
+    en: The cycle every robot repeats. It measures the world, decides what to do, acts, and then measures the result.
+    mn: Робот бүрийн давтдаг мөчлөг. Ертөнцийг хэмжиж, юу хийхээ шийдэж, үйлдэл хийгээд, дараа нь үр дүнг нь хэмждэг.
+  see: [control-loop]
+- id: degree-of-freedom
+  node: F5
+  term:
+    en: Degree of freedom
+    mn: Чөлөөний зэрэг
+  def:
+    en: One independent way a body can move, such as sliding along one direction or turning about one axis. A free object in space has six; each joint of an arm usually adds one.
+    mn: Биеийн бие даан хөдөлж чадах нэг арга, жишээ нь нэг чиглэлд гулсах эсвэл нэг тэнхлэгийг тойрон эргэх. Огторгуйд чөлөөтэй биет зургаатай; гарын үе бүр ихэвчлэн нэгийг нэмдэг.
+  see: [kinematics]
+- id: torque
+  node: F5
+  term:
+    en: Torque
+    mn: Эргүүлэх момент
+  def:
+    en: The turning effect of a force, how hard something is twisted about an axis. It is the force times its distance from the axis, measured in newton-metres.
+    mn: Хүчний эргүүлэх үйлчлэл, ямар нэг зүйлийг тэнхлэгийг тойруулан хэр хүчтэй мушгиж буй нь. Хүчийг тэнхлэг хүртэлх зайгаар нь үржүүлсэнтэй тэнцүү бөгөөд ньютон-метрээр хэмждэг.
+  see: [gear-ratio]
+- id: ground
+  node: F7
+  term:
+    en: Ground
+    mn: Газардуулга
+  def:
+    en: The shared reference point that every voltage in a circuit is measured from. Parts that send each other signals need their grounds joined.
+    mn: Хэлхээний бүх хүчдэлийг хэмждэг нийтлэг жишиг цэг. Хоорондоо дохио дамжуулдаг хэсгүүдийн газардуулгыг холбох ёстой.
+  see: [ground-loop, voltage-regulator]
+
+# T1 Components
+- id: gear-ratio
+  node: C2
+  term:
+    en: Gear ratio
+    mn: Арааны харьцаа
+  def:
+    en: How many turns of the motor make one turn of the output. A higher ratio gives more torque and precision, but less speed.
+    mn: Гаралтыг нэг эргүүлэхэд хөдөлгүүр хэдэн удаа эргэх вэ гэдэг. Харьцаа өндөр байх тусам момент ба нарийвчлал их, хурд бага.
+  see: [torque, backdrivable, backlash]
+- id: backdrivable
+  node: C2
+  term:
+    en: Backdrivable
+    mn: Backdrivable
+  def:
+    en: A joint is backdrivable when you can turn its output by hand and the motor turns with it. Such joints are safer when they hit something, and can feel force through the motor.
+    mn: Үеийн гаралтыг гараар эргүүлэхэд хөдөлгүүр нь хамт эргэдэг бол тэр үе backdrivable (гараар эргүүлэгддэг) юм. Ийм үе ямар нэг зүйлд мөргөхөд илүү аюулгүй бөгөөд хүчийг хөдөлгүүрээрээ мэдэрч чадна.
+  see: [gear-ratio, quasi-direct-drive]
+- id: backlash
+  node: C2
+  term:
+    en: Backlash
+    mn: Арааны сул зай
+  def:
+    en: The small play between gear teeth. The output can move a little before the gears catch, which makes precise positioning harder.
+    mn: Арааны шүднүүдийн хоорондох бага зэргийн чөлөө. Араа зуугдахаас өмнө гаралт бага зэрэг хөдөлж чаддаг тул нарийн байрлал барихад хэцүү болгодог.
+  see: [gear-ratio]
+- id: rocker-bogie
+  node: C3
+  term:
+    en: Rocker-bogie
+    mn: Rocker-bogie
+  def:
+    en: A six-wheel suspension without springs. On each side a long arm (the rocker) carries the front wheel and a shorter arm (the bogie) carries the other two, so all six wheels follow uneven ground.
+    mn: Пүршгүй, зургаан дугуйн түдгэлзүүр. Тал бүрд урт гар (rocker) урд дугуйг, богино гар (bogie) нөгөө хоёрыг барьдаг тул зургаан дугуй бүгд тэгш бус газрыг дагана.
+  see: [degree-of-freedom]
+- id: stepper-motor
+  node: C4
+  term:
+    en: Stepper motor
+    mn: Алхамт хөдөлгүүр
+  def:
+    en: A motor that moves one fixed step for each pulse it is sent, so a controller can count pulses to know where it is. Too much load makes it skip steps without anything noticing.
+    mn: Илгээсэн импульс бүрд нэг тогтмол алхам хөдөлдөг хөдөлгүүр; контроллер импульс тоолж хаана байгааг нь мэднэ. Ачаа хэт их бол алхам алгасаж, хэн ч анзаардаггүй.
+  see: [brushless-motor, servo]
+- id: brushless-motor
+  node: C4
+  term:
+    en: Brushless motor
+    mn: Сойзгүй хөдөлгүүр
+  def:
+    en: An electric motor whose coils are switched by electronics instead of by brushes. It is efficient and powerful for its size, but needs a driver.
+    mn: Ороомгийг нь сойз биш электроник сэлгэдэг цахилгаан хөдөлгүүр. Хэмжээндээ үр ашигтай, хүчтэй ч драйвер хэрэгтэй.
+  see: [motor-driver, stepper-motor]
+- id: actuator
+  node: C5
+  term:
+    en: Actuator
+    mn: Актуатор
+  def:
+    en: The part that turns energy into force or motion, such as an electric motor, a hydraulic piston or an air muscle.
+    mn: Энергийг хүч эсвэл хөдөлгөөн болгодог хэсэг, жишээ нь цахилгаан хөдөлгүүр, гидравлик поршень, агаарын булчин.
+  see: [sensor, servo]
+- id: servo
+  node: C5
+  term:
+    en: Servo
+    mn: Servo
+  def:
+    en: A motor with its own position sensor and control circuit. You send it a target angle, and it moves there and holds it.
+    mn: Өөрийн байрлалын мэдрэгч ба удирдлагын хэлхээтэй хөдөлгүүр. Зорилтот өнцөг илгээхэд тэнд хүрч, барьж байна.
+  see: [control-loop, encoder]
+- id: quasi-direct-drive
+  node: C5
+  term:
+    en: Quasi-direct drive (QDD)
+    mn: Quasi-direct drive (QDD)
+  def:
+    en: An actuator built from a large, high-torque motor with very little gearing. The joint is backdrivable and can sense force from the motor's current alone.
+    mn: Маш бага араатай, том, өндөр моменттой хөдөлгүүрээр хийсэн актуатор. Үе нь гараар эргүүлэгдэж, хүчийг зөвхөн хөдөлгүүрийн гүйдлээс мэдэрч чадна.
+  see: [backdrivable, series-elastic-actuator]
+- id: series-elastic-actuator
+  node: C5
+  term:
+    en: Series elastic actuator (SEA)
+    mn: Series elastic актуатор (SEA)
+  def:
+    en: An actuator with a spring placed on purpose between the gearbox and the load. How far the spring stretches tells the force.
+    mn: Редуктор ба ачааны хооронд зориуд пүрш байрлуулсан актуатор. Пүрш хэр сунаснаас хүчийг мэдэнэ.
+  see: [quasi-direct-drive]
+- id: radioisotope-power
+  node: C7
+  term:
+    en: Radioisotope power system
+    mn: Радиоизотопын тэжээлийн систем
+  def:
+    en: A power source that turns the heat of a decaying radioactive material into electricity, day and night, for years.
+    mn: Задарч буй цацраг идэвхт бодисын дулааныг өдөр шөнөгүй, олон жил цахилгаан болгодог тэжээлийн эх үүсвэр.
+- id: voltage-regulator
+  node: C8
+  term:
+    en: Voltage regulator
+    mn: Хүчдэл тогтворжуулагч
+  def:
+    en: A circuit that holds its output at a steady voltage while the input voltage or the load changes.
+    mn: Оролтын хүчдэл эсвэл ачаалал өөрчлөгдөхөд гаралтын хүчдэлээ тогтвортой барьдаг хэлхээ.
+  see: [ground]
+- id: ground-loop
+  node: C8
+  term:
+    en: Ground loop
+    mn: Газардуулгын гогцоо
+  def:
+    en: An unwanted loop formed when parts are grounded along more than one path. Current flowing around it adds noise to signals.
+    mn: Хэсгүүдийг нэгээс олон замаар газардуулахад үүсдэг хүсээгүй гогцоо. Түүгээр гүйх гүйдэл дохионд шуугиан нэмдэг.
+  see: [ground, noise]
+- id: sensor
+  node: C9
+  term:
+    en: Sensor
+    mn: Мэдрэгч
+  def:
+    en: A part that turns something physical, such as light, an angle, an acceleration or a distance, into a signal the robot can read. Some measure the robot itself, others the world around it.
+    mn: Гэрэл, өнцөг, хурдатгал, зай зэрэг физик зүйлийг роботын уншиж чадах дохио болгодог хэсэг. Зарим нь роботыг өөрийг нь, зарим нь эргэн тойрныг хэмждэг.
+  see: [encoder, imu, noise]
+- id: encoder
+  node: C9
+  term:
+    en: Encoder
+    mn: Энкодер
+  def:
+    en: A sensor that measures how far a shaft or wheel has turned, and so its angle or speed.
+    mn: Тэнхлэг эсвэл дугуй хэр эргэснийг, улмаар өнцөг эсвэл хурдыг нь хэмждэг мэдрэгч.
+  see: [odometry, servo]
+- id: imu
+  node: C9
+  term:
+    en: IMU (inertial measurement unit)
+    mn: IMU (инерцийн хэмжих төхөөрөмж)
+  def:
+    en: A small sensor that measures acceleration and how fast it is turning. From these a robot works out its tilt and which way it is facing.
+    mn: Хурдатгал ба эргэлтийн хурдыг хэмждэг жижиг мэдрэгч. Робот эдгээрээс хазайлт, аль зүг рүү харж байгаагаа тооцоолно.
+  see: [state-estimate, sensor]
+- id: microcontroller
+  node: C11
+  term:
+    en: Microcontroller
+    mn: Микроконтроллер
+  def:
+    en: A small computer on one chip, with its own memory and pins for reading sensors and driving motors. It runs the code closest to the hardware.
+    mn: Өөрийн санах ой, мэдрэгч уншиж хөдөлгүүр удирдах хөлтэй, нэг чип дээрх жижиг компьютер. Тоног төхөөрөмжид хамгийн ойр програмыг ажиллуулдаг.
+  see: [real-time, bus]
+- id: bus
+  node: C12
+  term:
+    en: Bus
+    mn: Bus
+  def:
+    en: A shared connection that several devices use to send each other messages, such as I²C or CAN. They take turns, so a busy bus delays messages.
+    mn: Хэд хэдэн төхөөрөмжийн хоорондоо мессеж илгээхэд хуваалцдаг холболт, жишээ нь I²C, CAN. Тэд ээлжилдэг тул ачаалалтай bus мессежийг хоцроодог.
+  see: [latency, microcontroller]
+
+# T2 Low-level integration
+- id: real-time
+  node: L2
+  term:
+    en: Real-time system
+    mn: Бодит хугацааны систем
+  def:
+    en: A system that must finish each task before a fixed deadline, every time. An answer that comes late counts as a wrong one.
+    mn: Ажил бүрийг тогтсон хугацаанаас өмнө, үргэлж дуусгах ёстой систем. Хоцорч ирсэн хариу буруу хариутай адил.
+  see: [latency, control-loop]
+- id: latency
+  node: L2
+  term:
+    en: Latency
+    mn: Хоцрогдол
+  def:
+    en: The delay between something happening and the system reacting to it. Too much latency in a control loop makes the robot react to the past.
+    mn: Ямар нэг зүйл болохоос систем түүнд хариу үйлдэл үзүүлэх хүртэлх саатал. Удирдлагын давталтад хоцрогдол их байвал робот өнгөрсөнд хариу үйлдэл үзүүлнэ.
+  see: [real-time, filter]
+- id: motor-driver
+  node: L3
+  term:
+    en: Motor driver
+    mn: Хөдөлгүүрийн драйвер
+  def:
+    en: The power circuit between a controller and a motor. It switches current from the battery into the motor's coils, as the controller commands.
+    mn: Контроллер ба хөдөлгүүрийн хоорондох тэжээлийн хэлхээ. Контроллерын тушаалаар батарейн гүйдлийг хөдөлгүүрийн ороомог руу сэлгэдэг.
+  see: [brushless-motor]
+- id: noise
+  node: L5
+  term:
+    en: Noise
+    mn: Шуугиан
+  def:
+    en: Random variation in a measurement that doesn't come from the thing being measured. Every sensor has some.
+    mn: Хэмжиж буй зүйлээс үүсээгүй, хэмжилт дэх санамсаргүй хэлбэлзэл. Мэдрэгч бүрд байдаг.
+  see: [filter, sensor]
+- id: filter
+  node: L5
+  term:
+    en: Filter
+    mn: Шүүлтүүр
+  def:
+    en: A calculation or a circuit that keeps the part of a signal you want, such as a slow change, and reduces the rest, such as noise. Most filters add some delay.
+    mn: Дохионы хэрэгтэй хэсгийг (жишээ нь удаан өөрчлөлт) үлдээж, бусдыг (жишээ нь шуугиан) багасгадаг тооцоо эсвэл хэлхээ. Ихэнх шүүлтүүр бага зэрэг саатал нэмдэг.
+  see: [noise, latency]
+
+# T3 Motion & control
+- id: kinematics
+  node: M2
+  term:
+    en: Kinematics
+    mn: Кинематик
+  def:
+    en: The geometry of motion. It works out how joint angles or wheel speeds become the robot's position and movement, without asking what forces cause them.
+    mn: Хөдөлгөөний геометр. Үеийн өнцөг эсвэл дугуйн хурд роботын байрлал, хөдөлгөөн болж хэрхэн хувирдгийг, ямар хүч үүсгэснийг асуухгүйгээр тооцоолдог.
+  see: [degree-of-freedom]
+- id: control-loop
+  node: M5
+  term:
+    en: Control loop
+    mn: Удирдлагын давталт
+  def:
+    en: A loop that measures the result, compares it with the target and corrects the command, again and again. Closing the loop means adding that measurement.
+    mn: Үр дүнг хэмжиж, зорилттой харьцуулж, тушаалаа засдаг, үүнийгээ дахин дахин хийдэг давталт. Давталтыг хаах гэдэг нь тэр хэмжилтийг нэмэхийг хэлнэ.
+  see: [sense-think-act, saturation, latency]
+- id: saturation
+  node: M5
+  term:
+    en: Saturation
+    mn: Ханалт
+  def:
+    en: When a command asks for more than the hardware can give, such as a motor already at full power, the output stops growing. A loop that saturates no longer behaves the way it was designed to.
+    mn: Тушаал тоног төхөөрөмжийн өгч чадахаас илүүг шаардахад (жишээ нь хөдөлгүүр аль хэдийн бүрэн хүчээрээ) гаралт өсөхөө болино. Ханасан давталт зохион бүтээсэн ёсоороо ажиллахаа больдог.
+  see: [control-loop]
+
+# T4 Perception & estimation
+- id: state-estimate
+  node: P1
+  term:
+    en: State estimate
+    mn: Төлөвийн тооцоо
+  def:
+    en: The robot's best guess of its state, such as where it is, how fast it is moving and which way it faces, worked out from noisy sensors.
+    mn: Шуугиантай мэдрэгчээс гаргасан, роботын төлөвийн (хаана байгаа, хэр хурдан хөдөлж буй, аль зүг рүү харж буй) хамгийн сайн таамаг.
+  see: [odometry, imu, noise]
+- id: odometry
+  node: P4
+  term:
+    en: Odometry
+    mn: Одометр
+  def:
+    en: Working out how far and which way a robot has moved by adding up its own motion, from wheel turns (wheel odometry) or from changes between camera images (visual odometry). Its error grows the longer it runs.
+    mn: Роботын өөрийн хөдөлгөөнийг нэмж, хэр хол, аль зүг рүү явсныг тооцох нь. Үүнийг дугуйн эргэлтээр (дугуйн одометр) эсвэл камерын зургуудын ялгаагаар (харааны одометр) хийдэг. Удаан ажиллах тусам алдаа нь өсдөг.
+  see: [encoder, state-estimate]
+
+# T5 Intelligence
+- id: waypoint
+  node: I1
+  term:
+    en: Waypoint
+    mn: Замын цэг
+  def:
+    en: A point a robot is told to reach or pass on its way. A route is often given as a list of waypoints.
+    mn: Робот замдаа хүрэх эсвэл дайрч өнгөрөх ёстой цэг. Маршрутыг ихэвчлэн замын цэгүүдийн жагсаалтаар өгдөг.
+  see: [hazard-avoidance]
+- id: hazard-avoidance
+  node: I3
+  term:
+    en: Hazard avoidance
+    mn: Саад тойрох
+  def:
+    en: Spotting nearby obstacles, such as rocks, drops or steep slopes, and steering a short path around them without waiting for a full plan.
+    mn: Ойр орчмын чулуу, огцом уналт, эгц налуу зэрэг саадыг илрүүлж, бүтэн төлөвлөгөө хүлээлгүй тэдгээрийг тойрох богино замаар явах.
+  see: [waypoint]
+
+# T6 Systems & the real world
+- id: redundancy
+  node: S5
+  term:
+    en: Redundancy
+    mn: Нөөцлөл
+  def:
+    en: Carrying a spare, such as a second computer, sensor or power path, that can take over when the first one fails.
+    mn: Эхнийх нь эвдрэхэд орлон ажиллах нөөц, жишээ нь хоёр дахь компьютер, мэдрэгч, тэжээлийн зам авч явах.
+  see: [safe-mode]
+- id: safe-mode
+  node: S5
+  term:
+    en: Safe mode
+    mn: Аюулгүй горим
+  def:
+    en: A state a robot falls back to when something goes wrong. It stops what it was doing, keeps itself safe, and waits for help or instructions.
+    mn: Ямар нэг зүйл буруу болоход робот шилждэг төлөв. Хийж байснаа зогсоож, өөрийгөө хамгаалж, тусламж эсвэл заавар хүлээнэ.
+  see: [redundancy]

@@ -5,7 +5,7 @@ summary: "The sense–think–act loop, what every robot is made of, and how to 
 
 ## What a robot is
 
-A robot is a machine that notices what is around it, decides what to do, and does it, again and again, without a person making every move. The international robotics vocabulary puts it more precisely: a *programmed actuated mechanism with a degree of autonomy* that moves itself, handles things, or puts them in place.[@iso-8373-robot]
+A [[~robot|robot]] is a machine that notices what is around it, decides what to do, and does it, again and again, without a person making every move. The international robotics vocabulary puts it more precisely: a *programmed actuated mechanism with a degree of autonomy* that moves itself, handles things, or puts them in place.[@iso-8373-robot]
 
 The words "degree of autonomy" matter. A mechanical arm moved entirely by a person at a remote control is, by that definition, a *robotic device*, not a robot.[@iso-8373-robot] What makes a robot is that some of the deciding happens inside it.
 
@@ -13,11 +13,11 @@ Robotics is the craft of building such machines. It pulls together mechanical en
 
 ## The sense–think–act loop
 
-Every robot in this atlas, from a toy line follower to a Mars rover, runs the same loop:
+Every robot in this atlas, from a toy line follower to a Mars rover, runs the same [[~sense-think-act|loop]]:
 
-1. **Sense.** Sensors turn the world into signals: a camera sees a doorway, an encoder counts how far a wheel has turned.
+1. **Sense.** [[~sensor|Sensors]] turn the world into signals: a camera sees a doorway, an [[~encoder|encoder]] counts how far a wheel has turned.
 2. **Think.** A computer turns those signals into a decision: where am I, where should I go, how hard should each motor push?
-3. **Act.** Motors and other actuators turn the decision into force and motion, and the world changes.
+3. **Act.** Motors and other [[~actuator|actuators]] turn the decision into force and motion, and the world changes.
 
 The sensors see that change, and the loop starts again. A real robot runs many of these loops at once, nested inside each other: a fast one keeps each motor at the right speed, a slower one keeps the robot balanced, and a much slower one decides where to go next.
 
@@ -34,6 +34,8 @@ Robots pick different parts for different jobs, but the same kinds of parts appe
 | Compute | Runs the software, from tiny chips to full computers | [[C11]] |
 | Communication | Carries signals between the parts, and to people | [[C12]] |
 | Software | Turns signals into decisions | Tiers T2 to T6 |
+
+Each way a body can move on its own, such as one joint turning, is one [[~degree-of-freedom|degree of freedom]]. This atlas takes its name from them.
 
 ## Kinds of robots
 

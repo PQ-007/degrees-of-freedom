@@ -78,7 +78,7 @@ degrees-of-freedom/
     signal-chain/en.md
     models/*.xml                          MJCF scenes for the MuJoCo demos
     policies/*.onnx                       learned policies used by demos
-    glossary/en.yaml, mn.yaml
+    glossary/terms.yaml                   every term, every language inside
     sources.yaml                          every source with its checked date
   src/
     content.config.ts      schemas: node, compare, robot, roadmap, build, glossary, source
@@ -122,7 +122,7 @@ Slugs are English in every language, so a page's link is the same apart from the
 - The prerequisite graph has no cycles, and a node's prerequisites sit in the same or lower tiers.
 - A node lists only direct prerequisites: one that another prerequisite already brings in is an error.
 - Every compare row has every column of its table.
-- Every glossary term is linked from at least one page; every `[[link]]` resolves.
+- Every glossary term is linked (`[[~id]]`) from at least one page in every language; every `[[link]]` resolves.
 - Every source cited exists in `sources.yaml` with a checked date.
 - Every page exists in every complete language (staged languages fall back to English and are marked).
 - Every custom element used in Markdown is registered; every MJCF model a demo names exists and loads in MuJoCo (a test).
@@ -216,6 +216,7 @@ A Hairline figure made with the `hairline-create` skill.
 | **Signal chain** | (Chosen by the user, 2026-11-14: chain + step-through.) On the drafting grid, three bordered columns (Sense · Think · Act), each headed by its square, with the 14 numbered stages as bordered blocks (one column on phones); below, the chosen stage: what comes in, what goes out, a short explanation, its topic, Previous/Next (Motion wraps to 1). Then loops inside loops (a table ordered from fastest to slowest, no numbers until they are cited), one robot end to end (a planetary rover first), where chains break; sources |
 | **Roadmap** | (Chosen by the user, 2026-11-14: ordered path + checklist.) Title, summary, its robot; a progress bar ("3 of 34 learned", saved in this browser); the path as numbered steps in stages, each a bordered row (number, tier square, ID and title linking to the topic, a Must or Helpful tag, one line on why this goal needs it, a "Learned" checkbox); Later topics folded at the end; then how to use it and the Build. Phones: the checkbox moves under the text |
 | **Build** | (Chosen by the user, 2026-11-14: spec card + steps.) Title and summary; the spec card (BUILD 08, difficulty as dots with a word, rough time, robot, roadmap, topics used; a resting hard shadow, like the home entry cards); parts by kind, each with its topic and Compare page; the block diagram (Sense → Think → Act columns with their squares, power underneath); numbered steps in stages with Done checkboxes and a progress bar (saved in this browser); then common failures, safety (cited), make it harder; sources |
+| **Glossary** | (Chosen by the user, 2026-11-14: grouped by tier.) Title and lead; a filter box (the term in either language, or the definition) with a live count; tier chips to jump; one bordered block per tier with its tier bar, T0 first, the terms sorted in the page's language. Each entry: the term (on the Mongolian page also the English one, for books and datasheets), a short definition, the topic that teaches it, See also. `#id` frames the entry. Linked from the footer, from every `[[~id]]` in the text (the definition as a tooltip) and from the Terms row on each topic's page |
 | **Sim demo** | Scene on the left, controls and live plots on the right (stacked on phones), in one bordered frame; traces in the bright data colours |
 
 ### Status of a node
