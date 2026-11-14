@@ -1,7 +1,7 @@
 ---
 title: "Hobby servo"
 summary: "A motor, gears and a sensor in a box: point it to an angle."
-figureAlt: "Line drawing of a rectangular servo with mounting tabs, a horn on its output shaft on top, and three wires."
+figureAlt: "Line drawing of a hobby servo seen from above: a rectangular body with a mounting ear at each end, the round output spline near one end with a single-arm horn on it, and three wires leaving the other end."
 ---
 
 - **Good for:** pointing something: small arms, grippers, steering, camera mounts.

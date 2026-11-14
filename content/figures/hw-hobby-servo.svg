@@ -1,15 +1,23 @@
-<!-- Hardware: hobby-servo. A line drawing with no words, so it suits every language; the part the entry is about is in the accent colour. The group with a motion class (spin, swing, step…) moves on hover (look.css). -->
+<!-- Hardware: hobby-servo, seen from above. A rectangular body with a
+     mounting ear at each end, the round output spline near one end with a
+     single-arm horn on it, and three wires leaving the other end. No words,
+     so it suits every language. The horn (the "swing" group) turns on hover
+     (look.css). -->
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
-  <path d="M60,104 C40,104 32,116 14,124" class="thick"/>
-  <path d="M60,110 C42,110 34,122 18,132" class="thick"/>
-  <path d="M60,116 C44,116 38,128 24,140" class="thick"/>
-  <rect x="42" y="74" width="156" height="12" rx="3" class="soft thick"/>
-  <circle cx="52" cy="80" r="3" class="thin"/>
-  <circle cx="188" cy="80" r="3" class="thin"/>
-  <rect x="60" y="60" width="120" height="66" rx="5" class="soft thick"/>
-  <circle cx="148" cy="52" r="13" class="soft thick"/>
-  <g class="swing" style="transform-origin: 148px 52px">
-    <rect x="110" y="45" width="78" height="15" rx="7.5" class="accent-fill thick" transform="rotate(-12 148 52)"/>
-    <circle cx="148" cy="52" r="3.5" class="soft thin"/>
+  <path d="M52,74 C34,74 26,66 6,64" class="thick"/>
+  <path d="M52,80 C34,80 24,80 6,80" class="thick"/>
+  <path d="M52,86 C34,86 26,94 6,96" class="thick"/>
+  <rect x="28" y="64" width="184" height="32" rx="4" class="soft thick"/>
+  <circle cx="39" cy="80" r="4.5" class="thin"/>
+  <circle cx="201" cy="80" r="4.5" class="thin"/>
+  <rect x="52" y="48" width="136" height="64" rx="5" class="soft thick"/>
+  <rect x="62" y="58" width="56" height="44" rx="2" class="thin"/>
+  <circle cx="150" cy="80" r="17" class="soft thick"/>
+  <g class="swing" style="transform-origin: 150px 80px">
+    <path d="M142,80 L144,26 Q150,18 156,26 L158,80 A8,8 0 0 1 142,80 Z" class="accent-fill thick"/>
+    <circle cx="150" cy="34" r="2.6" class="soft thin"/>
+    <circle cx="150" cy="46" r="2.6" class="soft thin"/>
+    <circle cx="150" cy="58" r="2.6" class="soft thin"/>
+    <circle cx="150" cy="80" r="4.5" class="soft thick"/>
   </g>
 </svg>
