@@ -38,7 +38,10 @@ export function usedBy(nodes: TreeNode[]): Map<string, string[]> {
 }
 
 /** Everything a node needs, directly or through its needs. */
-export function allNeeds(nodes: TreeNode[], id: string): Set<string> {
+export function allNeeds(
+  nodes: Pick<TreeNode, "id" | "needs">[],
+  id: string,
+): Set<string> {
   const byId = new Map(nodes.map((n) => [n.id, n]));
   const seen = new Set<string>();
   const stack = [...(byId.get(id)?.needs ?? [])];

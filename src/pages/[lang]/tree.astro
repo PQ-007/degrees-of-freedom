@@ -3,6 +3,7 @@ import Base from "../../layouts/Base.astro";
 import { getAtlas } from "../../lib/atlas";
 import { format, languages, t, type Lang } from "../../lib/i18n";
 import { tiers } from "../../lib/tiers";
+import type { PanelNode } from "../../lib/tree-view";
 
 export function getStaticPaths() {
   return languages.map((lang) => ({ params: { lang } }));
@@ -12,10 +13,23 @@ const lang = Astro.params.lang as Lang;
 const atlas = await getAtlas(lang);
 const byTier = tiers.map((tier, n) => ({
   ...tier,
+  name: t(lang, tier.nameKey),
   nodes: atlas.filter((node) => node.tier === n),
 }));
 const byId = new Map(atlas.map((n) => [n.id, n]));
 const label = (id: string) => `${id} ${byId.get(id)?.title ?? ""}`;
+
+// What the focus panel needs in the browser, as JSON in the page.
+const panelData: PanelNode[] = atlas.map((n) => ({
+  id: n.id,
+  tier: n.tier,
+  title: n.title,
+  summary: n.summary,
+  url: n.url,
+  needs: n.needs,
+  usedBy: n.usedBy,
+}));
+const tierNames = byTier.map((tier) => tier.name);
 ---
 
 <Base lang={lang} title={t(lang, "tree.title")}>
@@ -49,15 +63,12 @@ const label = (id: string) => `${id} ${byId.get(id)?.title ?? ""}`;
     </header>
 
     <div class="tree-views" data-tree-views>
-      <section class="graph-view" aria-label={t(lang, "tree.graphLabel")}>
-        <p class="hint muted">{t(lang, "tree.hint")}</p>
-        <div
+      <div class="graph-view">
+        <section
           class="tree grid-bg"
+          aria-label={t(lang, "tree.graphLabel")}
           data-tree
-          data-focus-template={t(lang, "tree.focus")}
-          data-nothing={t(lang, "tree.nothing")}
         >
-          <svg class="edges" aria-hidden="true"></svg>
           {[...byTier].reverse().map((tier) => (
             <div class={`band ${tier.className}`}>
               <div class="band-name">
@@ -65,7 +76,7 @@ const label = (id: string) => `${id} ${byId.get(id)?.title ?? ""}`;
                   <span class="sq" aria-hidden="true" />
                   {tier.id}
                 </span>
-                <span>{t(lang, tier.nameKey)}</span>
+                <span>{tier.name}</span>
               </div>
               <ul class="band-nodes">
                 {tier.nodes.map((node) => (
@@ -74,10 +85,6 @@ const label = (id: string) => `${id} ${byId.get(id)?.title ?? ""}`;
                       class={`node t${node.tier}`}
                       href={node.url}
                       data-id={node.id}
-                      data-title={node.title}
-                      data-needs={node.needs.join(" ")}
-                      data-used-by={node.usedBy.join(" ")}
-                      title={node.summary}
                     >
                       <span class="sq" aria-hidden="true" />
                       <span class="nid">{node.id}</span>
@@ -88,9 +95,36 @@ const label = (id: string) => `${id} ${byId.get(id)?.title ?? ""}`;
               </ul>
             </div>
           ))}
-        </div>
-        <p class="focus-status" aria-live="polite" data-focus-status></p>
-      </section>
+        </section>
+
+        <aside
+          class="panel"
+          aria-label={t(lang, "tree.panelLabel")}
+          data-panel
+          data-empty
+          hidden
+          data-strings={JSON.stringify({
+            needs: t(lang, "node.needs"),
+            unlocks: t(lang, "tree.unlocks"),
+            start: t(lang, "node.start"),
+            leaf: t(lang, "node.leaf"),
+            path: t(lang, "tree.path"),
+            pathCount: t(lang, "tree.pathCount"),
+            open: t(lang, "tree.open"),
+            close: t(lang, "tree.close"),
+            selected: t(lang, "tree.selected"),
+          })}
+        >
+          <p class="panel-hint">{t(lang, "tree.hint")}</p>
+          <div class="panel-body" data-panel-body></div>
+        </aside>
+        <p class="visually-hidden" aria-live="polite" data-announce></p>
+        <script
+          type="application/json"
+          id="tree-data"
+          set:html={JSON.stringify({ nodes: panelData, tiers: tierNames })}
+        />
+      </div>
 
       <div class="list-view">
         {byTier.map((tier) => (
@@ -100,7 +134,7 @@ const label = (id: string) => `${id} ${byId.get(id)?.title ?? ""}`;
                 <span class="sq" aria-hidden="true" />
                 {tier.id}
               </span>
-              {t(lang, tier.nameKey)}
+              {tier.name}
             </h2>
             <ol class="node-list">
               {tier.nodes.map((node) => (
@@ -183,48 +217,30 @@ const label = (id: string) => `${id} ${byId.get(id)?.title ?? ""}`;
     display: block;
   }
   .tree-views[data-view="graph"] .graph-view {
-    display: block;
+    display: grid;
   }
   .tree-views[data-view="graph"] .list-view {
     display: none;
   }
 
-  /* ---- Graph: tiers as bands, T0 at the bottom, compact one-line nodes ---- */
+  /* ---- Graph: tier bands (T0 at the bottom) beside the focus panel ---- */
   .graph-view {
-    border: 0;
-    padding: 0 0 48px;
-  }
-  .hint {
-    font-size: 14px;
-    margin: 0 0 12px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 24px;
+    align-items: start;
+    padding-bottom: 48px;
   }
   .tree {
-    position: relative;
     border: 2px solid var(--line);
-  }
-  .edges {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    pointer-events: none;
-    overflow: visible;
-    z-index: 1;
-  }
-  .edges :global(path) {
-    fill: none;
-    stroke: var(--ink);
-    stroke-width: 1.5;
-  }
-  .edges :global(path.unlocks) {
-    stroke-dasharray: 5 4;
+    padding: 0;
   }
   .band {
     display: grid;
-    grid-template-columns: 200px 1fr;
+    grid-template-columns: 180px 1fr;
     border-top: 2px solid var(--line);
   }
-  .band:first-of-type {
+  .band:first-child {
     border-top: 0;
   }
   .band-name {
@@ -249,9 +265,10 @@ const label = (id: string) => `${id} ${byId.get(id)?.title ?? ""}`;
     gap: 8px;
     align-content: flex-start;
   }
-  .node {
-    position: relative;
-    z-index: 2;
+
+  /* Node chips. Selected: filled. What it needs: solid ink border.
+     What it unlocks: dashed ink border. Nothing else changes. */
+  .tree :global(.node) {
     display: inline-flex;
     align-items: center;
     gap: 8px;
@@ -261,30 +278,202 @@ const label = (id: string) => `${id} ${byId.get(id)?.title ?? ""}`;
     font-size: 14px;
     line-height: 1.2;
     text-decoration: none;
-    transition: opacity 0.12s;
   }
-  .nid {
+  .tree :global(.node:hover) {
+    border-color: var(--ink);
+  }
+  .tree :global(.node.on) {
+    background: var(--primary-bg);
+    color: var(--primary-fg);
+    border-color: var(--primary-bg);
+  }
+  .tree :global(.node.on .nid) {
+    color: inherit;
+  }
+  .tree :global(.node.need),
+  .tree :global(.node.unlock) {
+    border-color: var(--ink);
+    font-weight: 600;
+  }
+  .tree :global(.node.unlock) {
+    border-style: dashed;
+  }
+  .nid,
+  :global(.panel .nid) {
     font: 700 11.5px var(--mono);
     letter-spacing: 0.04em;
     color: var(--muted);
   }
-  .node:hover,
-  .node.on {
+
+  /* ---- The focus panel ---- */
+  .panel {
+    position: sticky;
+    top: 76px;
+    max-height: calc(100vh - 92px);
+    overflow-y: auto;
+    border: 2px solid var(--line);
+    background: var(--surface);
+    padding: 16px 18px 18px;
+    font-size: 15px;
+  }
+  .panel[hidden] {
+    display: none;
+  }
+  .panel-hint {
+    margin: 0;
+    color: var(--muted);
+  }
+  .panel:not([data-empty]) .panel-hint {
+    display: none;
+  }
+  .panel :global(.panel-head) {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 12px;
+  }
+  .panel :global(h2) {
+    font-size: 1.35rem;
+    margin: 10px 0 6px;
+  }
+  .panel :global(.panel-summary) {
+    margin: 0 0 16px;
+  }
+  .panel :global(.close) {
+    font: 600 14px/1 var(--font);
+    background: none;
+    color: var(--ink);
+    border: 2px solid var(--line);
+    padding: 6px 9px;
+    cursor: pointer;
+  }
+  .panel :global(.close:hover) {
     border-color: var(--ink);
   }
-  .node.on {
-    box-shadow: var(--shadow-sm);
+  .panel :global(.flow) {
+    border-top: 1px solid var(--rule);
+    padding: 12px 0;
   }
-  :root[data-theme="dark"] .node.on {
-    outline: 1px solid var(--ink);
+  .panel :global(.flow-label) {
+    display: block;
+    color: var(--muted);
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
   }
-  .tree.focused .node:not(.on, .rel) {
-    opacity: 0.38;
+  .panel :global(.flow ul) {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
   }
-  .focus-status {
-    min-height: 1.6em;
-    margin: 12px 0 0;
-    font-size: 15px;
+  .panel :global(.pick) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    text-align: left;
+    font: 500 14px/1.25 var(--font);
+    color: var(--ink);
+    background: var(--surface);
+    border: 2px solid var(--line);
+    padding: 6px 10px 6px 8px;
+    cursor: pointer;
+  }
+  .panel :global(.pick:hover) {
+    border-color: var(--ink);
+  }
+  .panel :global(.unlocks .pick) {
+    border-style: dashed;
+  }
+  .panel :global(.pick .sq) {
+    width: 10px;
+    height: 10px;
+    border-width: 1.5px;
+  }
+  .panel :global(.this) {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    padding: 4px 0;
+  }
+  .panel :global(.arrow) {
+    display: block;
+    text-align: center;
+    color: var(--muted);
+    line-height: 1;
+    margin: 2px 0;
+  }
+  .panel :global(details) {
+    border-top: 1px solid var(--rule);
+    padding: 12px 0 4px;
+  }
+  .panel :global(summary) {
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .panel :global(.path-tier) {
+    margin: 10px 0 0;
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+  .panel :global(.path-tier .id) {
+    margin-right: 6px;
+  }
+  .panel :global(.path-tier button) {
+    font: inherit;
+    color: inherit;
+    background: none;
+    border: 0;
+    padding: 0;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    cursor: pointer;
+  }
+  .panel :global(.open) {
+    margin-top: 14px;
+  }
+
+  /* Narrower screens: the tree takes the width and the panel becomes a
+     bottom sheet, shown only once a topic is selected. */
+  @media (max-width: 1100px) {
+    .graph-view,
+    .tree-views[data-view="graph"] .graph-view {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .panel {
+      position: fixed;
+      top: auto;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 20;
+      max-height: 55vh;
+      border-width: 2px 0 0;
+      box-shadow: 0 -8px 24px rgba(0, 0, 0, 0.18);
+    }
+    .panel[data-empty] {
+      display: none;
+    }
+  }
+  @media (max-width: 760px) {
+    .band {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .band-name {
+      border-right: 0;
+      border-bottom: 2px solid var(--line);
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      padding: 10px 14px;
+    }
+    .band-name .id {
+      margin: 0;
+    }
   }
 
   /* ---- List: the accessible equivalent, and the phone default ---- */
@@ -331,33 +520,11 @@ const label = (id: string) => `${id} ${byId.get(id)?.title ?? ""}`;
     margin: 0;
     font-size: 13.5px;
   }
-
-  @media (max-width: 760px) {
-    .band {
-      grid-template-columns: minmax(0, 1fr);
-    }
-    .band-name {
-      border-right: 0;
-      border-bottom: 2px solid var(--line);
-      display: flex;
-      gap: 12px;
-      align-items: center;
-      padding: 10px 14px;
-    }
-    .band-name .id {
-      margin: 0;
-    }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .node {
-      transition: none;
-    }
-  }
 </style>
 
 <script>
   import { format } from "../../lib/i18n";
-  import { initTreeFocus, initViewSwitch } from "../../lib/tree-view";
+  import { initTreePanel, initViewSwitch } from "../../lib/tree-view";
 
   const views = document.querySelector<HTMLElement>("[data-tree-views]");
   if (views)
@@ -366,6 +533,9 @@ const label = (id: string) => `${id} ${byId.get(id)?.title ?? ""}`;
       document.querySelectorAll<HTMLButtonElement>("[data-view]"),
     );
   const tree = document.querySelector<HTMLElement>("[data-tree]");
-  const status = document.querySelector<HTMLElement>("[data-focus-status]");
-  if (tree && status) initTreeFocus(tree, status, format);
+  const panel = document.querySelector<HTMLElement>("[data-panel]");
+  const announce = document.querySelector<HTMLElement>("[data-announce]");
+  const data = document.getElementById("tree-data")?.textContent;
+  if (tree && panel && announce && data)
+    initTreePanel(tree, panel, announce, JSON.parse(data), format);
 </script>

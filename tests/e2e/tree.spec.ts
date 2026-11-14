@@ -14,28 +14,54 @@ test.describe("tech tree", () => {
     await expect(bands.last()).toContainText("T0");
   });
 
-  test("focusing a node keeps it, its needs and what it unlocks solid", async ({
+  test("selecting a topic opens the panel and marks its needs and unlocks", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("en/tree/");
-    const m5 = page.locator('a.node[data-id="M5"]');
-    await m5.focus();
-    await expect(m5).toHaveClass(/\bon\b/);
-    await expect(page.locator('a.node[data-id="L4"]')).toHaveClass(/\brel\b/); // needs
-    await expect(page.locator('a.node[data-id="M6"]')).toHaveClass(/\brel\b/); // unlocks
-    await expect(page.locator('a.node[data-id="F0"]')).not.toHaveClass(
-      /\b(on|rel)\b/,
+    const panel = page.getByRole("complementary", { name: "Selected topic" });
+    await expect(panel).toContainText("Select a topic");
+
+    await page.locator('a.node[data-id="M5"]').click();
+    await expect(page).toHaveURL(/\/en\/tree\/\?topic=M5$/);
+    await expect(page.locator('a.node[data-id="M5"]')).toHaveClass(/\bon\b/);
+    await expect(page.locator('a.node[data-id="L4"]')).toHaveClass(/\bneed\b/);
+    await expect(page.locator('a.node[data-id="M6"]')).toHaveClass(
+      /\bunlock\b/,
     );
-    await expect(page.locator("svg.edges path")).toHaveCount(4); // L4 → M5 → M6, M8, M11
-    await expect(page.locator("[data-focus-status]")).toHaveText(
-      "M5 Classical control needs L4 Motor control. It unlocks M6 Modern control, M8 Force and interaction control, M11 Flight and vehicle control.",
+    await expect(page.locator('a.node[data-id="F0"]')).toHaveClass(/^node t0$/);
+    await expect(panel.locator("h2")).toHaveText("Classical control");
+    await expect(panel.locator(".needs")).toContainText("L4 Motor control");
+    await expect(panel.locator(".unlocks")).toContainText("M6 Modern control");
+    await expect(panel.locator(".unlocks")).toContainText(
+      "M11 Flight and vehicle control",
     );
-    await page.keyboard.press("Shift+Tab");
-    await page.locator("h1").click();
-    await expect(page.locator(".tree")).not.toHaveClass(/focused/);
+    await expect(panel.locator("summary")).toContainText(
+      "Everything it builds on (",
+    );
+
+    // Walk the tree from inside the panel.
+    await panel.getByRole("button", { name: "L4 Motor control" }).click();
+    await expect(panel.locator("h2")).toHaveText("Motor control");
+    await expect(page).toHaveURL(/\?topic=L4$/);
+    await expect(panel.locator("h2")).toBeFocused();
+
+    await panel.getByRole("link", { name: "Open the page" }).click();
+    await expect(page).toHaveURL(/\/en\/node\/motor-control\/$/);
   });
 
+  test("a link with ?topic= opens with that topic selected; Escape clears it", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 900, height: 800 });
+    await page.goto("mn/tree/?topic=P2");
+    const panel = page.getByRole("complementary", { name: "Сонгосон сэдэв" });
+    await expect(panel).toBeVisible(); // a bottom sheet below 1100px
+    await expect(panel.locator("h2")).toHaveText("Калманы шүүлтүүр");
+    await page.keyboard.press("Escape");
+    await expect(panel).toBeHidden();
+    await expect(page).toHaveURL(/\/mn\/tree\/$/);
+  });
   test("the list is the default on phones, and the choice is remembered", async ({
     page,
   }) => {

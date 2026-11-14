@@ -1,9 +1,10 @@
-// Browser behaviour of the tech-tree page: the Graph/List switch, and focusing
-// a node in the graph (it, what it needs and what it unlocks stay solid; the
-// rest fades; lines join them).
+// Browser behaviour of the tech-tree page: the Graph/List switch, and the
+// focus panel. Selecting a topic marks it and its direct needs and unlocks in
+// the bands, and the panel shows Needs → topic → Unlocks plus everything the
+// topic builds on. No lines: they crossed rows and hid behind other topics.
+import { allNeeds, compareIds } from "./tree";
 
 const VIEW_KEY = "dof-tree-view";
-const SVG_NS = "http://www.w3.org/2000/svg";
 
 export function initViewSwitch(
   container: HTMLElement,
@@ -44,113 +45,207 @@ type Format = (
   values: Record<string, string | number>,
 ) => string;
 
-export function initTreeFocus(
+export interface PanelNode {
+  id: string;
+  tier: number;
+  title: string;
+  summary: string;
+  url: string;
+  needs: string[];
+  usedBy: string[];
+}
+
+interface PanelStrings {
+  needs: string;
+  unlocks: string;
+  start: string;
+  leaf: string;
+  path: string;
+  pathCount: string;
+  open: string;
+  close: string;
+  selected: string;
+}
+
+const PARAM = "topic";
+
+function el<K extends keyof HTMLElementTagNameMap>(
+  tag: K,
+  className?: string,
+  ...children: (Node | string)[]
+): HTMLElementTagNameMap[K] {
+  const e = document.createElement(tag);
+  if (className) e.className = className;
+  e.append(...children);
+  return e;
+}
+
+function square(tier: number): HTMLElement {
+  const sq = el("span", `sq t${tier}`);
+  sq.setAttribute("aria-hidden", "true");
+  return sq;
+}
+
+export function initTreePanel(
   tree: HTMLElement,
-  status: HTMLElement,
+  panel: HTMLElement,
+  announce: HTMLElement,
+  data: { nodes: PanelNode[]; tiers: string[] },
   format: Format,
 ): void {
-  const svg = tree.querySelector<SVGSVGElement>("svg.edges");
-  const nodes = new Map<string, HTMLElement>();
-  for (const el of tree.querySelectorAll<HTMLElement>("a.node[data-id]")) {
-    nodes.set(el.dataset["id"] ?? "", el);
+  const strings = JSON.parse(panel.dataset["strings"] ?? "{}") as PanelStrings;
+  const body = panel.querySelector<HTMLElement>("[data-panel-body]");
+  if (!body) return;
+  const byId = new Map(data.nodes.map((n) => [n.id, n]));
+  const chips = new Map<string, HTMLAnchorElement>();
+  for (const a of tree.querySelectorAll<HTMLAnchorElement>("a.node[data-id]")) {
+    chips.set(a.dataset["id"] ?? "", a);
   }
-  const ids = (el: HTMLElement, key: string) =>
-    (el.dataset[key] ?? "").split(" ").filter(Boolean);
-  const name = (id: string) => `${id} ${nodes.get(id)?.dataset["title"] ?? ""}`;
-  const nothing = tree.dataset["nothing"] ?? "";
-  const template = tree.dataset["focusTemplate"] ?? "";
+  panel.hidden = false;
 
-  let current: HTMLElement | null = null;
+  const pick = (id: string) => {
+    const n = byId.get(id);
+    const b = el(
+      "button",
+      "pick",
+      square(n?.tier ?? 0),
+      el("span", "nid", id),
+      " ",
+      n?.title ?? "",
+    );
+    b.type = "button";
+    b.addEventListener("click", () => select(id, true));
+    return el("li", undefined, b);
+  };
+
+  const flow = (label: string, ids: string[], empty: string, cls: string) => {
+    const part = el("div", `flow ${cls}`, el("span", "flow-label", label));
+    part.append(
+      ids.length
+        ? el("ul", undefined, ...ids.map(pick))
+        : el("p", "muted", empty),
+    );
+    return part;
+  };
 
   const clear = () => {
-    current = null;
-    tree.classList.remove("focused");
-    for (const el of nodes.values()) el.classList.remove("on", "rel");
-    svg?.replaceChildren();
-    status.textContent = "";
+    for (const a of chips.values()) a.classList.remove("on", "need", "unlock");
+    body.replaceChildren();
+    panel.setAttribute("data-empty", "");
+    setParam(null);
   };
 
-  const focus = (el: HTMLElement) => {
-    if (current === el) return;
-    clear();
-    current = el;
-    const needs = ids(el, "needs");
-    const unlocks = ids(el, "usedBy");
-    tree.classList.add("focused");
-    el.classList.add("on");
-    for (const id of [...needs, ...unlocks])
-      nodes.get(id)?.classList.add("rel");
-    draw(el, needs, unlocks);
-    status.textContent = format(template, {
-      node: name(el.dataset["id"] ?? ""),
-      needs: needs.length ? needs.map(name).join(", ") : nothing,
-      unlocks: unlocks.length ? unlocks.map(name).join(", ") : nothing,
+  const select = (id: string, fromPanel = false) => {
+    const n = byId.get(id);
+    if (!n) return clear();
+    for (const a of chips.values()) a.classList.remove("on", "need", "unlock");
+    chips.get(id)?.classList.add("on");
+    for (const x of n.needs) chips.get(x)?.classList.add("need");
+    for (const x of n.usedBy) chips.get(x)?.classList.add("unlock");
+
+    const close = el("button", "close", strings.close);
+    close.type = "button";
+    close.addEventListener("click", () => {
+      clear();
+      chips.get(id)?.focus();
     });
+    const head = el(
+      "div",
+      "panel-head",
+      el("span", "id", square(n.tier), `T${n.tier} · ${n.id}`),
+      close,
+    );
+    const title = el("h2", undefined, n.title);
+    title.id = "panel-title";
+    title.tabIndex = -1;
+
+    // Everything it builds on, grouped by tier, lowest first.
+    const path = [...allNeeds(data.nodes, id)].sort(compareIds);
+    const details = el(
+      "details",
+      undefined,
+      el(
+        "summary",
+        undefined,
+        `${strings.path} (${format(strings.pathCount, { n: path.length })})`,
+      ),
+    );
+    for (let tier = 0; tier < data.tiers.length; tier++) {
+      const ids = path.filter((x) => byId.get(x)?.tier === tier);
+      if (ids.length === 0) continue;
+      const line = el(
+        "p",
+        "path-tier",
+        el("span", "id", square(tier), `T${tier}`),
+      );
+      ids.forEach((x, i) => {
+        if (i > 0) line.append(", ");
+        const b = el("button", undefined, `${x} ${byId.get(x)?.title ?? ""}`);
+        b.type = "button";
+        b.addEventListener("click", () => select(x, true));
+        line.append(b);
+      });
+      details.append(line);
+    }
+
+    const open = el("a", "btn primary small open", strings.open);
+    open.href = n.url;
+
+    body.replaceChildren(
+      head,
+      title,
+      el("p", "panel-summary", n.summary),
+      flow(strings.needs, n.needs, strings.start, "needs"),
+      el("span", "arrow", "↓"),
+      el("div", "this", square(n.tier), el("span", "nid", n.id), " ", n.title),
+      el("span", "arrow", "↓"),
+      flow(strings.unlocks, n.usedBy, strings.leaf, "unlocks"),
+      ...(path.length ? [details] : []),
+      open,
+    );
+    panel.removeAttribute("data-empty");
+    panel.scrollTop = 0;
+    setParam(id);
+    announce.textContent = format(strings.selected, {
+      node: `${n.id} ${n.title}`,
+    });
+    // From inside the panel, keep keyboard focus there (the button just clicked is gone).
+    if (fromPanel) title.focus();
   };
 
-  // A line from each need into the node, and from the node to what it unlocks
-  // (dashed). Needs usually sit in a lower band, so lines leave a need's top
-  // edge and enter the node's bottom edge; within one band they arc above.
-  const draw = (el: HTMLElement, needs: string[], unlocks: string[]) => {
-    if (!svg) return;
-    const box = tree.getBoundingClientRect();
-    const rect = (e: HTMLElement) => {
-      const r = e.getBoundingClientRect();
-      return {
-        x: r.left - box.left,
-        y: r.top - box.top,
-        w: r.width,
-        h: r.height,
-      };
-    };
-    const path = (from: HTMLElement, to: HTMLElement, cls: string) => {
-      const a = rect(from);
-      const b = rect(to);
-      let d: string;
-      if (Math.abs(a.y - b.y) < 4) {
-        const ax = a.x + a.w / 2;
-        const bx = b.x + b.w / 2;
-        const lift = Math.min(40, 14 + Math.abs(ax - bx) / 8);
-        d = `M${ax},${a.y} C${ax},${a.y - lift} ${bx},${b.y - lift} ${bx},${b.y}`;
-      } else {
-        const below = a.y > b.y; // from is lower on the page
-        const ax = a.x + a.w / 2;
-        const ay = below ? a.y : a.y + a.h;
-        const bx = b.x + b.w / 2;
-        const by = below ? b.y + b.h : b.y;
-        const mid = (ay + by) / 2;
-        d = `M${ax},${ay} C${ax},${mid} ${bx},${mid} ${bx},${by}`;
-      }
-      const p = document.createElementNS(SVG_NS, "path");
-      p.setAttribute("d", d);
-      p.setAttribute("class", cls);
-      svg.append(p);
-    };
-    for (const id of needs) {
-      const from = nodes.get(id);
-      if (from) path(from, el, "needs");
-    }
-    for (const id of unlocks) {
-      const to = nodes.get(id);
-      if (to) path(el, to, "unlocks");
-    }
+  const setParam = (id: string | null) => {
+    const url = new URL(location.href);
+    if (id) url.searchParams.set(PARAM, id);
+    else url.searchParams.delete(PARAM);
+    history.replaceState(null, "", url);
   };
 
-  for (const el of nodes.values()) {
-    el.addEventListener("mouseenter", () => focus(el));
-    el.addEventListener("focus", () => focus(el));
+  // A plain click selects; a modified click (new tab, etc.) still follows the link.
+  for (const [id, a] of chips) {
+    a.addEventListener("click", (event) => {
+      if (
+        event.metaKey ||
+        event.ctrlKey ||
+        event.shiftKey ||
+        event.altKey ||
+        event.button !== 0
+      )
+        return;
+      event.preventDefault();
+      if (a.classList.contains("on")) clear();
+      else select(id);
+    });
   }
-  tree.addEventListener("mouseleave", () => {
-    if (!tree.contains(document.activeElement)) clear();
-  });
-  tree.addEventListener("focusout", (event) => {
-    if (!tree.contains(event.relatedTarget as Node | null)) clear();
-  });
-  window.addEventListener("resize", () => {
-    if (current) {
-      const el = current;
-      current = null;
-      focus(el);
+  document.addEventListener("keydown", (event) => {
+    if (event.key === "Escape" && !panel.hasAttribute("data-empty")) {
+      const current = [...chips.entries()].find(([, a]) =>
+        a.classList.contains("on"),
+      );
+      clear();
+      current?.[1].focus();
     }
   });
+
+  const initial = new URL(location.href).searchParams.get(PARAM);
+  if (initial && byId.has(initial)) select(initial);
 }

@@ -5,6 +5,7 @@ import { expect, test } from "@playwright/test";
 const pages = [
   { name: "home", path: "{lang}/" },
   { name: "tree", path: "{lang}/tree/" },
+  { name: "tree-selected", path: "{lang}/tree/?topic=M5" },
   { name: "node", path: "{lang}/node/classical-control/" },
   { name: "search", path: "{lang}/search/?q=control" },
   { name: "404", path: "404.html" },
