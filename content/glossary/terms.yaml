@@ -358,6 +358,15 @@
     en: A small computer on one chip, with its own memory and pins for reading sensors and driving motors. It runs the code closest to the hardware.
     mn: Өөрийн санах ой, мэдрэгч уншиж хөдөлгүүр удирдах хөлтэй, нэг чип дээрх жижиг компьютер. Тоног төхөөрөмжид хамгийн ойр програмыг ажиллуулдаг.
   see: [real-time, bus]
+- id: single-board-computer
+  node: C11
+  term:
+    en: Single-board computer
+    mn: Нэг хавтант компьютер
+  def:
+    en: A whole computer on one small board, with a processor, memory and ports, running a full operating system such as Linux.
+    mn: Процессор, санах ой, портуудтай, Linux зэрэг бүрэн үйлдлийн систем ажиллуулдаг, нэг жижиг хавтан дээрх бүтэн компьютер.
+  see: [microcontroller, real-time]
 - id: bus
   node: C12
   term:

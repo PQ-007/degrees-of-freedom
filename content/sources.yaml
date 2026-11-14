@@ -472,3 +472,79 @@
     - title: "AK80-9 robotic actuator (CubeMars)"
       url: https://www.cubemars.com/goods-1031-AK80-9.html
   checked: web, 2026-11-14
+
+- id: arduino-uno-r3
+  claim: >-
+    The Arduino UNO R3 is based on the ATmega328P, an AVR CPU running at up to
+    16 MHz with 32 kB of flash, 2 kB of SRAM and 1 kB of EEPROM; it has 14
+    digital input/output pins, 6 of which can be PWM outputs, and 6 analog
+    inputs.
+  sources:
+    - title: "Arduino UNO R3 product reference manual (A000066 datasheet)"
+      url: https://docs.arduino.cc/resources/datasheets/A000066-datasheet.pdf
+    - title: "UNO R3 (Arduino documentation)"
+      url: https://docs.arduino.cc/hardware/uno-rev3/
+  checked: web (the datasheet's PDF), 2026-11-14
+
+- id: pico-2
+  claim: >-
+    The Raspberry Pi Pico 2 uses the RP2350 microcontroller: dual Arm
+    Cortex-M33 or dual Hazard3 RISC-V processors at 150 MHz, 520 KB of on-chip
+    SRAM, 4 MB of on-board flash and 12 PIO state machines; available from $5.
+  sources:
+    - title: "Raspberry Pi Pico 2 (Raspberry Pi)"
+      url: https://www.raspberrypi.com/products/raspberry-pi-pico-2/
+  checked: web, 2026-11-14
+
+- id: esp32
+  claim: >-
+    The ESP32 has one or two Xtensa 32-bit LX6 cores running at up to 240 MHz,
+    520 KB of SRAM, Wi-Fi 802.11 b/g/n, and Bluetooth v4.2 BR/EDR and
+    Bluetooth LE.
+  sources:
+    - title: "ESP32 Series Datasheet (Espressif)"
+      url: https://www.espressif.com/sites/default/files/documentation/esp32_datasheet_en.pdf
+  checked: web (the datasheet's PDF), 2026-11-14
+
+- id: pixhawk-6c
+  claim: >-
+    The Holybro Pixhawk 6C flight controller has an STM32H743 main processor
+    (32-bit Arm Cortex-M7, 480 MHz, 2 MB of flash, 1 MB of SRAM), an STM32F103
+    I/O processor, two IMUs (ICM-42688-P and BMI055), an MS5611 barometer and
+    an IST8310 magnetometer, and is supported by the PX4 team.
+  sources:
+    - title: "Holybro Pixhawk 6C (PX4 user guide)"
+      url: https://docs.px4.io/main/en/flight_controller/pixhawk6c
+  checked: web, 2026-11-14
+
+- id: raspberry-pi-5
+  claim: >-
+    The Raspberry Pi 5 has a Broadcom BCM2712 quad-core 64-bit Arm Cortex-A76
+    CPU at 2.4 GHz, 1 to 16 GB of LPDDR4X RAM, two USB 3.0 and two USB 2.0
+    ports, Gigabit Ethernet, a PCIe 2.0 x1 interface and the standard 40-pin
+    GPIO header; it runs Raspberry Pi OS and takes 5 V, 5 A over USB-C.
+  sources:
+    - title: "Raspberry Pi 5 (Raspberry Pi)"
+      url: https://www.raspberrypi.com/products/raspberry-pi-5/
+  checked: web, 2026-11-14
+
+- id: jetson-orin-nano
+  claim: >-
+    The NVIDIA Jetson Orin Nano Super Developer Kit has a 6-core Arm
+    Cortex-A78AE CPU, an Ampere GPU with 1024 CUDA cores and 32 Tensor Cores,
+    8 GB of LPDDR5 memory and up to 67 INT8 TOPS of AI performance, at 7 to
+    25 W; NVIDIA presents it for edge AI and robotics.
+  sources:
+    - title: "Jetson Orin Nano Super Developer Kit (NVIDIA)"
+      url: https://www.nvidia.com/en-us/autonomous-machines/embedded-systems/jetson-orin/nano-super-developer-kit/
+  checked: web, 2026-11-14
+
+- id: linux-preempt-rt
+  claim: >-
+    The PREEMPT_RT ("real-time") configuration of the Linux kernel reduces the
+    latency between a high-priority task becoming runnable and its actual
+    execution on the CPU, by making the kernel almost fully preemptible.
+  sources:
+    - title: "Theory of operation: real-time preemption (the Linux kernel documentation)"
+      url: https://docs.kernel.org/core-api/real-time/theory.html
+  checked: web, 2026-11-14

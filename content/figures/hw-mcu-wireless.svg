@@ -1,0 +1,13 @@
+<!-- Hardware: mcu-wireless. A line drawing with no words, so it suits every language; the part the entry is about is in the accent colour. The group with a motion class moves on hover (look.css). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <g class="waves" style="transform-origin: 120px 40px">
+    <path d="M100,30 A28,28 0 0 1 140,30" class="thick"/>
+    <path d="M90,22 A42,42 0 0 1 150,22" class="thick"/>
+    <path d="M80,14 A56,56 0 0 1 160,14" class="thick"/>
+  </g>
+  <rect x="76" y="40" width="88" height="96" rx="3" class="soft thick"/>
+  <path d="M84,64 L84,48 L96,48 L96,60 L108,60 L108,48 L120,48 L120,60 L132,60 L132,48 L144,48 L144,60 L156,60 L156,48" class="thick"/>
+  <rect x="84" y="72" width="72" height="56" rx="3" class="accent-fill thick"/>
+  <line x1="66" y1="78" x2="76" y2="78" class="thick"/><line x1="66" y1="88" x2="76" y2="88" class="thick"/><line x1="66" y1="98" x2="76" y2="98" class="thick"/><line x1="66" y1="108" x2="76" y2="108" class="thick"/><line x1="66" y1="118" x2="76" y2="118" class="thick"/><line x1="66" y1="128" x2="76" y2="128" class="thick"/>
+  <line x1="164" y1="78" x2="174" y2="78" class="thick"/><line x1="164" y1="88" x2="174" y2="88" class="thick"/><line x1="164" y1="98" x2="174" y2="98" class="thick"/><line x1="164" y1="108" x2="174" y2="108" class="thick"/><line x1="164" y1="118" x2="174" y2="118" class="thick"/><line x1="164" y1="128" x2="174" y2="128" class="thick"/>
+</svg>

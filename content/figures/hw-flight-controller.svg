@@ -1,0 +1,13 @@
+<!-- Hardware: flight-controller. A line drawing with no words, so it suits every language; the part the entry is about is in the accent colour. The group with a motion class moves on hover (look.css). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <g class="wobble" style="transform-origin: 120px 80px">
+    <rect x="72" y="36" width="96" height="88" rx="14" class="soft thick"/>
+    <rect x="60" y="56" width="12" height="12" rx="2" class="soft thin"/>
+    <rect x="60" y="76" width="12" height="12" rx="2" class="soft thin"/>
+    <rect x="60" y="96" width="12" height="12" rx="2" class="soft thin"/>
+    <rect x="168" y="56" width="12" height="12" rx="2" class="soft thin"/>
+    <rect x="168" y="76" width="12" height="12" rx="2" class="soft thin"/>
+    <rect x="168" y="96" width="12" height="12" rx="2" class="soft thin"/>
+    <path d="M120,48 L140,78 L128,78 L128,108 L112,108 L112,78 L100,78 Z" class="accent-fill thick"/>
+  </g>
+</svg>

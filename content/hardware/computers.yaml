@@ -1,0 +1,22 @@
+# H2 Microcontrollers and computers: a row of cards on the Hardware page. The
+# types are in the same order and have the same keys as the rows of compare
+# table X2 (content/compare/computers.yaml). Each type has a page per
+# language, content/hardware/<lang>/computers/<key>.md, and a drawing,
+# content/figures/hw-<key>.svg.
+id: H2
+slug: computers
+nodes: [C11, L1, L2]
+compare: X2
+types:
+  - key: mcu-8bit
+    node: C11
+  - key: mcu-32bit
+    node: C11
+  - key: mcu-wireless
+    node: C12
+  - key: flight-controller
+    node: M11
+  - key: sbc
+    node: C11
+  - key: ai-computer
+    node: C11

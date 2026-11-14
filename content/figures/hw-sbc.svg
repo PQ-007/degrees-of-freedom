@@ -1,0 +1,43 @@
+<!-- Hardware: sbc. A line drawing with no words, so it suits every language; the part the entry is about is in the accent colour. The group with a motion class moves on hover (look.css). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <rect x="22" y="28" width="164" height="104" rx="8" class="soft thick"/>
+  <circle cx="34" cy="40" r="4" class="thin"/>
+  <circle cx="34" cy="120" r="4" class="thin"/>
+  <circle cx="160" cy="40" r="4" class="thin"/>
+  <circle cx="160" cy="120" r="4" class="thin"/>
+  <rect x="46" y="32" width="104" height="14" rx="1" class="thin"/>
+  <circle cx="51" cy="36" r="1.6" class="thin"/>
+  <circle cx="59" cy="36" r="1.6" class="thin"/>
+  <circle cx="67" cy="36" r="1.6" class="thin"/>
+  <circle cx="75" cy="36" r="1.6" class="thin"/>
+  <circle cx="83" cy="36" r="1.6" class="thin"/>
+  <circle cx="91" cy="36" r="1.6" class="thin"/>
+  <circle cx="99" cy="36" r="1.6" class="thin"/>
+  <circle cx="107" cy="36" r="1.6" class="thin"/>
+  <circle cx="115" cy="36" r="1.6" class="thin"/>
+  <circle cx="123" cy="36" r="1.6" class="thin"/>
+  <circle cx="131" cy="36" r="1.6" class="thin"/>
+  <circle cx="139" cy="36" r="1.6" class="thin"/>
+  <circle cx="147" cy="36" r="1.6" class="thin"/>
+  <circle cx="51" cy="42" r="1.6" class="thin"/>
+  <circle cx="59" cy="42" r="1.6" class="thin"/>
+  <circle cx="67" cy="42" r="1.6" class="thin"/>
+  <circle cx="75" cy="42" r="1.6" class="thin"/>
+  <circle cx="83" cy="42" r="1.6" class="thin"/>
+  <circle cx="91" cy="42" r="1.6" class="thin"/>
+  <circle cx="99" cy="42" r="1.6" class="thin"/>
+  <circle cx="107" cy="42" r="1.6" class="thin"/>
+  <circle cx="115" cy="42" r="1.6" class="thin"/>
+  <circle cx="123" cy="42" r="1.6" class="thin"/>
+  <circle cx="131" cy="42" r="1.6" class="thin"/>
+  <circle cx="139" cy="42" r="1.6" class="thin"/>
+  <circle cx="147" cy="42" r="1.6" class="thin"/>
+  <rect x="62" y="66" width="38" height="38" rx="3" class="accent-fill thick"/>
+  <rect x="112" y="70" width="26" height="30" rx="2" class="soft thin"/>
+  <rect x="176" y="48" width="44" height="22" rx="2" class="soft thick"/>
+  <rect x="176" y="74" width="44" height="22" rx="2" class="soft thick"/>
+  <rect x="176" y="100" width="44" height="26" rx="2" class="soft thick"/>
+  <g class="blink">
+    <circle cx="50" cy="118" r="4.5" class="accent-fill thick"/>
+  </g>
+</svg>

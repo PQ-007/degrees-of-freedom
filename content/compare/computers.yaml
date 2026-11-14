@@ -1,0 +1,156 @@
+# X2 Microcontrollers and computers: the compare table, folded into the pages
+# of Hardware H2 (content/hardware/computers.yaml): rows = its types.
+#
+# Ratings are 1–5 and compare these options with each other: rough guides,
+# not measurements. The page says so.
+
+id: X2
+slug: computers
+nodes: [C11, L1, L2]
+
+columns:
+  - key: runs
+    type: text
+    label:
+      en: "What it runs"
+      mn: "Юу ажиллуулдаг"
+  - key: compute
+    type: rating
+    label:
+      en: "Computing power"
+      mn: "Тооцоолох чадал"
+  - key: timing
+    type: rating
+    label:
+      en: "Exact timing"
+      mn: "Цаг хугацааны нарийвчлал"
+  - key: power
+    type: rating
+    label:
+      en: "Power it draws"
+      mn: "Зарцуулах цахилгаан"
+  - key: cost
+    type: rating
+    label:
+      en: "Cost"
+      mn: "Үнэ"
+  - key: connects
+    type: text
+    label:
+      en: "Connects to"
+      mn: "Юутай холбогддог"
+  - key: used
+    type: text
+    label:
+      en: "Typical robots"
+      mn: "Түгээмэл робот"
+
+rows:
+  - key: mcu-8bit
+    name:
+      en: "8-bit microcontroller board"
+      mn: "8 битийн микроконтроллерын хавтан"
+    values:
+      runs:
+        en: "One program, no operating system"
+        mn: "Нэг програм, үйлдлийн системгүй"
+      compute: 1
+      timing: 5
+      power: 1
+      cost: 1
+      connects:
+        en: "Pins for switches, sensors and motor drivers"
+        mn: "Унтраалга, мэдрэгч, хөдөлгүүрийн драйверт зориулсан хөлүүд"
+      used:
+        en: "First robots, line followers"
+        mn: "Анхны робот, шугам дагагч"
+  - key: mcu-32bit
+    name:
+      en: "32-bit microcontroller board"
+      mn: "32 битийн микроконтроллерын хавтан"
+    values:
+      runs:
+        en: "One program, or a small real-time OS"
+        mn: "Нэг програм, эсвэл бодит хугацааны жижиг ҮС"
+      compute: 2
+      timing: 5
+      power: 1
+      cost: 1
+      connects:
+        en: "Pins and buses such as I²C, SPI and CAN"
+        mn: "Хөлүүд ба I²C, SPI, CAN зэрэг bus"
+      used:
+        en: "Motor controllers, small rovers"
+        mn: "Хөдөлгүүрийн контроллер, жижиг ровер"
+  - key: mcu-wireless
+    name:
+      en: "Wireless microcontroller"
+      mn: "Утасгүй микроконтроллер"
+    values:
+      runs:
+        en: "One program, plus the radio's software"
+        mn: "Нэг програм, нэмээд радиогийн програм"
+      compute: 2
+      timing: 4
+      power: 2
+      cost: 1
+      connects:
+        en: "Pins, buses, Wi-Fi and Bluetooth"
+        mn: "Хөлүүд, bus, Wi-Fi, Bluetooth"
+      used:
+        en: "Robots driven from a phone, sensor nodes"
+        mn: "Утаснаас удирддаг робот, мэдрэгчийн зангилаа"
+  - key: flight-controller
+    name:
+      en: "Flight controller"
+      mn: "Нислэгийн контроллер"
+    values:
+      runs:
+        en: "Flight software such as PX4"
+        mn: "PX4 зэрэг нислэгийн програм"
+      compute: 3
+      timing: 5
+      power: 2
+      cost: 3
+      connects:
+        en: "Its own motion sensors, motors, radio, GPS"
+        mn: "Өөрийн хөдөлгөөний мэдрэгч, хөдөлгүүр, радио, GPS"
+      used:
+        en: "Drones, also rovers and boats"
+        mn: "Дрон, мөн ровер ба завь"
+  - key: sbc
+    name:
+      en: "Single-board computer"
+      mn: "Нэг хавтант компьютер"
+    values:
+      runs:
+        en: "Linux and many programs at once"
+        mn: "Linux ба олон програм зэрэг"
+      compute: 4
+      timing: 2
+      power: 3
+      cost: 3
+      connects:
+        en: "USB, Ethernet, cameras, a pin header"
+        mn: "USB, Ethernet, камер, хөлийн эгнээ"
+      used:
+        en: "A mobile robot's main computer, running ROS"
+        mn: "ROS ажиллуулдаг хөдөлгөөнт роботын гол компьютер"
+  - key: ai-computer
+    name:
+      en: "AI computer"
+      mn: "Хиймэл оюуны компьютер"
+    values:
+      runs:
+        en: "Linux, with a GPU for neural networks"
+        mn: "Linux, нейрон сүлжээнд зориулсан GPU-тэй"
+      compute: 5
+      timing: 2
+      power: 5
+      cost: 5
+      connects:
+        en: "USB, Ethernet, several cameras"
+        mn: "USB, Ethernet, хэд хэдэн камер"
+      used:
+        en: "Robots that see with neural networks"
+        mn: "Нейрон сүлжээгээр хардаг робот"

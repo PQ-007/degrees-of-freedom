@@ -1,0 +1,12 @@
+<!-- Hardware: ai-computer. A line drawing with no words, so it suits every language; the part the entry is about is in the accent colour. The group with a motion class moves on hover (look.css). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <rect x="18" y="96" width="204" height="44" rx="5" class="soft thick"/>
+  <rect x="34" y="122" width="22" height="14" rx="2" class="soft thin"/><rect x="62" y="122" width="22" height="14" rx="2" class="soft thin"/><rect x="90" y="122" width="22" height="14" rx="2" class="soft thin"/><rect x="150" y="122" width="22" height="14" rx="2" class="soft thin"/><rect x="178" y="122" width="22" height="14" rx="2" class="soft thin"/>
+  <rect x="46" y="22" width="148" height="78" rx="6" class="soft thick"/>
+  <line x1="56" y1="28" x2="56" y2="94" class="thin"/><line x1="64" y1="28" x2="64" y2="94" class="thin"/><line x1="72" y1="28" x2="72" y2="94" class="thin"/><line x1="80" y1="28" x2="80" y2="94" class="thin"/><line x1="160" y1="28" x2="160" y2="94" class="thin"/><line x1="168" y1="28" x2="168" y2="94" class="thin"/><line x1="176" y1="28" x2="176" y2="94" class="thin"/><line x1="184" y1="28" x2="184" y2="94" class="thin"/>
+  <circle cx="120" cy="61" r="34" class="soft thick"/>
+  <g class="spin" style="transform-origin: 120px 61px">
+    <path d="M128.0,61.0 L148.2,71.3 A30,30 0 0 1 139.3,84.0 L126.7,65.3 Z" class="accent-fill thin"/><path d="M122.5,68.6 L118.9,91.0 A30,30 0 0 1 104.1,86.4 L118.0,68.7 Z" class="accent-fill thin"/><path d="M113.5,65.7 L91.2,69.2 A30,30 0 0 1 90.9,53.7 L112.0,61.4 Z" class="accent-fill thin"/><path d="M113.5,56.3 L103.2,36.1 A30,30 0 0 1 117.9,31.1 L117.1,53.5 Z" class="accent-fill thin"/><path d="M122.5,53.4 L138.5,37.4 A30,30 0 0 1 147.8,49.8 L126.2,55.9 Z" class="accent-fill thin"/>
+  </g>
+  <circle cx="120" cy="61" r="8" class="soft thick"/>
+</svg>
