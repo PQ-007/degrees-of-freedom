@@ -136,21 +136,22 @@ The agreed sample is `docs/style-preview.html` (open it in a browser; it has a l
 
 | Token | Light | Dark | Use |
 |---|---|---|---|
-| `--bg` | `#F4F3EE` | `#050506` | Page (paper / deep black) |
-| `--surface` | `#FFFFFF` | `#0C0C10` | Cards, tables, code |
-| `--ink` | `#0B0B10` | `#E4E4E8` | Text |
-| `--line` | `#0B0B10` | `#3A3A44` | Borders (dim grey in dark, so the frame doesn't glare) |
-| `--muted` | `#55555F` | `#8A8A96` | Secondary text |
-| `--rule` | `#D9D8D2` | `#1C1C23` | Thin inner lines (table rows) |
-| `--head-bg` / `--head-fg` | `#0B0B10` / `#F4F3EE` | `#15151B` / `#E4E4E8` | Table header rows |
-| `--primary-bg` / `--primary-fg` | `#0B0B10` / `#F4F3EE` | `#D4D4DA` / `#050506` | Primary button |
-| `--grid` | ink at 13% | ink at 7% | Drafting dot grid |
-| `--error` | `#B42318` | `#E5675C` | Real trouble only |
+| `--bg` | `#F4F3EE` | `#131317` | Page (paper / dark grey) |
+| `--surface` | `#FFFFFF` | `#1B1B21` | Cards, tables, code |
+| `--ink` | `#0B0B10` | `#D6D6DC` | Text |
+| `--line` | `#0B0B10` | `#44444F` | Borders (dim grey in dark, so the frame doesn't glare) |
+| `--muted` | `#55555F` | `#9B9BA6` | Secondary text |
+| `--rule` | `#D9D8D2` | `#2A2A32` | Thin inner lines (table rows) |
+| `--head-bg` / `--head-fg` | `#0B0B10` / `#F4F3EE` | `#26262E` / `#D6D6DC` | Table header rows |
+| `--primary-bg` / `--primary-fg` | `#0B0B10` / `#F4F3EE` | `#BDBDC6` / `#131317` | Primary button |
+| `--grid` | ink at 13% | ink at 6% | Drafting dot grid |
+| `--error` | `#B42318` | `#E5776D` | Real trouble only |
+| `--selected-*` | the primary fill | `#2C2C35` bg, `#ECECF0` text, `#D6D6DC` border | The current tier step: raised in dark, not a light block |
 
-The dark theme is deliberately deep: near-black page, dark surfaces, grey frame lines, white shadows, dark table headers, deep accents (the user, 2026-11-14).
+The dark theme is dark grey, not black, and softened for comfort: the near-black page with near-white text, white shadows and light-filled blocks hurt the user's eyes (2026-11-14). Text is a step down from white, frame lines grey, shadows light grey (`#77778A`), selections a raised dark block, accents deep.
 
 - **Borders:** 2px solid `--line` on cards, tables, buttons, inputs, code blocks and callouts. Square corners.
-- **Hard shadows:** `4px 4px 0`, no blur, in ink: black in light mode, **white (`#E4E4E8`) in dark mode** (the user, 2026-11-14), not the grey frame-line colour. At rest only on buttons and the three home entry cards; hovering a button shifts it into its shadow. Everything else you can press (cards, chips, tier steps) is flat at rest and lifts into a `2px`–`4px` shadow on hover (the user, 2026-11-14).
+- **Hard shadows:** `4px 4px 0`, no blur, black in light mode, **light grey (`#77778A`) in dark mode**: the user first asked for white, then found the dark theme hard on the eyes (2026-11-14). At rest only on buttons and the three home entry cards; hovering a button shifts it into its shadow. Everything else you can press (cards, chips, tier steps) is flat at rest and lifts into a `2px`–`4px` shadow on hover (the user, 2026-11-14).
 - **Dark-filled things get a grey shadow:** under a primary button, or the current tier step, an ink shadow would merge with the fill, so those use `--shade` (`#8A8A96` in light; `#3A3A44` in dark, where the fill is light).
 - **Type:** Geist, bold and tight for headings (800), normal weight for text, 600 for buttons, chips and table headers. **Uppercase mono only for IDs (`T3 · M5`) and small eyebrow labels**; everything else is normal case, which also keeps Mongolian readable. Body 17px, line height 1.6, about 68 characters per line.
 - **Visible structure:** the header sits on a 2px rule; sections are separated by 2px rules; table header rows are inverted in light and dark grey in dark.

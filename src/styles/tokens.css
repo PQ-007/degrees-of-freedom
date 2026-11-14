@@ -24,6 +24,11 @@
   --shadow-shade: 4px 4px 0 var(--shade);
   --shadow-shade-sm: 2px 2px 0 var(--shade);
 
+  /* Selected things (the current tier step). */
+  --selected-bg: #0b0b10;
+  --selected-fg: #f4f3ee;
+  --selected-line: #0b0b10;
+
   /* T0 Foundations has no hue: grey in both themes. */
   --t0: #8a8a96;
 
@@ -53,25 +58,33 @@
 
 /* Deep dark: near-black page, grey frame lines, white shadows, deep marks, bright data. */
 :root[data-theme="dark"] {
-  --bg: #050506;
-  --surface: #0c0c10;
-  --ink: #e4e4e8;
-  --line: #3a3a44;
-  --muted: #8a8a96;
-  --rule: #1c1c23;
-  --error: #e5675c;
-  --head-bg: #15151b;
-  --head-fg: #e4e4e8;
-  --primary-bg: #d4d4da;
-  --primary-fg: #050506;
-  --grid: rgba(228, 228, 232, 0.07);
+  /* Softened for comfort (the user, 2026-11-14: the near-black page, bright
+     text, white shadows and light-filled blocks hurt to look at). A dark grey
+     page instead of black, text a step down from white, light-grey shadows,
+     and selections shown as a raised dark block, not a light one. */
+  --bg: #131317;
+  --surface: #1b1b21;
+  --ink: #d6d6dc;
+  --line: #44444f;
+  --muted: #9b9ba6;
+  --rule: #2a2a32;
+  --error: #e5776d;
+  --head-bg: #26262e;
+  --head-fg: #d6d6dc;
+  --primary-bg: #bdbdc6;
+  --primary-fg: #131317;
+  --grid: rgba(214, 214, 220, 0.06);
 
-  /* Dark shadows are white (the user, 2026-11-14), not the grey frame-line
-     colour. Light-filled things (primary buttons, the current step) keep a grey
-     shadow (--shade), where white would merge with the fill. */
-  --shade: #3a3a44;
-  --shadow: 4px 4px 0 var(--ink);
-  --shadow-sm: 2px 2px 0 var(--ink);
+  /* Selected things (the current tier step): raised, not filled with light. */
+  --selected-bg: #2c2c35;
+  --selected-fg: #ececf0;
+  --selected-line: #d6d6dc;
+
+  /* Shadows: light grey, softer than white on dark. Under the light primary
+     button, a darker grey (--shade). */
+  --shade: #44444f;
+  --shadow: 4px 4px 0 #77778a;
+  --shadow-sm: 2px 2px 0 #77778a;
 
   --yellow: #94800f;
   --orange: #9e4a1a;

@@ -36,6 +36,7 @@ const pairs: [string, string, number][] = [
   ["error", "bg", 4.5],
   ["error", "surface", 4.5],
   ["ink", "bg", 3], // focus ring
+  ["selected-fg", "selected-bg", 4.5],
 ];
 
 describe.each(Object.entries(themes))("%s theme", (_name, tokens) => {
