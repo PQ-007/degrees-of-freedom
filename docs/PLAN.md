@@ -215,7 +215,7 @@ A Hairline figure made with the `hairline-create` skill.
 | **Robots matrix** | Robot types as columns, the template's rows as rows |
 | **Signal chain** | On the drafting grid: three bordered columns (Sense · Think · Act), each headed by its square and name in ink; the steps as bordered blocks; horizontal on wide screens, vertical on phones; clicking a step shows its signal |
 | **Roadmap** | (Chosen by the user, 2026-11-14: ordered path + checklist.) Title, summary, its robot; a progress bar ("3 of 34 learned", saved in this browser); the path as numbered steps in stages, each a bordered row (number, tier square, ID and title linking to the topic, a Must or Helpful tag, one line on why this goal needs it, a "Learned" checkbox); Later topics folded at the end; then how to use it and the Build. Phones: the checkbox moves under the text |
-| **Build** | A spec card (`BUILD 05`, difficulty, time, nodes used, part categories), then build steps |
+| **Build** | (Chosen by the user, 2026-11-14: spec card + steps.) Title and summary; the spec card (BUILD 08, difficulty as dots with a word, rough time, robot, roadmap, topics used; a resting hard shadow, like the home entry cards); parts by kind, each with its topic and Compare page; the block diagram (Sense → Think → Act columns with their squares, power underneath); numbered steps in stages with Done checkboxes and a progress bar (saved in this browser); then common failures, safety (cited), make it harder; sources |
 | **Sim demo** | Scene on the left, controls and live plots on the right (stacked on phones), in one bordered frame; traces in the bright data colours |
 
 ### Status of a node

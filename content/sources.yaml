@@ -233,3 +233,15 @@
     - title: "Mars rover mission comes to an end, but science legacy lives on (NASA JPL Education, 13 February 2019)"
       url: https://jpl.nasa.gov/edu/news/2019/2/13/mars-rover-mission-comes-to-an-end-but-science-legacy-live-on
   checked: web, 2026-11-14
+
+- id: osha-lithium
+  claim: >-
+    Lithium batteries that are damaged (dropped, crushed, punctured, overheated)
+    or charged improperly can catch fire or explode; follow the maker's
+    charging instructions, use a charger approved for the battery, take it off
+    the charger when full, and stop using one that bulges, hisses, leaks or
+    gets hot.
+  sources:
+    - title: "Preventing fire and/or explosion injury from small and wearable lithium battery powered devices (OSHA SHIB 06-20-2019)"
+      url: https://www.osha.gov/sites/default/files/publications/shib011819.pdf
+  checked: web (the bulletin's PDF, read in full), 2026-11-14

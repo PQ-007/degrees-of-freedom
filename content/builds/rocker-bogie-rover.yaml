@@ -1,0 +1,152 @@
+# B08 Rocker-bogie rover: the spec card, block diagram and steps.
+# The text (common failures, safety, make it harder) is
+# content/builds/<lang>/rocker-bogie-rover.md. Parts are categories, not
+# products; a part links its topic and, if one exists, its Compare page.
+# Difficulty is 1-5. Time is a rough estimate.
+
+id: B08
+slug: rocker-bogie-rover
+difficulty: 3
+time:
+  en: "About three weekends (a rough estimate)"
+  mn: "Ойролцоогоор гурван амралтын өдөр (барагцаа)"
+nodes: [C1, C3, C4, C7, C8, C10, L1, L3, M2, I3]
+robot: R5
+
+parts:
+  - node: C4
+    compare: X1
+    name:
+      en: "Six small DC gearmotors, all the same model"
+      mn: "Зургаан ижил загварын жижиг араатай DC хөдөлгүүр"
+  - node: L3
+    name:
+      en: "Motor drivers for six motors (or one channel per side)"
+      mn: "Зургаан хөдөлгүүрийн драйвер (эсвэл тал бүрд нэг суваг)"
+  - node: C11
+    name:
+      en: "A microcontroller board"
+      mn: "Микроконтроллерын хавтан"
+  - node: C7
+    name:
+      en: "A rechargeable battery pack, with a switch and a fuse"
+      mn: "Цэнэглэдэг батарей, унтраалга ба гал хамгаалагчтай"
+  - node: C8
+    name:
+      en: "A voltage regulator for the logic"
+      mn: "Логик хэлхээнд зориулсан хүчдэл тогтворжуулагч"
+  - node: C1
+    name:
+      en: "Six wheels and the linkage: 3D-printed or cut from sheet, with bolts or bearings at the pivots"
+      mn: "Зургаан дугуй ба холбоос: 3D хэвлэсэн эсвэл хавтангаас зүссэн, тэнхлэгтээ боолт эсвэл холхивчтой"
+  - node: C10
+    name:
+      en: "Distance sensors or a camera"
+      mn: "Зай хэмжигч эсвэл камер"
+  - node: C9
+    name:
+      en: "An IMU (optional)"
+      mn: "IMU (заавал биш)"
+
+diagram:
+  sense:
+    - en: "Distance sensors or a camera"
+      mn: "Зай хэмжигч эсвэл камер"
+    - en: "IMU (optional)"
+      mn: "IMU (заавал биш)"
+  think:
+    - en: "Microcontroller"
+      mn: "Микроконтроллер"
+  act:
+    - en: "Motor drivers"
+      mn: "Хөдөлгүүрийн драйверууд"
+    - en: "Six gearmotors"
+      mn: "Зургаан араатай хөдөлгүүр"
+  power:
+    - en: "Battery, switch and fuse"
+      mn: "Батарей, унтраалга, гал хамгаалагч"
+    - en: "Regulator for the logic"
+      mn: "Логикийн тогтворжуулагч"
+
+stages:
+  - key: plan
+    title:
+      en: "Plan"
+      mn: "Төлөвлөх"
+    steps:
+      - node: C7
+        text:
+          en: "Choose the motors and the battery together: the motors' voltage sets the battery, and the battery's weight sets how strong the motors must be."
+          mn: "Хөдөлгүүр ба батарейг хамт сонго: хөдөлгүүрийн хүчдэл батарейг тодорхойлж, батарейн жин хөдөлгүүр хэр хүчтэй байхыг тодорхойлно."
+      - node: C3
+        text:
+          en: "Sketch the linkage: where the pivots sit decides how evenly the weight spreads over the six wheels."
+          mn: "Холбоосыг зурж үз: тэнхлэгүүд хаана байх нь жин зургаан дугуйд хэр жигд хуваарилагдахыг шийднэ."
+  - key: body
+    title:
+      en: "Body"
+      mn: "Бие"
+    steps:
+      - node: C1
+        text:
+          en: "Build the two rockers and the two bogies, with pivots that turn freely."
+          mn: "Хоёр rocker, хоёр bogie-г чөлөөтэй эргэдэг тэнхлэгтэйгээр бүтээ."
+      - node: C3
+        text:
+          en: "Join the two rockers through the body with a differential (a bar or gears), so that when one side climbs, the body tilts only half as much."
+          mn: "Хоёр rocker-ийг их биеэр дамжуулан дифференциалаар (саваа эсвэл араа) холбо: нэг тал өгсөхөд их бие хагасаар л хазайна."
+      - node: C3
+        text:
+          en: "Mount the motors and wheels, then check on bumpy ground that all six wheels touch."
+          mn: "Хөдөлгүүр, дугуйг суурилуул, дараа нь бартаатай газар зургаан дугуй бүгд хүрч байгааг шалга."
+  - key: electronics
+    title:
+      en: "Electronics"
+      mn: "Электроник"
+    steps:
+      - node: C8
+        text:
+          en: "Wire the power: battery, switch, fuse, then the motor drivers; a regulator feeds the microcontroller; join all the grounds."
+          mn: "Тэжээлийг холбо: батарей, унтраалга, гал хамгаалагч, дараа нь хөдөлгүүрийн драйверууд; тогтворжуулагч микроконтроллерыг тэжээнэ; бүх газардуулгыг нэгтгэ."
+      - node: L3
+        text:
+          en: "Connect the motor drivers to the microcontroller: a speed (PWM) and a direction signal for each motor, or for each side if a side's three motors share one channel."
+          mn: "Хөдөлгүүрийн драйверуудыг микроконтроллерт холбо: хөдөлгүүр бүрд, эсвэл тал бүрийн гурван хөдөлгүүр нэг сувагтай бол тал бүрд, хурдны (PWM) ба чиглэлийн дохио."
+      - node: C10
+        text:
+          en: "Mount the sensors at the front, where they can see what's ahead."
+          mn: "Мэдрэгчүүдийг урд талын юуг харж чадахаар урд нь суурилуул."
+  - key: code
+    title:
+      en: "Code"
+      mn: "Код"
+    steps:
+      - node: L1
+        text:
+          en: "Make one motor run: speed with PWM, then direction."
+          mn: "Нэг хөдөлгүүрийг ажиллуул: эхлээд PWM-ээр хурд, дараа нь чиглэл."
+      - node: M2
+        text:
+          en: "Drive both sides: turn by running the left and right wheels at different speeds (skid steering)."
+          mn: "Хоёр талыг жолоод: зүүн ба баруун дугуйг өөр хурдтай эргүүлж эргэ (skid steering)."
+      - node: I3
+        text:
+          en: "Avoid obstacles: when a sensor sees something close, stop, turn away and go on."
+          mn: "Саад тойр: мэдрэгч ойрхон юм харвал зогсоод, эргээд, цааш яв."
+  - key: test
+    title:
+      en: "Test"
+      mn: "Турших"
+    steps:
+      - node: S4
+        text:
+          en: "Test on the bench first, with the wheels off the ground."
+          mn: "Эхлээд ширээн дээр, дугуйг газраас өргөөд турш."
+      - node: C3
+        text:
+          en: "Drive over rough ground and small obstacles, and watch the body stay level."
+          mn: "Бартаатай газар ба жижиг саадаар явуулж, их бие тэгш байхыг ажигла."
+      - node: C7
+        text:
+          en: "Time how long one charge lasts while driving."
+          mn: "Явж байх үед нэг цэнэг хэр удахыг хэмж."
