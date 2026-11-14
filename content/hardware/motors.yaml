@@ -7,6 +7,8 @@
 # "Which one?" advice shown with the comparison.
 id: H1
 slug: motors
+# Its place in Sense · Think · Act, which sets the colour of its row and pages.
+role: act
 nodes: [C4, C5, C6]
 compare: X1
 types:

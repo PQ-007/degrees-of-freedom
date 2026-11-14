@@ -5,6 +5,8 @@
 # content/figures/hw-<key>.svg.
 id: H2
 slug: computers
+# Its place in Sense · Think · Act, which sets the colour of its row and pages.
+role: think
 nodes: [C11, L1, L2]
 compare: X2
 types:

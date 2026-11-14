@@ -1,0 +1,12 @@
+<!-- Hardware: imu. A line drawing with no words, so it suits every language; the part the entry is about is in the accent colour. The group with a motion class moves on hover (look.css). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <g class="wobble" style="transform-origin: 120px 86px">
+    <rect x="84" y="62" width="72" height="56" rx="4" class="soft thick"/>
+    <line x1="92" y1="118" x2="92" y2="126" class="thin"/><line x1="92" y1="54" x2="92" y2="62" class="thin"/><line x1="102" y1="118" x2="102" y2="126" class="thin"/><line x1="102" y1="54" x2="102" y2="62" class="thin"/><line x1="112" y1="118" x2="112" y2="126" class="thin"/><line x1="112" y1="54" x2="112" y2="62" class="thin"/><line x1="122" y1="118" x2="122" y2="126" class="thin"/><line x1="122" y1="54" x2="122" y2="62" class="thin"/><line x1="132" y1="118" x2="132" y2="126" class="thin"/><line x1="132" y1="54" x2="132" y2="62" class="thin"/><line x1="142" y1="118" x2="142" y2="126" class="thin"/><line x1="142" y1="54" x2="142" y2="62" class="thin"/><line x1="152" y1="118" x2="152" y2="126" class="thin"/><line x1="152" y1="54" x2="152" y2="62" class="thin"/>
+    <circle cx="94" cy="72" r="3" class="ink-fill thin"/>
+    <path d="M120,90 L176,90" class="under"/><path d="M120,90 L176,90" class="accent-stroke"/>
+    <path d="M120,90 L120,34" class="under"/><path d="M120,90 L120,34" class="accent-stroke"/>
+    <path d="M120,90 L86,118" class="under"/><path d="M120,90 L86,118" class="accent-stroke"/>
+    <circle cx="120" cy="90" r="5" class="soft thick"/>
+  </g>
+</svg>

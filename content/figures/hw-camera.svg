@@ -1,0 +1,15 @@
+<!-- Hardware: camera. A line drawing with no words, so it suits every language; the part the entry is about is in the accent colour. The group with a motion class moves on hover (look.css). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <rect x="58" y="24" width="124" height="112" rx="6" class="soft thick"/>
+  <circle cx="70" cy="36" r="4" class="thin"/>
+  <circle cx="170" cy="36" r="4" class="thin"/>
+  <circle cx="70" cy="124" r="4" class="thin"/>
+  <circle cx="170" cy="124" r="4" class="thin"/>
+  <rect x="100" y="132" width="40" height="18" rx="1" class="soft thick"/>
+  <circle cx="120" cy="80" r="38" class="soft thick"/>
+  <circle cx="120" cy="80" r="30" class="thin"/>
+  <g class="spin slow" style="transform-origin: 120px 80px">
+    <path d="M148.0,80.0 L126.0,90.4" class="thick"/><path d="M134.0,104.2 L114.0,90.4" class="thick"/><path d="M106.0,104.2 L108.0,80.0" class="thick"/><path d="M92.0,80.0 L114.0,69.6" class="thick"/><path d="M106.0,55.8 L126.0,69.6" class="thick"/><path d="M134.0,55.8 L132.0,80.0" class="thick"/>
+  </g>
+  <circle cx="120" cy="80" r="11" class="accent-fill thick"/>
+</svg>

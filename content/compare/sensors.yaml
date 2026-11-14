@@ -1,0 +1,208 @@
+# X3 Sensors: the compare table, folded into the pages of Hardware H3
+# (content/hardware/sensors.yaml): rows = its types.
+#
+# Ratings are 1–5 and compare these options with each other: rough guides,
+# not measurements. The page says so.
+
+id: X3
+slug: sensors
+nodes: [C9, C10]
+
+columns:
+  - key: measures
+    type: text
+    label:
+      en: "What it measures"
+      mn: "Юу хэмждэг"
+  - key: range
+    type: text
+    label:
+      en: "Range"
+      mn: "Хүрээ"
+  - key: detail
+    type: rating
+    label:
+      en: "Detail"
+      mn: "Нарийвчлал"
+  - key: rate
+    type: rating
+    label:
+      en: "Readings per second"
+      mn: "Секундэд хэмжих тоо"
+  - key: cost
+    type: rating
+    label:
+      en: "Cost"
+      mn: "Үнэ"
+  - key: trouble
+    type: text
+    label:
+      en: "Trouble with"
+      mn: "Бэрхшээл"
+  - key: used
+    type: text
+    label:
+      en: "Typical robots"
+      mn: "Түгээмэл робот"
+
+rows:
+  - key: encoder
+    name:
+      en: "Encoder"
+      mn: "Энкодер"
+    values:
+      measures:
+        en: "How far a shaft has turned"
+        mn: "Тэнхлэг хэр эргэсэн"
+      range:
+        en: "Any number of turns"
+        mn: "Хязгааргүй олон эргэлт"
+      detail: 4
+      rate: 5
+      cost: 1
+      trouble:
+        en: "Wheel slip: it counts turns, not distance"
+        mn: "Дугуйн гулсалт: зайг биш эргэлтийг тоолно"
+      used:
+        en: "Every motor that needs its speed or angle"
+        mn: "Хурд эсвэл өнцгөө мэдэх ёстой бүх хөдөлгүүр"
+  - key: imu
+    name:
+      en: "IMU"
+      mn: "IMU"
+    values:
+      measures:
+        en: "Turning rate and acceleration, so tilt"
+        mn: "Эргэлтийн хурд ба хурдатгал, улмаар хазайлт"
+      range:
+        en: "Its own motion only"
+        mn: "Зөвхөн өөрийн хөдөлгөөн"
+      detail: 3
+      rate: 5
+      cost: 1
+      trouble:
+        en: "Drift when its readings are added up"
+        mn: "Хэмжилтийг нь нэмэхэд гулсдаг"
+      used:
+        en: "Balancing robots, drones, every robot's heading"
+        mn: "Тэнцвэр барьдаг робот, дрон, роботын чиглэл"
+  - key: ultrasonic
+    name:
+      en: "Ultrasonic distance sensor"
+      mn: "Хэт авианы зай хэмжигч"
+    values:
+      measures:
+        en: "Distance to the nearest echo"
+        mn: "Хамгийн ойрын цуурай хүртэлх зай"
+      range:
+        en: "A few cm to about 4 m"
+        mn: "Хэдэн см-ээс 4 м орчим"
+      detail: 1
+      rate: 2
+      cost: 1
+      trouble:
+        en: "Soft or slanted surfaces that don't echo back"
+        mn: "Цуурай буцаадаггүй зөөлөн эсвэл хазгай гадаргуу"
+      used:
+        en: "Obstacle stops on small robots"
+        mn: "Жижиг роботын саадын өмнө зогсох"
+  - key: tof
+    name:
+      en: "Time-of-flight sensor"
+      mn: "Нислэгийн хугацааны мэдрэгч"
+    values:
+      measures:
+        en: "Distance along a narrow beam of light"
+        mn: "Нарийн гэрлийн цацрагийн дагуух зай"
+      range:
+        en: "Up to about 4 m"
+        mn: "4 м орчим хүртэл"
+      detail: 2
+      rate: 3
+      cost: 2
+      trouble:
+        en: "Seeing only one spot at a time"
+        mn: "Нэг удаад ганц цэг хардаг"
+      used:
+        en: "Edges, walls and gestures on small robots"
+        mn: "Жижиг роботын ирмэг, хана, дохио зангаа"
+  - key: lidar
+    name:
+      en: "2D lidar"
+      mn: "2D лидар"
+    values:
+      measures:
+        en: "Distances all around, in one plane"
+        mn: "Нэг хавтгай дахь эргэн тойрны зай"
+      range:
+        en: "Several metres, depending on the model"
+        mn: "Загвараасаа хамааран хэдэн метр"
+      detail: 4
+      rate: 4
+      cost: 3
+      trouble:
+        en: "Glass and mirrors; things above or below its plane"
+        mn: "Шил, толь; хавтгайнаасаа дээр эсвэл доор буй зүйл"
+      used:
+        en: "Mapping and navigation (SLAM)"
+        mn: "Газрын зураг үүсгэх ба навигаци (SLAM)"
+  - key: camera
+    name:
+      en: "Camera"
+      mn: "Камер"
+    values:
+      measures:
+        en: "Colour images"
+        mn: "Өнгөт зураг"
+      range:
+        en: "As far as it can see"
+        mn: "Харж чадах хэрээр"
+      detail: 5
+      rate: 3
+      cost: 2
+      trouble:
+        en: "Darkness and glare; no distance from one image"
+        mn: "Харанхуй, гялбаа; нэг зургаас зай гардаггүй"
+      used:
+        en: "Recognising objects, following lines and markers"
+        mn: "Юм таних, шугам ба тэмдэг дагах"
+  - key: depth-camera
+    name:
+      en: "Depth camera"
+      mn: "Гүний камер"
+    values:
+      measures:
+        en: "An image with a distance at every pixel"
+        mn: "Пиксел бүртээ зайтай зураг"
+      range:
+        en: "About 0.3 to 3 m at its best"
+        mn: "Хамгийн сайндаа 0.3-3 м орчим"
+      detail: 4
+      rate: 3
+      cost: 4
+      trouble:
+        en: "Plain or shiny surfaces with nothing to match"
+        mn: "Тааруулах юмгүй жигд эсвэл гялгар гадаргуу"
+      used:
+        en: "Grasping, 3D maps, avoiding obstacles"
+        mn: "Барих, 3D газрын зураг, саад тойрох"
+  - key: force-torque
+    name:
+      en: "Force/torque sensor"
+      mn: "Хүч/моментын мэдрэгч"
+    values:
+      measures:
+        en: "Pushes and twists along three axes each"
+        mn: "Гурван тэнхлэг тус бүрийн түлхэлт ба мушгилт"
+      range:
+        en: "Set by its calibration"
+        mn: "Тохируулгаараа тодорхойлогдоно"
+      detail: 5
+      rate: 5
+      cost: 5
+      trouble:
+        en: "Being overloaded"
+        mn: "Хэт ачаалал"
+      used:
+        en: "Assembly, surgery and robot-hand research"
+        mn: "Угсралт, мэс засал, роботын гарын судалгаа"

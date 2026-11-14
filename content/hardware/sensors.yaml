@@ -1,0 +1,28 @@
+# H3 Sensors: a row of cards on the Hardware page. The types are in the same
+# order and have the same keys as the rows of compare table X3
+# (content/compare/sensors.yaml). Each type has a page per language,
+# content/hardware/<lang>/sensors/<key>.md, and a drawing,
+# content/figures/hw-<key>.svg.
+id: H3
+slug: sensors
+# Its place in Sense · Think · Act, which sets the colour of its row and pages.
+role: sense
+nodes: [C9, C10]
+compare: X3
+types:
+  - key: encoder
+    node: C9
+  - key: imu
+    node: C9
+  - key: ultrasonic
+    node: C10
+  - key: tof
+    node: C10
+  - key: lidar
+    node: C10
+  - key: camera
+    node: C10
+  - key: depth-camera
+    node: P7
+  - key: force-torque
+    node: C9

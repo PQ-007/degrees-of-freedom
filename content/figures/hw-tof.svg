@@ -1,0 +1,11 @@
+<!-- Hardware: tof. A line drawing with no words, so it suits every language; the part the entry is about is in the accent colour. The group with a motion class moves on hover (look.css). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <rect x="20" y="52" width="56" height="56" rx="4" class="soft thick"/>
+  <rect x="38" y="64" width="22" height="32" rx="2" class="accent-fill thick"/>
+  <line x1="216" y1="20" x2="216" y2="140" class="thick"/>
+  <line x1="216" y1="28" x2="226" y2="20" class="thin"/><line x1="216" y1="42" x2="226" y2="34" class="thin"/><line x1="216" y1="56" x2="226" y2="48" class="thin"/><line x1="216" y1="70" x2="226" y2="62" class="thin"/><line x1="216" y1="84" x2="226" y2="76" class="thin"/><line x1="216" y1="98" x2="226" y2="90" class="thin"/><line x1="216" y1="112" x2="226" y2="104" class="thin"/><line x1="216" y1="126" x2="226" y2="118" class="thin"/><line x1="216" y1="140" x2="226" y2="132" class="thin"/>
+  <g class="flow">
+    <path d="M60,68 L214,68" class="under"/><path d="M60,68 L214,68" class="accent-stroke"/>
+    <path d="M214,92 L60,92" class="under"/><path d="M214,92 L60,92" class="accent-stroke"/>
+  </g>
+</svg>

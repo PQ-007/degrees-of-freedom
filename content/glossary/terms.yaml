@@ -331,6 +331,24 @@
     en: A part that turns something physical, such as light, an angle, an acceleration or a distance, into a signal the robot can read. Some measure the robot itself, others the world around it.
     mn: Гэрэл, өнцөг, хурдатгал, зай зэрэг физик зүйлийг роботын уншиж чадах дохио болгодог хэсэг. Зарим нь роботыг өөрийг нь, зарим нь эргэн тойрныг хэмждэг.
   see: [encoder, imu, noise]
+- id: lidar
+  node: C10
+  term:
+    en: Lidar
+    mn: Лидар
+  def:
+    en: A sensor that measures distances with light, often by spinning a laser to scan all the way round.
+    mn: Гэрлээр зай хэмждэг мэдрэгч; ихэвчлэн лазераа эргүүлж эргэн тойрныг бүхэлд нь скан хийдэг.
+  see: [time-of-flight, sensor]
+- id: time-of-flight
+  node: C10
+  term:
+    en: Time of flight
+    mn: Нислэгийн хугацаа
+  def:
+    en: Measuring distance by timing how long a pulse of light or sound takes to reach something and come back.
+    mn: Гэрэл эсвэл дууны импульс ямар нэг зүйлд хүрээд буцаж ирэх хугацааг хэмжиж зай олох арга.
+  see: [lidar]
 - id: encoder
   node: C9
   term:

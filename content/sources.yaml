@@ -548,3 +548,93 @@
     - title: "Theory of operation: real-time preemption (the Linux kernel documentation)"
       url: https://docs.kernel.org/core-api/real-time/theory.html
   checked: web, 2026-11-14
+
+- id: pololu-encoder
+  claim: >-
+    Pololu's magnetic encoder kit for micro metal gearmotors reads a 6-pole
+    magnetic disc on the motor's back shaft with Hall effect sensors, giving
+    two digital quadrature outputs (A and B) and 12 counts per revolution of
+    the motor shaft; the sensors work from 2.7 V to 18 V.
+  sources:
+    - title: "Magnetic Encoder Pair Kit for Micro Metal Gearmotors, 12 CPR (Pololu item 4760)"
+      url: https://www.pololu.com/product/4760
+  checked: web, 2026-11-15
+
+- id: icm-42688
+  claim: >-
+    TDK InvenSense's ICM-42688-P is a 6-axis MEMS motion-tracking device with
+    user-selectable gyroscope ranges up to ±2000 °/s and accelerometer ranges
+    up to ±16 g, I3C, I²C and SPI interfaces, gyroscope noise of 2.8
+    mdps/√Hz and accelerometer noise of 70 µg/√Hz.
+  sources:
+    - title: "ICM-42688-P (TDK InvenSense)"
+      url: https://invensense.tdk.com/products/motion-tracking/6-axis/icm-42688-p/
+  checked: web, 2026-11-15
+
+- id: hc-sr04
+  claim: >-
+    The HC-SR04 ultrasonic sensor, triggered by a pulse of at least 10 µs,
+    sends eight 40 kHz pulses and raises its echo output for as long as the
+    sound takes to come back; distance = echo time × speed of sound (340 m/s)
+    ÷ 2. It works on 5 V, ranges from 2 cm to 4 m, over a 15° angle.
+  sources:
+    - title: "HC-SR04 user's manual (Elec Freaks, via SparkFun)"
+      url: https://cdn.sparkfun.com/datasheets/Sensors/Proximity/HCSR04.pdf
+    - title: "Ultrasonic Distance Sensor, HC-SR04 (SparkFun)"
+      url: https://www.sparkfun.com/ultrasonic-distance-sensor-hc-sr04.html
+  checked: web (the manual's PDF), 2026-11-15
+
+- id: vl53l1x
+  claim: >-
+    The ST VL53L1X measures absolute distance from the time of flight of
+    invisible, eye-safe laser pulses, up to 4 m with 1 mm resolution; its
+    fastest rate is 50 Hz (short-distance mode), its typical full field of
+    view 27°, and it reports over I²C.
+  sources:
+    - title: "VL53L1X Time-of-Flight Distance Sensor Carrier (Pololu item 3415)"
+      url: https://www.pololu.com/product/3415
+  checked: web, 2026-11-15
+
+- id: rplidar-a1
+  claim: >-
+    Slamtec's RPLIDAR A1 does 360-degree laser range scanning by laser
+    triangulation, measuring distance more than 8000 times per second, with a
+    scan rate adjustable from 2 to 10 Hz; Slamtec designed it for SLAM.
+  sources:
+    - title: "RPLIDAR A1 (Slamtec)"
+      url: http://www.slamtec.com/en/lidar/a1
+  checked: web, 2026-11-15
+
+- id: pi-camera-3
+  claim: >-
+    Raspberry Pi Camera Module 3: a 12-megapixel Sony IMX708 sensor
+    (11.9 MP, 4608 × 2592), phase-detection autofocus, a 75° diagonal field of
+    view (120° on the Wide version), an HDR mode, video modes such as 1080p50
+    and 720p120, and a CSI-2 ribbon connection.
+  sources:
+    - title: "Raspberry Pi Camera Module 3 (Raspberry Pi)"
+      url: https://www.raspberrypi.com/products/camera-module-3/
+  checked: web, 2026-11-15
+
+- id: realsense-d435i
+  claim: >-
+    The RealSense D435i depth camera uses stereoscopic depth with global
+    shutter sensors; its ideal range is 0.3 m to 3 m, its depth field of view
+    87° × 58°, its depth output up to 1280 × 720 at up to 90 fps; it adds an
+    IMU, a 2 MP colour camera (1920 × 1080 at 30 fps) and USB-C 3.1 Gen 1.
+  sources:
+    - title: "Depth Camera D435i (RealSense)"
+      url: https://realsenseai.com/products/depth-camera-d435i/
+  checked: web, 2026-11-15
+
+- id: ati-mini45
+  claim: >-
+    ATI's Mini45 six-axis force/torque sensor measures Fx, Fy, Fz, Tx, Ty and
+    Tz with silicon strain gauges, whose signal ATI gives as 75 times stronger
+    than conventional foil gauges; with its US-30-40 calibration it reads up
+    to 30 lbf (Fx, Fy), 60 lbf (Fz) and 40 lbf·in (torques). ATI lists uses in
+    telerobotics, robotic surgery and robotic-hand research.
+  sources:
+    - title: "F/T Sensor Mini45 (ATI Industrial Automation)"
+      url: https://www.ati-ia.com/products/ft/ft_models.aspx?id=Mini45
+  checked: web, 2026-11-15

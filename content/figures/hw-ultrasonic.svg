@@ -1,0 +1,15 @@
+<!-- Hardware: ultrasonic. A line drawing with no words, so it suits every language; the part the entry is about is in the accent colour. The group with a motion class moves on hover (look.css). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <g class="waves" style="transform-origin: 88px 52px">
+    <path d="M72,40 A22,22 0 0 1 104,40" class="thick"/>
+    <path d="M62,30 A36,36 0 0 1 114,30" class="thick"/>
+    <path d="M52,20 A50,50 0 0 1 124,20" class="thick"/>
+  </g>
+  <rect x="40" y="66" width="160" height="62" rx="4" class="soft thick"/>
+  <circle cx="88" cy="97" r="24" class="accent-fill thick"/>
+  <circle cx="88" cy="97" r="13" class="soft thin"/>
+  <circle cx="152" cy="97" r="24" class="soft thick"/>
+  <circle cx="152" cy="97" r="13" class="thin"/>
+  <rect x="110" y="70" width="20" height="8" rx="1" class="thin"/>
+  <line x1="105" y1="128" x2="105" y2="140" class="thick"/><line x1="115" y1="128" x2="115" y2="140" class="thick"/><line x1="125" y1="128" x2="125" y2="140" class="thick"/><line x1="135" y1="128" x2="135" y2="140" class="thick"/>
+</svg>

@@ -1,0 +1,15 @@
+<!-- Hardware: force-torque. A line drawing with no words, so it suits every language; the part the entry is about is in the accent colour. The group with a motion class moves on hover (look.css). -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <rect x="74" y="16" width="92" height="14" rx="2" class="soft thick"/>
+  <g class="press">
+    <rect x="62" y="44" width="116" height="18" rx="3" class="soft thick"/>
+  </g>
+  <rect x="78" y="62" width="84" height="40" rx="6" class="accent-fill thick"/>
+  <line x1="78" y1="82" x2="162" y2="82" class="thin"/>
+  <rect x="62" y="102" width="116" height="18" rx="3" class="soft thick"/>
+  <rect x="102" y="120" width="36" height="28" rx="2" class="soft thick"/>
+  <line x1="120" y1="30" x2="120" y2="44" class="thick"/>
+  <line x1="200" y1="40" x2="200.0" y2="74.0" class="thick"/><path d="M200,82 L195.2,74.0 L204.8,74.0 Z" class="ink-fill thin"/>
+  <path d="M30,96 A22,10 0 1 0 54,90" class="thick"/>
+  <path d="M54,90 L46,84 L48,94 Z" class="ink-fill thin"/>
+</svg>
