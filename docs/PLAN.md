@@ -139,7 +139,7 @@ The agreed sample is `docs/style-preview.html` (open it in a browser; it has a l
 | `--bg` | `#F4F3EE` | `#050506` | Page (paper / deep black) |
 | `--surface` | `#FFFFFF` | `#0C0C10` | Cards, tables, code |
 | `--ink` | `#0B0B10` | `#E4E4E8` | Text |
-| `--line` | `#0B0B10` | `#3A3A44` | Borders (dim grey in dark, so the frame doesn't glare) |
+| `--line` | `#0B0B10` | `#E4E4E8` | Borders (white in dark: the user, 2026-11-14; was a dim grey) |
 | `--muted` | `#55555F` | `#8A8A96` | Secondary text |
 | `--rule` | `#D9D8D2` | `#1C1C23` | Thin inner lines (table rows) |
 | `--head-bg` / `--head-fg` | `#0B0B10` / `#F4F3EE` | `#15151B` / `#E4E4E8` | Table header rows |
@@ -147,10 +147,10 @@ The agreed sample is `docs/style-preview.html` (open it in a browser; it has a l
 | `--grid` | ink at 13% | ink at 7% | Drafting dot grid |
 | `--error` | `#B42318` | `#E5675C` | Real trouble only |
 
-The dark theme is deliberately deep: near-black page, dark surfaces, grey frame lines, dark table headers, deep accents (the user, 2026-11-14).
+The dark theme is deliberately deep: near-black page, dark surfaces, white frame lines, grey shadows, dark table headers, deep accents (the user, 2026-11-14).
 
 - **Borders:** 2px solid `--line` on cards, tables, buttons, inputs, code blocks and callouts. Square corners.
-- **Hard shadows:** `4px 4px 0`, no blur, in the line colour: ink in light mode, **grey (`#3A3A44`) in dark mode**. At rest only on buttons and the three home entry cards; hovering a button shifts it into its shadow. Everything else you can press (cards, chips, tier steps) is flat at rest and lifts into a `2px`–`4px` shadow on hover (the user, 2026-11-14). In dark mode, hover also brightens the border to `--ink`.
+- **Hard shadows:** `4px 4px 0`, no blur, ink in light mode, **grey (`#3A3A44`) in dark mode** (not the white frame-line colour). At rest only on buttons and the three home entry cards; hovering a button shifts it into its shadow. Everything else you can press (cards, chips, tier steps) is flat at rest and lifts into a `2px`–`4px` shadow on hover (the user, 2026-11-14).
 - **Dark-filled things get a grey shadow:** under a primary button, or the current tier step, an ink shadow would merge with the fill, so those use `--shade` (`#8A8A96` in light, `#3A3A44` in dark).
 - **Type:** Geist, bold and tight for headings (800), normal weight for text, 600 for buttons, chips and table headers. **Uppercase mono only for IDs (`T3 · M5`) and small eyebrow labels**; everything else is normal case, which also keeps Mongolian readable. Body 17px, line height 1.6, about 68 characters per line.
 - **Visible structure:** the header sits on a 2px rule; sections are separated by 2px rules; table header rows are inverted in light and dark grey in dark.

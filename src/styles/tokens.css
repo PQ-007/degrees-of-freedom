@@ -51,12 +51,12 @@
   color-scheme: light;
 }
 
-/* Deep dark: near-black page, grey frame lines, deep marks, bright data. */
+/* Deep dark: near-black page, white frame lines, grey shadows, deep marks, bright data. */
 :root[data-theme="dark"] {
   --bg: #050506;
   --surface: #0c0c10;
   --ink: #e4e4e8;
-  --line: #3a3a44;
+  --line: #e4e4e8; /* white frame lines (the user, 2026-11-14) */
   --muted: #8a8a96;
   --rule: #1c1c23;
   --error: #e5675c;
@@ -66,8 +66,10 @@
   --primary-fg: #050506;
   --grid: rgba(228, 228, 232, 0.07);
 
-  /* Dark shadows are grey: the frame-line colour (the user, 2026-11-14). */
+  /* Dark shadows stay grey (the user, 2026-11-14), so they no longer follow --line. */
   --shade: #3a3a44;
+  --shadow: 4px 4px 0 var(--shade);
+  --shadow-sm: 2px 2px 0 var(--shade);
 
   --yellow: #94800f;
   --orange: #9e4a1a;
