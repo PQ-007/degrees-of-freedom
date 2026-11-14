@@ -1,10 +1,11 @@
 ---
-// A node page. In M1 every node is a stub: its place in the tree, its summary,
-// what it needs and what uses it. M2 brings the full node layout.
-import { render } from "astro:content";
+// A node page: the tier's topics on the left, the article in the middle, "On
+// this page" on the right (PLAN.md §4). Below ~1200px the tier list folds into
+// a bar above the article; below ~900px so does "On this page".
+import { getCollection, render } from "astro:content";
 import Base from "../../../layouts/Base.astro";
 import { getAtlas } from "../../../lib/atlas";
-import { languages, localePath, t, type Lang } from "../../../lib/i18n";
+import { format, languages, localePath, t, type Lang } from "../../../lib/i18n";
 import { tiers } from "../../../lib/tiers";
 
 export async function getStaticPaths() {
@@ -24,80 +25,293 @@ const byId = new Map(atlas.map((n) => [n.id, n]));
 const node = byId.get(id);
 if (!node) throw new Error(`no node ${id}`);
 const tier = tiers[node.tier];
-const { Content } = await render(node.entry);
+const tierName = tier ? t(lang, tier.nameKey) : "";
+const siblings = atlas.filter((n) => n.tier === node.tier);
+const at = siblings.findIndex((n) => n.id === id);
+const prev = siblings[at - 1];
+const next = siblings[at + 1];
+
+const { Content, headings, remarkPluginFrontmatter } = await render(node.entry);
 const hasBody = (node.entry.body ?? "").trim().length > 0;
+const citedIds =
+  (remarkPluginFrontmatter["citations"] as string[] | undefined) ?? [];
+const allSources = new Map(
+  (await getCollection("sources")).map((s) => [s.data.id, s.data]),
+);
+const cited = citedIds.map((sid) => ({ id: sid, ...allSources.get(sid) }));
+
+const toc = [
+  ...headings
+    .filter((h) => h.depth === 2)
+    .map((h) => ({ slug: h.slug, text: h.text })),
+  ...(cited.length ? [{ slug: "sources", text: t(lang, "node.sources") }] : []),
+];
 const base = import.meta.env.BASE_URL;
+const tierUrl = localePath(base, lang, `tree/#${tier?.id ?? ""}`);
 const chips = (list: string[]) =>
   list.map((x) => byId.get(x)).filter((x) => x !== undefined);
 ---
 
 <Base lang={lang} title={`${node.id} ${node.title}`} description={node.summary}>
-  <div class="wrap">
-    <article
-      class={`article t${node.tier}`}
-      data-pagefind-body
-      data-pagefind-meta={`id:${node.id}`}
-    >
-      <nav class="crumbs" aria-label="Breadcrumb" data-pagefind-ignore>
-        <a href={localePath(base, lang, "tree/")}>{t(lang, "nav.tree")}</a>
-        <span aria-hidden="true">›</span>
-        <span class="id">
-          <span class="sq" aria-hidden="true"></span>
-          {tier?.id} · {node.id}
-        </span>
+  <div class="wrap page">
+    <nav class="tier-nav side" aria-label={tierName}>
+      <a class="tier-head id" href={tierUrl}>
+        <span class={`sq t${node.tier}`} aria-hidden="true"></span>
+        {tier?.id} · {tierName}
+      </a>
+      <ol>
+        {siblings.map((n) => (
+          <li>
+            <a href={n.url} aria-current={n.id === id ? "page" : undefined}>
+              <span class="nid">{n.id}</span> {n.title}
+            </a>
+          </li>
+        ))}
+      </ol>
+    </nav>
+
+    <div class="main">
+      <details class="fold tier-bar">
+        <summary>
+          <span class="id">
+            <span class={`sq t${node.tier}`} aria-hidden="true"></span>
+            {tier?.id} · {tierName}
+          </span>
+          <span class="muted">
+            {format(t(lang, "tree.tierCount"), { n: siblings.length })}
+          </span>
+        </summary>
+        <ol>
+          {siblings.map((n) => (
+            <li>
+              <a href={n.url} aria-current={n.id === id ? "page" : undefined}>
+                <span class="nid">{n.id}</span> {n.title}
+              </a>
+            </li>
+          ))}
+        </ol>
+      </details>
+
+      <article
+        class={`article t${node.tier}`}
+        data-pagefind-body
+        data-pagefind-meta={`id:${node.id}`}
+      >
+        <nav class="crumbs" aria-label="Breadcrumb" data-pagefind-ignore>
+          <a href={localePath(base, lang, "tree/")}>{t(lang, "nav.tree")}</a>
+          <span aria-hidden="true">›</span>
+          <a class="id" href={tierUrl}>
+            <span class="sq" aria-hidden="true"></span>
+            {tier?.id} · {node.id}
+          </a>
+        </nav>
+        <h1>{node.title}</h1>
+        <p class="summary">{node.summary}</p>
+
+        <dl class="meta" data-pagefind-ignore>
+          <dt>{t(lang, "node.needs")}</dt>
+          <dd>
+            {node.needs.length === 0
+              ? t(lang, "node.start")
+              : chips(node.needs).map((n) => (
+                  <a class={`chip t${n.tier}`} href={n.url}>
+                    <span class="sq" aria-hidden="true" />
+                    {n.id} {n.title}
+                  </a>
+                ))}
+          </dd>
+          <dt>{t(lang, "node.usedBy")}</dt>
+          <dd>
+            {node.usedBy.length === 0
+              ? t(lang, "node.leaf")
+              : chips(node.usedBy).map((n) => (
+                  <a class={`chip t${n.tier}`} href={n.url}>
+                    <span class="sq" aria-hidden="true" />
+                    {n.id} {n.title}
+                  </a>
+                ))}
+          </dd>
+        </dl>
+
+        {toc.length > 0 && (
+          <details class="fold toc-bar" data-pagefind-ignore>
+            <summary>{t(lang, "node.onThisPage")}</summary>
+            <ol>
+              {toc.map((h) => (
+                <li>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+              ))}
+            </ol>
+          </details>
+        )}
+
+        <div class="prose">
+          {hasBody ? (
+            <Content />
+          ) : (
+            <p class="callout" data-pagefind-ignore>
+              {t(lang, "node.stub")}
+            </p>
+          )}
+        </div>
+
+        {cited.length > 0 && (
+          <section
+            class="sources"
+            aria-labelledby="sources"
+            data-pagefind-ignore
+          >
+            <h2 id="sources">{t(lang, "node.sources")}</h2>
+            <ol>
+              {cited.map((s) => (
+                <li id={`src-${s.id}`}>
+                  {s.sources?.map((src, i) => (
+                    <>
+                      {i > 0 && "; "}
+                      <a href={src.url}>{src.title}</a>
+                    </>
+                  ))}
+                  .{" "}
+                  <span class="muted">
+                    {t(lang, "node.checked")}: {s.checked}.
+                  </span>{" "}
+                  {s.uncertain && (
+                    <span class="contested">
+                      <strong>{t(lang, "node.contested")}:</strong>{" "}
+                      {s.uncertain[lang]}
+                    </span>
+                  )}{" "}
+                  <a
+                    class="back"
+                    href={`#ref-${s.id}-1`}
+                    aria-label={t(lang, "node.backToText")}
+                  >
+                    ↩
+                  </a>
+                </li>
+              ))}
+            </ol>
+          </section>
+        )}
+
+        <nav class="pager" aria-label={tierName} data-pagefind-ignore>
+          {prev ? (
+            <a class="btn small" href={prev.url}>
+              <span class="visually-hidden">{t(lang, "node.prev")}:</span>←{" "}
+              {prev.id} {prev.title}
+            </a>
+          ) : (
+            <span />
+          )}
+          {next && (
+            <a class="btn small primary" href={next.url}>
+              <span class="visually-hidden">{t(lang, "node.next")}:</span>
+              {next.id} {next.title} →
+            </a>
+          )}
+        </nav>
+      </article>
+    </div>
+
+    {toc.length > 0 && (
+      <nav class="toc side" aria-label={t(lang, "node.onThisPage")} data-toc>
+        <p class="label">{t(lang, "node.onThisPage")}</p>
+        <ol>
+          {toc.map((h) => (
+            <li>
+              <a href={`#${h.slug}`}>{h.text}</a>
+            </li>
+          ))}
+        </ol>
       </nav>
-      <h1>{node.title}</h1>
-      <p class="summary">{node.summary}</p>
-
-      <dl class="meta" data-pagefind-ignore>
-        <dt>{t(lang, "node.needs")}</dt>
-        <dd>
-          {node.needs.length === 0
-            ? t(lang, "node.start")
-            : chips(node.needs).map((n) => (
-                <a class={`chip t${n.tier}`} href={n.url}>
-                  <span class="sq" aria-hidden="true" />
-                  {n.id} {n.title}
-                </a>
-              ))}
-        </dd>
-        <dt>{t(lang, "node.usedBy")}</dt>
-        <dd>
-          {node.usedBy.length === 0
-            ? t(lang, "node.leaf")
-            : chips(node.usedBy).map((n) => (
-                <a class={`chip t${n.tier}`} href={n.url}>
-                  <span class="sq" aria-hidden="true" />
-                  {n.id} {n.title}
-                </a>
-              ))}
-        </dd>
-      </dl>
-
-      {hasBody ? (
-        <Content />
-      ) : (
-        <p class="callout" data-pagefind-ignore>
-          {t(lang, "node.stub")}
-        </p>
-      )}
-    </article>
+    )}
   </div>
 </Base>
 
 <style>
-  /* The reading column is not boxed: an 8px rule in the tier colour, then text. */
+  .page {
+    max-width: 1320px;
+    display: grid;
+    grid-template-columns: 230px minmax(0, 46rem) 210px;
+    gap: 44px;
+    justify-content: center;
+    align-items: start;
+    padding-top: 40px;
+    padding-bottom: 64px;
+  }
+  .side {
+    position: sticky;
+    top: 84px;
+    max-height: calc(100vh - 100px);
+    overflow-y: auto;
+    font-size: 14px;
+  }
+  .side ol,
+  .fold ol {
+    list-style: none;
+    margin: 10px 0 0;
+    padding: 0;
+  }
+  .side li a,
+  .fold li a {
+    display: block;
+    padding: 5px 0 5px 12px;
+    border-left: 2px solid transparent;
+    text-decoration: none;
+    line-height: 1.35;
+  }
+  .side li a:hover,
+  .fold li a:hover {
+    border-left-color: var(--hover-line);
+  }
+  .side li a[aria-current],
+  .fold li a[aria-current] {
+    border-left-color: var(--ink);
+    font-weight: 700;
+  }
+  .nid {
+    font: 700 11.5px var(--mono);
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+  .tier-head {
+    text-decoration: none;
+  }
+  .toc .label {
+    margin: 0;
+  }
+
+  /* Folds: the side panels folded on narrower screens. */
+  .fold {
+    display: none;
+    border: 2px solid var(--line);
+    background: var(--surface);
+    padding: 10px 14px;
+    margin: 0 0 20px;
+    font-size: 14px;
+  }
+  .fold summary {
+    cursor: pointer;
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    font-weight: 600;
+  }
+
   .article {
-    max-width: 46rem;
-    margin: 40px 0 64px;
     border-top: 8px solid var(--c);
     padding-top: 22px;
+    min-width: 0;
   }
   .crumbs {
     display: flex;
     align-items: center;
     gap: 10px;
     font-size: 14px;
+  }
+  .crumbs .id {
+    text-decoration: none;
   }
   h1 {
     font-size: clamp(2rem, 5vw, 2.6rem);
@@ -113,7 +327,7 @@ const chips = (list: string[]) =>
     grid-template-columns: auto 1fr;
     gap: 8px 16px;
     align-items: baseline;
-    margin: 0 0 24px;
+    margin: 0 0 28px;
     font-size: 14px;
   }
   .meta dt {
@@ -122,6 +336,107 @@ const chips = (list: string[]) =>
   }
   .meta dd {
     margin: 0;
+  }
+
+  /* The text itself: unboxed, one reading column. */
+  .prose :global(h2) {
+    font-size: 1.45rem;
+    margin: 40px 0 12px;
+    scroll-margin-top: 84px;
+  }
+  .prose :global(p),
+  .prose :global(li) {
+    max-width: 68ch;
+  }
+  .prose :global(ol),
+  .prose :global(ul) {
+    padding-left: 1.4em;
+  }
+  .prose :global(li) {
+    margin: 6px 0;
+  }
+  .prose :global(.examples) {
+    border: 2px solid var(--line);
+    background: var(--surface);
+    padding: 4px 18px;
+    margin: 32px 0;
+  }
+  .prose :global(.examples ul) {
+    padding-left: 1.2em;
+  }
+  :global(.cite) {
+    font: 600 11px var(--mono);
+    line-height: 0;
+    margin-left: 1px;
+  }
+  :global(.cite a) {
+    text-decoration: none;
+    padding: 0 2px;
+  }
+  :global(.cite a:hover) {
+    text-decoration: underline;
+  }
+
+  .sources {
+    border-top: 2px solid var(--line);
+    margin-top: 40px;
+    padding: 0;
+    font-size: 14px;
+  }
+  .sources h2 {
+    font-size: 1.2rem;
+    margin: 24px 0 12px;
+    scroll-margin-top: 84px;
+  }
+  .sources ol {
+    padding-left: 1.4em;
+  }
+  .sources li {
+    margin: 0 0 10px;
+    scroll-margin-top: 84px;
+  }
+  .sources li:target {
+    outline: 2px solid var(--hover-line);
+    outline-offset: 4px;
+  }
+  .contested {
+    display: block;
+    margin-top: 4px;
+  }
+  .back {
+    text-decoration: none;
+  }
+
+  .pager {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-top: 40px;
+  }
+
+  @media (max-width: 1200px) {
+    .page {
+      grid-template-columns: minmax(0, 46rem) 200px;
+    }
+    .tier-nav.side {
+      display: none;
+    }
+    .tier-bar {
+      display: block;
+    }
+  }
+  @media (max-width: 900px) {
+    .page {
+      grid-template-columns: minmax(0, 1fr);
+      padding-top: 24px;
+    }
+    .toc.side {
+      display: none;
+    }
+    .toc-bar {
+      display: block;
+    }
   }
   @media (max-width: 480px) {
     .meta {
@@ -133,3 +448,28 @@ const chips = (list: string[]) =>
     }
   }
 </style>
+
+<script>
+  // "On this page": mark the section being read.
+  const toc = document.querySelector<HTMLElement>("[data-toc]");
+  if (toc) {
+    const links = new Map<string, HTMLAnchorElement>();
+    for (const a of toc.querySelectorAll<HTMLAnchorElement>("a[href^='#']")) {
+      links.set(decodeURIComponent(a.hash.slice(1)), a);
+    }
+    const targets = [...links.keys()]
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+    const mark = () => {
+      let current: string | null = null;
+      for (const el of targets)
+        if (el.getBoundingClientRect().top < 120) current = el.id;
+      for (const [id, a] of links) {
+        if (id === current) a.setAttribute("aria-current", "true");
+        else a.removeAttribute("aria-current");
+      }
+    };
+    document.addEventListener("scroll", mark, { passive: true });
+    mark();
+  }
+</script>

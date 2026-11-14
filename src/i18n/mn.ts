@@ -43,6 +43,13 @@ export const mn: Record<MessageKey, string> = {
   "node.usedBy": "Үүнийг ашигладаг",
   "node.start": "Байхгүй: эхлэх цэг",
   "node.leaf": "Одоогоор байхгүй",
+  "node.onThisPage": "Энэ хуудсанд",
+  "node.sources": "Эх сурвалж",
+  "node.checked": "Шалгасан",
+  "node.contested": "Маргаантай",
+  "node.backToText": "Бичвэр рүү буцах",
+  "node.prev": "Өмнөх",
+  "node.next": "Дараах",
   "node.stub":
     "Энэ хуудас одоогоор товч хувилбар. Бүрэн бичвэр нь дараагийн шатанд нэмэгдэнэ.",
   "search.title": "Хайх",

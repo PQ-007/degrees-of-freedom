@@ -73,6 +73,35 @@ pre {
   overflow-x: auto;
 }
 
+/* Tables: bordered, inverted header row; they scroll inside themselves on
+   narrow screens instead of widening the page. */
+table {
+  border-collapse: collapse;
+  border: 2px solid var(--line);
+  background: var(--surface);
+  font-size: 15px;
+  margin: 20px 0;
+  display: block;
+  max-width: 100%;
+  overflow-x: auto;
+}
+th,
+td {
+  text-align: left;
+  vertical-align: top;
+  padding: 9px 14px;
+  border-bottom: 1px solid var(--rule);
+}
+thead th {
+  background: var(--head-bg);
+  color: var(--head-fg);
+  font-size: 14px;
+  font-weight: 600;
+}
+tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
 img,
 svg {
   max-width: 100%;

@@ -34,4 +34,25 @@ const nodes = defineCollection({
   }),
 });
 
-export const collections = { tree, nodes };
+// Every factual claim's sources (cited in pages as [@id]).
+const sources = defineCollection({
+  loader: file("content/sources.yaml"),
+  schema: z.object({
+    id: z.string().regex(/^[a-z0-9-]+$/),
+    claim: z.string().min(1),
+    sources: z
+      .array(z.object({ title: z.string().min(1), url: z.url() }))
+      .min(1),
+    checked: z
+      .string()
+      .regex(
+        /\d{4}-\d{2}-\d{2}/,
+        "say how and when it was checked, with a date",
+      ),
+    uncertain: z
+      .object({ en: z.string().min(1), mn: z.string().min(1) })
+      .optional(),
+  }),
+});
+
+export const collections = { tree, nodes, sources };
