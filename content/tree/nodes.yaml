@@ -1,0 +1,89 @@
+# The tech tree: every node's ID, tier, URL slug and prerequisites ("needs").
+# Language-independent: titles and summaries live in content/nodes/<lang>/<ID>-<slug>.md.
+# The build fails if a need is missing, points to a higher tier, or makes a cycle
+# (src/lib/tree.ts). List only direct needs: what they need is implied.
+
+# T0 · Foundations
+- { id: F0, tier: 0, slug: what-is-robotics, needs: [] }
+- { id: F1, tier: 0, slug: geometry-and-linear-algebra, needs: [F0] }
+- { id: F2, tier: 0, slug: calculus-and-differential-equations, needs: [F1] }
+- { id: F3, tier: 0, slug: probability-and-statistics, needs: [F1] }
+- { id: F4, tier: 0, slug: optimization, needs: [F2] }
+- { id: F5, tier: 0, slug: mechanics, needs: [F2] }
+- { id: F6, tier: 0, slug: electromagnetism, needs: [F5] }
+- { id: F7, tier: 0, slug: electronics-basics, needs: [F0] }
+- { id: F8, tier: 0, slug: programming-for-robots, needs: [F0] }
+- { id: F9, tier: 0, slug: how-computers-work, needs: [F8] }
+
+# T1 · Components
+- { id: C1, tier: 1, slug: mechanisms-and-structure, needs: [F5] }
+- { id: C2, tier: 1, slug: transmissions, needs: [C1] }
+- { id: C3, tier: 1, slug: locomotion-mechanisms, needs: [C1] }
+- { id: C4, tier: 1, slug: electric-motors, needs: [F6, F7] }
+- { id: C5, tier: 1, slug: actuator-packages, needs: [C2, C4] }
+- { id: C6, tier: 1, slug: fluid-and-other-actuators, needs: [C1] }
+- { id: C7, tier: 1, slug: power-sources, needs: [F7] }
+- { id: C8, tier: 1, slug: power-electronics, needs: [C7] }
+- { id: C9, tier: 1, slug: proprioceptive-sensors, needs: [F5, F7] }
+- { id: C10, tier: 1, slug: exteroceptive-sensors, needs: [F1, F7] }
+- { id: C11, tier: 1, slug: compute-hardware, needs: [F9] }
+- { id: C12, tier: 1, slug: buses-and-links, needs: [F7, F9] }
+
+# T2 · Low-level integration
+- { id: L1, tier: 2, slug: embedded-firmware, needs: [C11] }
+- { id: L2, tier: 2, slug: real-time-systems, needs: [L1] }
+- { id: L3, tier: 2, slug: motor-drivers, needs: [C4, C8] }
+- { id: L4, tier: 2, slug: motor-control, needs: [L1, L3, C9] }
+- { id: L5, tier: 2, slug: sensor-interfacing, needs: [L1, C9, C10] }
+- { id: L6, tier: 2, slug: device-communication, needs: [L1, C12] }
+- { id: L7, tier: 2, slug: hardware-safety, needs: [L3] }
+
+# T3 · Motion & control
+- { id: M1, tier: 3, slug: frames-and-transforms, needs: [F1] }
+- { id: M2, tier: 3, slug: mobile-kinematics, needs: [M1, C3] }
+- { id: M3, tier: 3, slug: arm-and-leg-kinematics, needs: [M1, C1] }
+- { id: M4, tier: 3, slug: dynamics, needs: [M3] }
+- { id: M5, tier: 3, slug: classical-control, needs: [L4] }
+- { id: M6, tier: 3, slug: modern-control, needs: [M5] }
+- { id: M7, tier: 3, slug: optimal-and-predictive-control, needs: [M4, M6, F4] }
+- { id: M8, tier: 3, slug: force-control, needs: [M4, M5, C5] }
+- { id: M9, tier: 3, slug: whole-body-control, needs: [M7, M8] }
+- { id: M10, tier: 3, slug: trajectory-generation, needs: [M3] }
+- { id: M11, tier: 3, slug: flight-and-vehicle-control, needs: [C3, M4, M5] }
+
+# T4 · Perception & estimation
+- { id: P1, tier: 4, slug: state-estimation, needs: [F3, L5] }
+- { id: P2, tier: 4, slug: kalman-filters, needs: [P1, M6] }
+- { id: P3, tier: 4, slug: particle-filters, needs: [P1] }
+- { id: P4, tier: 4, slug: sensor-fusion, needs: [P2, M1] }
+- { id: P5, tier: 4, slug: computer-vision, needs: [M1, C10] }
+- { id: P6, tier: 4, slug: learned-perception, needs: [P5, F4] }
+- { id: P7, tier: 4, slug: 3d-perception, needs: [P5] }
+- { id: P8, tier: 4, slug: mapping, needs: [P1, M1] }
+- { id: P9, tier: 4, slug: slam, needs: [P2, P8, F4] }
+
+# T5 · Intelligence
+- { id: I1, tier: 5, slug: path-planning, needs: [M1, F8] }
+- { id: I2, tier: 5, slug: motion-planning, needs: [I1, M3] }
+- { id: I3, tier: 5, slug: local-navigation, needs: [I1, M2] }
+- { id: I4, tier: 5, slug: task-planning-and-behavior, needs: [F8] }
+- { id: I5, tier: 5, slug: wheeled-navigation, needs: [I3, P9] }
+- { id: I6, tier: 5, slug: legged-locomotion, needs: [M9, P4] }
+- { id: I7, tier: 5, slug: aerial-autonomy, needs: [M11, P4, I1] }
+- { id: I8, tier: 5, slug: manipulation, needs: [I2, M8, P7] }
+- { id: I9, tier: 5, slug: reinforcement-learning, needs: [F3, F4] }
+- { id: I10, tier: 5, slug: imitation-learning, needs: [P6] }
+- { id: I11, tier: 5, slug: sim-to-real, needs: [I9, M4] }
+- { id: I12, tier: 5, slug: foundation-models, needs: [I10] }
+- { id: I13, tier: 5, slug: multi-robot-systems, needs: [I1, I4] }
+- { id: I14, tier: 5, slug: human-robot-interaction, needs: [I4] }
+
+# T6 · Systems & the real world
+- { id: S1, tier: 6, slug: software-architecture, needs: [L2] }
+- { id: S2, tier: 6, slug: ros-2, needs: [S1, M1] }
+- { id: S3, tier: 6, slug: simulation, needs: [M4] }
+- { id: S4, tier: 6, slug: testing-and-debugging, needs: [S1] }
+- { id: S5, tier: 6, slug: reliability-and-operations, needs: [S4] }
+- { id: S6, tier: 6, slug: teleoperation, needs: [S1, I14] }
+- { id: S7, tier: 6, slug: safety-standards-and-ethics, needs: [L7, I14] }
+- { id: S8, tier: 6, slug: design-process, needs: [S4, S7] }
