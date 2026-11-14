@@ -1,0 +1,215 @@
+# The signal chain: one moment of a robot's life, stage by stage, in order.
+# Each stage is Sense, Think or Act (in that order), has its topic, and says
+# what comes in and what goes out. The text around it is
+# content/signal-chain/<lang>.md. Checked at build time (src/lib/chain.ts).
+
+- id: quantity
+  role: sense
+  node: F5
+  name:
+    en: "Something to measure"
+    mn: "Хэмжих зүйл"
+  in:
+    en: "The world: an angle, a distance, light"
+    mn: "Ертөнц: өнцөг, зай, гэрэл"
+  out:
+    en: "A physical quantity"
+    mn: "Физик хэмжигдэхүүн"
+  text:
+    en: "Every chain starts with physics: how far a wheel has turned, how far away a rock is, how bright the ground looks."
+    mn: "Гинж бүр физикээс эхэлдэг: дугуй хэр эргэсэн, чулуу хэр хол байгаа, газар хэр гэрэлтэй харагдаж байгаа."
+- id: sensor
+  role: sense
+  node: C9
+  name:
+    en: "Sensor"
+    mn: "Мэдрэгч"
+  in:
+    en: "A physical quantity"
+    mn: "Физик хэмжигдэхүүн"
+  out:
+    en: "A voltage, or a train of pulses"
+    mn: "Хүчдэл эсвэл импульсийн цуваа"
+  text:
+    en: "A sensor turns the quantity into something electrical: an encoder gives a pulse for each small turn, a camera gives a charge for each pixel."
+    mn: "Мэдрэгч хэмжигдэхүүнийг цахилгаан зүйл болгодог: энкодер бага зэрэг эргэх бүрд импульс, камер пиксел бүрд цэнэг өгнө."
+- id: conditioning
+  role: sense
+  node: L5
+  name:
+    en: "Conditioning"
+    mn: "Дохио бэлтгэх"
+  in:
+    en: "A small, noisy signal"
+    mn: "Жижиг, шуугиантай дохио"
+  out:
+    en: "A clean signal in the right range"
+    mn: "Зөв хүрээнд орсон цэвэр дохио"
+  text:
+    en: "Amplifiers, filters and protection make the signal big enough to read and remove what isn't wanted."
+    mn: "Өсгөгч, шүүлтүүр, хамгаалалт дохиог уншихуйц том болгож, хэрэггүй зүйлийг арилгана."
+- id: digitising
+  role: sense
+  node: L1
+  name:
+    en: "Digitising"
+    mn: "Тоон хэлбэрт оруулах"
+  in:
+    en: "A voltage or pulses"
+    mn: "Хүчдэл эсвэл импульс"
+  out:
+    en: "Numbers"
+    mn: "Тоонууд"
+  text:
+    en: "An analog-to-digital converter samples the voltage into numbers, or a counter counts the pulses; many sensors send numbers over a bus themselves."
+    mn: "Аналог-тоон хувиргагч хүчдэлийг тоо болгон түүвэрлэх, эсвэл тоолуур импульсийг тоолно; олон мэдрэгч өөрсдөө bus-аар тоо илгээдэг."
+- id: firmware
+  role: sense
+  node: L5
+  name:
+    en: "Firmware"
+    mn: "Firmware"
+  in:
+    en: "Raw numbers"
+    mn: "Түүхий тоонууд"
+  out:
+    en: "A measurement with units and a time"
+    mn: "Нэгж ба цагтай хэмжилт"
+  text:
+    en: "Firmware scales the numbers into units, calibrates them, filters them and stamps each one with the time it was taken."
+    mn: "Firmware тоонуудыг нэгж рүү хувиргаж, калибровк хийж, шүүж, хэмжсэн цагийг нь тэмдэглэнэ."
+- id: estimate
+  role: think
+  node: P1
+  name:
+    en: "Estimating"
+    mn: "Үнэлэх"
+  in:
+    en: "Measurements from many sensors"
+    mn: "Олон мэдрэгчийн хэмжилт"
+  out:
+    en: "The robot's state: where it is, how it is moving"
+    mn: "Роботын төлөв: хаана байгаа, хэрхэн хөдөлж байгаа"
+  text:
+    en: "No sensor is right on its own; combining them gives one best guess of the robot's state, and how sure it is."
+    mn: "Ямар ч мэдрэгч дангаараа зөв биш; тэдгээрийг нэгтгэснээр роботын төлөвийн хамгийн сайн таамаглал ба түүнд хэр итгэлтэй байгааг гаргана."
+- id: decide
+  role: think
+  node: I4
+  name:
+    en: "Deciding"
+    mn: "Шийдэх"
+  in:
+    en: "The state, and the goal"
+    mn: "Төлөв ба зорилго"
+  out:
+    en: "What to do next"
+    mn: "Дараа нь юу хийх"
+  text:
+    en: "A state machine, a behaviour tree or a plan from people chooses the next thing to do: drive to that rock, stop, take a picture."
+    mn: "Төлөвийн машин, behavior tree эсвэл хүмүүсийн төлөвлөгөө дараагийн хийх зүйлийг сонгоно: тэр чулуу руу яв, зогс, зураг ав."
+- id: plan
+  role: think
+  node: I1
+  name:
+    en: "Planning"
+    mn: "Төлөвлөх"
+  in:
+    en: "Where to go, and what is in the way"
+    mn: "Хаашаа явах, замд юу байгаа"
+  out:
+    en: "A path, or a trajectory over time"
+    mn: "Зам, эсвэл цаг хугацааны дагуух траектори"
+  text:
+    en: "A planner finds a route that avoids the hazards, then turns it into positions and speeds over time."
+    mn: "Төлөвлөгч саадыг тойрох замыг олж, түүнийг цаг хугацааны дагуух байрлал, хурд болгоно."
+- id: control
+  role: think
+  node: M5
+  name:
+    en: "Control"
+    mn: "Удирдлага"
+  in:
+    en: "Where it is, and where it should be"
+    mn: "Хаана байгаа ба хаана байх ёстой"
+  out:
+    en: "A command: a speed, a torque or a position target"
+    mn: "Тушаал: хурд, момент эсвэл байрлалын зорилт"
+  text:
+    en: "A controller compares the two and works out how hard to push to close the gap, without overshooting."
+    mn: "Удирдлага хоёрыг харьцуулж, хэтрүүлэлгүйгээр зөрүүг арилгахын тулд хэр хүчтэй түлхэхийг тооцно."
+- id: bus
+  role: act
+  node: L6
+  name:
+    en: "Command over a bus"
+    mn: "Bus-аар дамжих тушаал"
+  in:
+    en: "A command in the main computer"
+    mn: "Гол компьютер дахь тушаал"
+  out:
+    en: "A message on a wire"
+    mn: "Утсан дээрх мессеж"
+  text:
+    en: "The command travels as a packet to the motor's own controller, often over CAN, EtherCAT or a serial line."
+    mn: "Тушаал пакет болж хөдөлгүүрийн өөрийн контроллер руу ихэвчлэн CAN, EtherCAT эсвэл цуваа шугамаар дамжина."
+- id: driver
+  role: act
+  node: L3
+  name:
+    en: "Motor driver"
+    mn: "Хөдөлгүүрийн драйвер"
+  in:
+    en: "A target from the message"
+    mn: "Мессежийн зорилт"
+  out:
+    en: "Switched voltage (PWM) on the motor's wires"
+    mn: "Хөдөлгүүрийн утсан дээрх сэлгэгдсэн хүчдэл (PWM)"
+  text:
+    en: "Power transistors switch the battery's voltage on and off very fast, so the motor sees the average voltage it needs."
+    mn: "Хүчний транзисторууд батарейн хүчдэлийг маш хурдан асааж унтрааж, хөдөлгүүр хэрэгтэй дундаж хүчдэлээ авна."
+- id: current
+  role: act
+  node: L4
+  name:
+    en: "Current in the coils"
+    mn: "Ороомог дахь гүйдэл"
+  in:
+    en: "Switched voltage"
+    mn: "Сэлгэгдсэн хүчдэл"
+  out:
+    en: "Current, held where it is wanted"
+    mn: "Хүссэн хэмжээнд барьсан гүйдэл"
+  text:
+    en: "The fastest loop of all measures the current in the coils and adjusts the switching to hold it, because current is what makes torque."
+    mn: "Хамгийн хурдан давталт ороомгийн гүйдлийг хэмжиж, түүнийг барихын тулд сэлгэлтийг тохируулдаг, учир нь моментыг гүйдэл үүсгэдэг."
+- id: torque
+  role: act
+  node: C4
+  name:
+    en: "Torque"
+    mn: "Момент"
+  in:
+    en: "Current"
+    mn: "Гүйдэл"
+  out:
+    en: "Torque on the motor shaft"
+    mn: "Хөдөлгүүрийн гол дээрх момент"
+  text:
+    en: "In the motor, current in a magnetic field becomes force, and the shaft turns."
+    mn: "Хөдөлгүүрт соронзон орон дахь гүйдэл хүч болж, гол эргэнэ."
+- id: motion
+  role: act
+  node: C2
+  name:
+    en: "Motion"
+    mn: "Хөдөлгөөн"
+  in:
+    en: "Torque on the shaft"
+    mn: "Гол дээрх момент"
+  out:
+    en: "A joint turns, a wheel rolls: the world changes"
+    mn: "Үе эргэж, дугуй өнхөрнө: ертөнц өөрчлөгдөнө"
+  text:
+    en: "Gears trade the motor's speed for torque, and the wheel or joint moves. The sensors see the change, and the chain starts again."
+    mn: "Араа хөдөлгүүрийн хурдыг моментоор сольж, дугуй эсвэл үе хөдөлнө. Мэдрэгчүүд өөрчлөлтийг харж, гинж дахин эхэлнэ."
