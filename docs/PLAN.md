@@ -45,7 +45,7 @@ Draft 2, 2026-11-14. The content is in `CONTENT_PLAN.md`; this file covers the t
 | Lint | ESLint, Prettier, markdownlint, `astro check` | |
 | CI / hosting | GitHub Actions → GitHub Pages | Free and static |
 
-Versions are pinned to the latest stable releases when the project is set up.
+Versions are pinned exactly (M0, 2026-11-14). Astro is held at 7.3.8 because 7.4.x needs Node ≥ 22.23.4 and the local Node is 22.22.2; bump it when Node is upgraded. TypeScript is 6.0.x (typescript-eslint supports < 6.1). Fonts (Geist, Geist Mono, with Cyrillic) are self-hosted from Fontsource, not loaded from Google.
 
 ### How MuJoCo demos load
 
@@ -90,7 +90,7 @@ degrees-of-freedom/
     sim/                   <mujoco-scene>: loader, render loop, controls, replay fallback
     lib/                   graph (prereqs, cycles, layout), progress, i18n, theme
     styles/                tokens.css, base.css, layout.css, look.css
-    i18n/                  interface strings: en.json, mn.json, ja.json
+    i18n/                  interface strings: en.ts, mn.ts (typed against en.ts), ja.ts later
     vendor/hairline/       line figures (as in Sand to Tetris)
   public/
   tests/                   unit (models, data) and e2e (Playwright)
@@ -240,4 +240,4 @@ Not started: an empty square. Reading: a half-filled square. Learned: a filled s
 2. **Languages:** English and Mongolian complete from launch (every page needs its Mongolian text in the same change, as in Sand to Tetris); Japanese added later in stages.
 3. **Repo:** its own repo. The existing GitHub repo `PQ-007/sand-to-robot` is renamed to `degrees-of-freedom`; the site is served at `/degrees-of-freedom/`.
 
-Nothing is open. Next: M0.
+M0 done (2026-11-14), on the `dev` branch. Next: M1.
