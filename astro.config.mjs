@@ -1,6 +1,7 @@
 // @ts-check
 import { fileURLToPath } from "node:url";
 import { defineConfig } from "astro/config";
+import remarkMath from "remark-math";
 import { remarkAtlas } from "./src/lib/remark-atlas.ts";
 
 // GitHub Pages serves the site under /<repo-name>/. CI passes it in BASE_PATH;
@@ -19,7 +20,8 @@ export default defineConfig({
     routing: { prefixDefaultLocale: true, redirectToDefaultLocale: false },
   },
   markdown: {
-    // [@source] citations and [[ID]] node links (src/lib/remark-atlas.ts).
-    remarkPlugins: [[remarkAtlas, { base, root }]],
+    // remark-math finds $…$ and $$…$$; remark-atlas renders them with KaTeX
+    // and handles citations, links, figures (src/lib/remark-atlas.ts).
+    remarkPlugins: [remarkMath, [remarkAtlas, { base, root }]],
   },
 });

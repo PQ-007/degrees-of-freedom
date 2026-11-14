@@ -8,10 +8,17 @@
 //   [[~encoder|text]]   showing the term in the page's language, or the text
 //   ## Body {#body}     a heading with a fixed anchor, the same in every
 //                       language (robot teardowns use the template's anchors)
+//   $x^2$, $$…$$        maths (parsed by remark-math), rendered here with
+//                       KaTeX at build time, as HTML plus MathML for screen
+//                       readers; no maths JavaScript in the browser
+//   ![alt](fig:name "caption")
+//                       a figure: content/figures/<name>.svg inlined (so its
+//                       lines follow the theme), described by alt, captioned
 //
 // An unknown source, node or term fails the build with the file and the fix.
 // The cited IDs, in order, go to the page as remarkPluginFrontmatter.citations.
-import { readdirSync, readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
+import katex from "katex";
 import { join } from "node:path";
 import type { RemarkPlugin } from "@astrojs/markdown-remark";
 import { parse } from "yaml";
@@ -20,7 +27,8 @@ export interface MdNode {
   type: string;
   value?: string;
   url?: string;
-  title?: string;
+  title?: string | null;
+  alt?: string | null;
   children?: MdNode[];
   data?: { hProperties?: Record<string, unknown> };
 }
@@ -36,6 +44,65 @@ export interface AtlasRefs {
   lang: string;
   /** For error messages. */
   file: string;
+  /** Reads a figure's SVG by name, or undefined if there is none. */
+  figure?: (name: string) => string | undefined;
+}
+
+const escapeHtml = (text: string) =>
+  text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+
+function renderMath(tex: string, display: boolean, file: string): string {
+  try {
+    return katex.renderToString(tex, {
+      displayMode: display,
+      output: "htmlAndMathml",
+      throwOnError: true,
+      strict: "error",
+    });
+  } catch (error) {
+    throw new Error(
+      `${file}: the maths "${tex}" doesn't render: ${String(error)}`,
+    );
+  }
+}
+
+/** A paragraph that is only ![alt](fig:name "caption") becomes a figure. */
+function figure(node: MdNode, refs: AtlasRefs): MdNode | undefined {
+  const kids = (node.children ?? []).filter(
+    (c) => !(c.type === "text" && !c.value?.trim()),
+  );
+  const img = kids[0];
+  if (
+    kids.length !== 1 ||
+    img?.type !== "image" ||
+    !img.url?.startsWith("fig:")
+  )
+    return undefined;
+  const name = img.url.slice(4);
+  const svg = refs.figure?.(name);
+  if (svg === undefined)
+    throw new Error(
+      `${refs.file}: figure "${name}" not found; add content/figures/${name}.svg`,
+    );
+  if (!img.alt?.trim())
+    throw new Error(
+      `${refs.file}: figure "${name}" needs alt text: ![what it shows](fig:${name})`,
+    );
+  const caption = img.title
+    ? `<figcaption>${escapeHtml(img.title)}</figcaption>`
+    : "";
+  const labelled = svg.replace(
+    /<svg\b/,
+    `<svg role="img" aria-label="${escapeHtml(img.alt)}"`,
+  );
+  return {
+    type: "html",
+    value: `<figure class="fig">${labelled}${caption}</figure>`,
+  };
 }
 
 const PATTERN =
@@ -130,6 +197,22 @@ export function transformAtlasRefs(tree: MdNode, refs: AtlasRefs): string[] {
     if (!node.children || SKIP.has(node.type)) return;
     const next: MdNode[] = [];
     for (const child of node.children) {
+      if (child.type === "inlineMath" || child.type === "math") {
+        next.push({
+          type: "html",
+          value: renderMath(
+            child.value ?? "",
+            child.type === "math",
+            refs.file,
+          ),
+        });
+        continue;
+      }
+      const fig = child.type === "paragraph" ? figure(child, refs) : undefined;
+      if (fig) {
+        next.push(fig);
+        continue;
+      }
       if (child.type === "text" && child.value && PATTERN.test(child.value)) {
         PATTERN.lastIndex = 0;
         next.push(...replace(child.value));
@@ -191,6 +274,16 @@ export function loadRefs(
   };
 }
 
+/** content/figures/<name>.svg without its XML prolog, or undefined. */
+export function readFigure(root: string, name: string): string | undefined {
+  if (!/^[a-z0-9-]+$/.test(name)) return undefined;
+  const path = join(root, "content/figures", `${name}.svg`);
+  if (!existsSync(path)) return undefined;
+  return readFileSync(path, "utf8")
+    .replace(/<\?xml[^>]*>\s*/, "")
+    .trim();
+}
+
 interface VFileLike {
   path?: string;
   data: { astro?: { frontmatter?: Record<string, unknown> } };
@@ -211,6 +304,7 @@ export const remarkAtlas: RemarkPlugin<[{ base: string; root: string }]> = (
       base: options.base,
       lang,
       file: path.slice(path.indexOf("content")),
+      figure: (name) => readFigure(options.root, name),
     });
     file.data.astro ??= {};
     file.data.astro.frontmatter ??= {};

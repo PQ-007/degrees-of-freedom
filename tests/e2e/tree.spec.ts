@@ -154,9 +154,9 @@ test.describe("search", () => {
   });
 
   test("says when nothing matches", async ({ page }) => {
-    await page.goto("en/search/?q=zzzqqq");
+    await page.goto("en/search/?q=ŋŋŋŋ");
     await expect(page.locator("[data-search-status]")).toHaveText(
-      "Nothing found for “zzzqqq”.",
+      "Nothing found for “ŋŋŋŋ”.",
     );
   });
 });

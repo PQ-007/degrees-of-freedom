@@ -203,3 +203,141 @@
     grid-row: 2;
   }
 }
+
+/* 2D demos (SVG): the same frame as a sim demo; the drawing in ink on the
+   drafting grid, the thing the demo is about in the page's data colour. */
+.demo-view {
+  aspect-ratio: 16 / 9;
+  border-bottom: 2px solid var(--line);
+  background: var(--surface);
+}
+.demo-svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+.demo-svg line,
+.demo-svg polygon,
+.demo-svg circle {
+  vector-effect: non-scaling-stroke;
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  fill: none;
+}
+.demo-svg .grid {
+  stroke: var(--rule);
+  stroke-width: 1;
+}
+.demo-svg .axis {
+  stroke: var(--muted);
+  stroke-width: 2;
+}
+.demo-svg .head {
+  fill: var(--ink);
+  stroke-width: 1;
+}
+.demo-svg .axis.head {
+  fill: var(--muted);
+}
+.demo-svg .fixed {
+  fill: var(--muted);
+}
+.demo-svg .robot-axis {
+  stroke: var(--d, var(--ink));
+  stroke-width: 3.5;
+}
+.demo-svg .robot-axis.head {
+  fill: var(--d, var(--ink));
+  stroke: var(--d, var(--ink));
+}
+.demo-svg .body {
+  fill: var(--surface);
+  stroke-width: 2;
+}
+.demo-svg .ray {
+  stroke-dasharray: 5 4;
+  stroke-width: 1.5;
+}
+.demo-svg .point {
+  fill: var(--d, var(--ink));
+  stroke-width: 1.5;
+}
+.demo-svg text {
+  fill: var(--ink);
+  stroke: none;
+  font-family: var(--font);
+}
+.demo-svg .tick {
+  font-size: 0.17px;
+  fill: var(--muted);
+}
+.demo-svg .name {
+  font-size: 0.22px;
+  font-style: italic;
+  font-weight: 600;
+  text-anchor: middle;
+  dominant-baseline: central;
+}
+.demo-legend {
+  margin: 0;
+  padding: 10px 14px;
+  font-size: 13px;
+  border-bottom: 2px solid var(--line);
+}
+.demo-controls {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(16rem, 1fr));
+  gap: 12px 24px;
+  padding: 12px 14px;
+  border-bottom: 2px solid var(--line);
+}
+.demo-set {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+.demo-set legend {
+  font-weight: 700;
+  font-size: 14px;
+  padding: 0;
+  margin-bottom: 4px;
+}
+.demo-slider {
+  display: grid;
+  grid-template-columns: minmax(6.5rem, max-content) minmax(0, 1fr) 4.5rem;
+  align-items: center;
+  gap: 10px;
+  font-size: 14px;
+}
+.demo-slider input {
+  width: 100%;
+  min-width: 0;
+  accent-color: var(--ink);
+}
+.demo-slider output {
+  font: 600 13px var(--mono);
+  text-align: right;
+}
+.demo-matrix {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  padding: 0 14px 14px;
+  font-size: 14px;
+}
+.demo-brackets {
+  display: inline-grid;
+  grid-template-columns: repeat(2, auto);
+  gap: 2px 14px;
+  padding: 2px 10px;
+  border-left: 2px solid var(--ink);
+  border-right: 2px solid var(--ink);
+  font: 600 13px var(--mono);
+  text-align: right;
+}

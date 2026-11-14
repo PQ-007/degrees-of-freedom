@@ -47,7 +47,7 @@
 
 /* Demos written into the Markdown (<cartpole-demo>…): until the element
    loads, and without JavaScript, its own note shows in a plain frame. */
-.prose :is(cartpole-demo) {
+.prose :is(cartpole-demo, frames-demo) {
   display: block;
 }
 .prose .demo-nojs {
@@ -55,4 +55,87 @@
   padding: 14px 16px;
   margin: 28px 0;
   color: var(--muted);
+}
+
+/* Figures (![alt](fig:name "caption")): inlined SVG line drawings. Ink lines
+   and text; the accent is the page's data colour (--d), used for the one
+   thing the figure is about. */
+.prose .fig {
+  margin: 28px 0;
+  max-width: 46rem;
+}
+.prose .fig svg {
+  display: block;
+  width: 100%;
+  max-width: 380px;
+  height: auto;
+  margin: 0 auto;
+  fill: none;
+  stroke: var(--ink);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.prose .fig svg text {
+  fill: var(--ink);
+  stroke: none;
+  font: italic 15px var(--font);
+}
+.prose .fig .thin {
+  stroke-width: 1.5;
+}
+.prose .fig .thick {
+  stroke-width: 3;
+}
+.prose .fig .dash {
+  stroke-width: 1.5;
+  stroke-dasharray: 5 4;
+}
+.prose .fig .accent {
+  stroke: var(--d, var(--ink));
+  stroke-width: 3;
+}
+.prose .fig .accent-fill {
+  fill: var(--d, var(--ink));
+  stroke: var(--ink);
+  stroke-width: 1.5;
+}
+.prose .fig .ink-fill {
+  fill: var(--ink);
+  stroke: none;
+}
+.prose .fig figcaption {
+  margin-top: 10px;
+  font-size: 14px;
+  color: var(--muted);
+  text-align: center;
+}
+
+/* Go deeper: equations and detail, folded. */
+.prose .deeper {
+  border: 2px solid var(--line);
+  background: var(--surface);
+  margin: 24px 0;
+  max-width: 46rem;
+}
+.prose .deeper > summary {
+  cursor: pointer;
+  padding: 10px 14px;
+  font-weight: 700;
+}
+.prose .deeper[open] > summary {
+  border-bottom: 2px solid var(--line);
+}
+.prose .deeper > :not(summary) {
+  margin-left: 14px;
+  margin-right: 14px;
+}
+
+/* Maths (KaTeX, rendered at build time). Wide equations scroll. */
+.prose .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 4px 0;
+}
+.prose .katex {
+  font-size: 1.08em;
 }

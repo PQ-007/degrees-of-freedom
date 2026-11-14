@@ -104,6 +104,64 @@ describe("term links", () => {
   });
 });
 
+describe("maths and figures", () => {
+  const root = (children: MdNode[]): MdNode & { children: MdNode[] } => ({
+    type: "root",
+    children,
+  });
+
+  it("render maths with KaTeX, as HTML and MathML", () => {
+    const tree = root([
+      { type: "paragraph", children: [{ type: "inlineMath", value: "x^2" }] },
+      { type: "math", value: "R^\\top" },
+    ]);
+    transformAtlasRefs(tree, refs);
+    const inline = tree.children[0]?.children?.[0];
+    expect(inline?.type).toBe("html");
+    expect(inline?.value).toContain('class="katex"');
+    expect(inline?.value).toContain("<math");
+    expect(tree.children[1]?.value).toContain("katex-display");
+  });
+
+  it("fail the build on maths that doesn't render", () => {
+    expect(() =>
+      transformAtlasRefs(root([{ type: "math", value: "\\frac{1}" }]), refs),
+    ).toThrow("content/nodes/en/F0-test.md: the maths");
+  });
+
+  const fig = (url: string, alt: string, title: string | null = null) =>
+    root([
+      {
+        type: "paragraph",
+        children: [{ type: "image", url, alt, title }],
+      },
+    ]);
+  const withFigure = {
+    ...refs,
+    figure: (name: string) =>
+      name === "circle" ? '<svg viewBox="0 0 1 1"></svg>' : undefined,
+  };
+
+  it("inline a figure, described by its alt text, with its caption", () => {
+    const tree = fig("fig:circle", "A circle", "The unit circle");
+    transformAtlasRefs(tree, withFigure);
+    expect(tree.children[0]).toEqual({
+      type: "html",
+      value:
+        '<figure class="fig"><svg role="img" aria-label="A circle" viewBox="0 0 1 1"></svg><figcaption>The unit circle</figcaption></figure>',
+    });
+  });
+
+  it("fail the build on a missing figure or missing alt text", () => {
+    expect(() => transformAtlasRefs(fig("fig:nope", "x"), withFigure)).toThrow(
+      'figure "nope" not found',
+    );
+    expect(() => transformAtlasRefs(fig("fig:circle", ""), withFigure)).toThrow(
+      "needs alt text",
+    );
+  });
+});
+
 describe("heading anchors", () => {
   it("take a fixed id from {#id} and drop it from the text", () => {
     const tree: MdNode & { children: MdNode[] } = {

@@ -11,11 +11,15 @@ test.describe("glossary", () => {
     await expect(
       page.locator("section.tier").first().locator("dfn"),
     ).toHaveText([
+      "Coordinate frame",
       "Degree of freedom",
       "Ground",
+      "Radian",
       "Robot",
+      "Rotation matrix",
       "Sense–think–act loop",
       "Torque",
+      "Vector",
     ]);
     const encoder = page.locator("#encoder");
     await expect(encoder).toContainText("C9");
@@ -45,7 +49,7 @@ test.describe("glossary", () => {
     await expect(page.locator(".entry:visible")).toHaveCount(0);
     await expect(page.locator("[data-count]")).toContainText("zzzz");
     await filter.fill("");
-    await expect(page.locator(".entry:visible")).toHaveCount(37);
+    await expect(page.locator(".entry:visible")).toHaveCount(41);
   });
 
   test("a term in the text links to its entry, and the footer links the glossary", async ({

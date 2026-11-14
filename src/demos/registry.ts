@@ -3,6 +3,7 @@
 // that every custom element in the content is listed here.
 export const DEMOS: Record<string, () => Promise<unknown>> = {
   "cartpole-demo": () => import("./elements/cartpole-demo"),
+  "frames-demo": () => import("./elements/frames-demo"),
 };
 
 export function upgradeDemos(root: ParentNode = document): void {
