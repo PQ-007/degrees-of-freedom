@@ -207,6 +207,11 @@ const refs = (ids: string[]) =>
   }
   .rail a:hover {
     border-color: var(--ink);
+    box-shadow: var(--shadow-sm);
+    transform: translate(-2px, -2px);
+  }
+  .rail a[aria-current]:hover {
+    box-shadow: var(--shadow-shade-sm);
   }
   .rail a[aria-current] {
     background: var(--primary-bg);
@@ -267,12 +272,18 @@ const refs = (ids: string[]) =>
     flex-direction: column;
     scroll-margin-top: 140px;
   }
+  .card:hover,
   .card.flash {
     border-color: var(--ink);
     box-shadow: var(--shadow);
+    transform: translate(-2px, -2px);
   }
-  :root[data-theme="dark"] .card.flash {
-    outline: 2px solid var(--ink);
+  @media (prefers-reduced-motion: reduce) {
+    .card:hover,
+    .card.flash,
+    .rail a:hover {
+      transform: none;
+    }
   }
   .card h3 {
     margin: 10px 0 6px;

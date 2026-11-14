@@ -70,7 +70,7 @@ const lang = Astro.params.lang as Lang;
     font-size: 15px;
     max-width: 44ch;
   }
-  /* T0 at the bottom: the list is in tier order, drawn bottom-up. */
+  /* T0 first, at the top: begin with the foundations (the user, 2026-11-14). */
   .tiers {
     list-style: none;
     margin: 0;
@@ -78,7 +78,7 @@ const lang = Astro.params.lang as Lang;
     border: 2px solid var(--line);
     background: var(--surface);
     display: flex;
-    flex-direction: column-reverse;
+    flex-direction: column;
   }
   .tiers li {
     display: grid;
@@ -87,7 +87,7 @@ const lang = Astro.params.lang as Lang;
     padding: 10px 14px;
     border-top: 2px solid var(--line);
   }
-  .tiers li:last-child {
+  .tiers li:first-child {
     border-top: 0;
   }
   @media (max-width: 760px) {

@@ -15,9 +15,17 @@
   --primary-fg: #f4f3ee;
   --grid: rgba(11, 11, 16, 0.13);
 
-  /* Hard shadows: light theme only, on what you press. */
+  /* Hard shadows: on buttons at rest, and on what you can press when hovered.
+     --shade is the grey used under dark-filled things (primary buttons, the
+     current step), where an ink shadow would merge with the fill. */
+  --shade: #8a8a96;
   --shadow: 4px 4px 0 var(--line);
   --shadow-sm: 2px 2px 0 var(--line);
+  --shadow-shade: 4px 4px 0 var(--shade);
+  --shadow-shade-sm: 2px 2px 0 var(--shade);
+
+  /* T0 Foundations has no hue: grey in both themes. */
+  --t0: #8a8a96;
 
   --font: "Geist Variable", system-ui, -apple-system, "Segoe UI", sans-serif;
   --mono:
@@ -58,9 +66,8 @@
   --primary-fg: #050506;
   --grid: rgba(228, 228, 232, 0.07);
 
-  /* A grey offset on black reads as a glitch, so dark has none. */
-  --shadow: none;
-  --shadow-sm: none;
+  /* Dark shadows are grey: the frame-line colour (the user, 2026-11-14). */
+  --shade: #3a3a44;
 
   --yellow: #94800f;
   --orange: #9e4a1a;
@@ -80,13 +87,10 @@
 }
 
 /* Tier and Sense/Think/Act carriers: --c is the mark, --d the data colour.
-   T0 has no hue: ink in light, muted grey in dark. */
+   T0 has no hue: its mark is grey in both themes, its data colour ink. */
 .t0 {
-  --c: var(--ink);
+  --c: var(--t0);
   --d: var(--ink);
-}
-:root[data-theme="dark"] .t0 {
-  --c: var(--muted);
 }
 .t1,
 .act {

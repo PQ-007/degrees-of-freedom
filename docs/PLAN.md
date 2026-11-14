@@ -6,7 +6,7 @@ Draft 2, 2026-11-14. The content is in `CONTENT_PLAN.md`; this file covers the t
 
 - **Stack:** Astro (the user, 2026-11-14).
 - **Simulation:** MuJoCo running in the browser (WebAssembly), wherever a demo needs real physics (the user, 2026-11-14).
-- **Look:** restrained neo-brutalism on Sand to Tetris's black and white, with cyberpunk accent colours only in fixed, meaningful places, a deep dark theme, and the review changes (shadows only on what you press and none in dark mode, unboxed reading column, little uppercase mono, separate data colours, compact tree nodes, drafting grid). Agreed by the user, 2026-11-14. Details in §4.
+- **Look:** restrained neo-brutalism on Sand to Tetris's black and white, with cyberpunk accent colours only in fixed, meaningful places, a deep dark theme, and the review changes (hard shadows on what you press, grey in dark mode, unboxed reading column, little uppercase mono, separate data colours, compact tree nodes, drafting grid). Agreed by the user, 2026-11-14. Details in §4.
 - **Project name:** **Degrees of Freedom** (DOF), replacing "Sand to Robot" (the user, 2026-11-14). The repo and folder follow: `degrees-of-freedom`.
 - **Section name:** the hands-on section is **Builds** (was "Projects"; the user, 2026-11-14). Build IDs are `B01`–`B12`.
 
@@ -150,13 +150,14 @@ The agreed sample is `docs/style-preview.html` (open it in a browser; it has a l
 The dark theme is deliberately deep: near-black page, dark surfaces, grey frame lines, dark table headers, deep accents (the user, 2026-11-14).
 
 - **Borders:** 2px solid `--line` on cards, tables, buttons, inputs, code blocks and callouts. Square corners.
-- **Hard shadows (light theme only):** `4px 4px 0` in ink, no blur, only on buttons and the three home entry cards. Other cards are flat at rest and lift into a shadow on hover. Pressing a button shifts it into its shadow.
-- **Dark theme has no offset shadows:** a grey offset on black reads as a glitch. Hover brightens the border to `--ink` instead.
+- **Hard shadows:** `4px 4px 0`, no blur, in the line colour: ink in light mode, **grey (`#3A3A44`) in dark mode**. At rest only on buttons and the three home entry cards; hovering a button shifts it into its shadow. Everything else you can press (cards, chips, tier steps) is flat at rest and lifts into a `2px`–`4px` shadow on hover (the user, 2026-11-14). In dark mode, hover also brightens the border to `--ink`.
+- **Dark-filled things get a grey shadow:** under a primary button, or the current tier step, an ink shadow would merge with the fill, so those use `--shade` (`#8A8A96` in light, `#3A3A44` in dark).
 - **Type:** Geist, bold and tight for headings (800), normal weight for text, 600 for buttons, chips and table headers. **Uppercase mono only for IDs (`T3 · M5`) and small eyebrow labels**; everything else is normal case, which also keeps Mongolian readable. Body 17px, line height 1.6, about 68 characters per line.
 - **Visible structure:** the header sits on a 2px rule; sections are separated by 2px rules; table header rows are inverted in light and dark grey in dark.
 - **Drafting grid:** a faint 20px dot grid behind canvas-like areas only (home hero, tech tree, signal chain). Never behind reading text.
 - **Buttons:** primary uses `--primary-bg`; secondary is surface with a border. Never coloured.
 - **Links:** ink, 1px underline at rest, 2px on hover.
+- **Header:** the language switch is a small button like the theme toggle (beside it on wide screens, inside the menu on phones).
 - **Focus:** a 3px ink ring with a 2px gap.
 
 ### Accents
@@ -172,7 +173,7 @@ Two roles. **Marks** (tier squares and bars) are deep in dark mode, so they sit 
 | magenta | `#D946EF` | `#C026D3` | `#84287A` | `#CC3DB4` | T5 Intelligence · **Think** |
 | violet | `#8B5CF6` | `#7C3AED` | `#57459A` | `#8A6EDB` | T6 Systems |
 
-**T0 Foundations** has no hue: its mark is ink in light mode and `--muted` grey in dark mode. It is the black-and-white base everything stands on.
+**T0 Foundations** has no hue: its mark is grey (`#8A8A96`) in both themes (the user, 2026-11-14: grey in light mode too). It is the neutral base everything stands on.
 
 ### Where colour is allowed (and nowhere else)
 
@@ -201,7 +202,7 @@ A Hairline figure made with the `hairline-create` skill.
 
 | Page | Layout |
 |---|---|
-| **Home** | Hero on the drafting grid: title, one-line idea, the home figure; three entry cards with resting hard shadows (By topic · By robot · By question), the tier stack T0–T6 (ink rows, each with its tier square), "Continue" if there is progress |
+| **Home** | Hero on the drafting grid: title, one-line idea, the home figure; three entry cards with resting hard shadows (By topic · By robot · By question), the tier stack T0–T6, **T0 first at the top** (ink rows, each with its tier square), "Continue" if there is progress |
 | **Tech tree** | A step rail of the seven tiers, **T0 first, top to bottom** (the user: begin from the bottom tier, don't put the highest on top), each with its square, name and count; the chosen tier's topics as cards (tier bar, ID, title linking to the page, summary, Needs and Unlocks chips). A chip jumps to that topic in its tier; `#T3` opens a tier, `#M5` a topic. Previous/next tier buttons. Phones: the rail becomes seven equal tabs. Without JS all tiers show in order. Roadmap highlighting comes with roadmaps |
 | **Node** | Three columns as in Sand to Tetris chapters: tree nav, article (max ~46rem, **not boxed**: an 8px tier-colour rule on top, then plain text; only callouts, code and go-deeper boxes have borders), "On this page". Breadcrumb `■ T3 › M5`; prerequisite and "used by" chips (bordered, tier square). Bottom: a small "How it connects" graph, next nodes, "Mark as learned" |
 | **Compare** | Bordered table (no shadow), inverted header row, sticky first row and column, sortable, filter chips, "pin two to compare". Ratings `●●●○○` with a word. Phones: one card per option, or pick two side by side |

@@ -93,7 +93,7 @@ const nav = [
             ))}
           </nav>
           <a
-            class="lang-link"
+            class="btn small lang-switch lang-in-menu"
             href={switchLang(base, pathname, other)}
             hreflang={other}
             lang={other}
@@ -103,6 +103,15 @@ const nav = [
           </a>
         </div>
         <div class="header-tools">
+          <a
+            class="btn small lang-switch lang-in-tools"
+            href={switchLang(base, pathname, other)}
+            hreflang={other}
+            lang={other}
+            title={t(lang, "lang.otherLabel")}
+          >
+            {t(lang, "lang.other")}
+          </a>
           <ThemeToggle lang={lang} />
           <button
             class="btn small menu-toggle"

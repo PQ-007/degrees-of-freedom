@@ -22,7 +22,7 @@ export const en = {
   "home.status":
     "The tech tree is up: every topic, what it needs and what it unlocks. The pages fill in from here.",
   "home.cta": "Open the tech tree",
-  "tiers.label": "The seven tiers, T0 at the bottom",
+  "tiers.label": "The seven tiers, from T0 Foundations up",
   "tier.0": "Foundations",
   "tier.1": "Components",
   "tier.2": "Low-level integration",

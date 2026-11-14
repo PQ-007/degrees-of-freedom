@@ -50,7 +50,7 @@
   border: 2px solid var(--line);
 }
 
-/* Buttons: never coloured; the hard shadow shows in light theme only. */
+/* Buttons: never coloured. A hard shadow at rest; hovering presses into it. */
 .btn {
   font: 600 15px/1 var(--font);
   background: var(--surface);
@@ -76,14 +76,16 @@
   background: var(--primary-bg);
   color: var(--primary-fg);
   border-color: var(--primary-bg);
+  box-shadow: var(--shadow-shade);
+}
+.btn.primary:hover {
+  box-shadow: var(--shadow-shade-sm);
 }
 .btn.small {
   font-size: 14px;
   padding: 8px 12px;
 }
-:root[data-theme="dark"] .btn:hover,
-:root[data-theme="dark"] .btn:active {
-  transform: none;
+:root[data-theme="dark"] .btn:hover {
   border-color: var(--ink);
 }
 :root[data-theme="dark"] .btn.primary:hover {
@@ -101,8 +103,10 @@
   text-decoration: none;
   margin: 0 6px 6px 0;
 }
-.chip:hover {
+a.chip:hover {
   border-color: var(--ink);
+  box-shadow: var(--shadow-sm);
+  transform: translate(-2px, -2px);
 }
 .chip .sq {
   width: 10px;
@@ -123,7 +127,6 @@ a.card:hover {
   transform: translate(-2px, -2px);
 }
 :root[data-theme="dark"] a.card:hover {
-  transform: none;
   border-color: var(--ink);
 }
 .card.bar {
@@ -140,7 +143,8 @@ a.card:hover {
 @media (prefers-reduced-motion: reduce) {
   .btn:hover,
   .btn:active,
-  a.card:hover {
+  a.card:hover,
+  a.chip:hover {
     transform: none;
   }
 }
