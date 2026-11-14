@@ -1,0 +1,90 @@
+---
+import Base from "../../layouts/Base.astro";
+import { languages, t, type Lang } from "../../lib/i18n";
+import { tiers } from "../../lib/tiers";
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+---
+
+<Base lang={lang}>
+  <div class="hero-band grid-bg">
+    <div class="wrap hero">
+      <div>
+        <p class="label">{t(lang, "home.eyebrow")}</p>
+        <h1>{t(lang, "site.name")}</h1>
+        <p class="lead">{t(lang, "home.lead")}</p>
+        <p class="callout status">{t(lang, "home.status")}</p>
+      </div>
+      <ol class="tiers" aria-label={t(lang, "tiers.label")}>
+        {tiers.map((tier) => (
+          <li class={tier.className}>
+            <span class="id">
+              <span class="sq" aria-hidden="true" />
+              {tier.id}
+            </span>
+            <span>{t(lang, tier.nameKey)}</span>
+          </li>
+        ))}
+      </ol>
+    </div>
+  </div>
+</Base>
+
+<style>
+  .hero-band {
+    border-bottom: 2px solid var(--line);
+  }
+  .hero {
+    display: grid;
+    grid-template-columns: 1.15fr 1fr;
+    gap: 56px;
+    align-items: center;
+    padding-top: 64px;
+    padding-bottom: 56px;
+  }
+  .label {
+    margin: 0 0 12px;
+  }
+  .lead {
+    font-size: 1.2rem;
+    max-width: 34ch;
+    margin: 0 0 26px;
+  }
+  .status {
+    margin: 0;
+    font-size: 15px;
+    max-width: 44ch;
+  }
+  /* T0 at the bottom: the list is in tier order, drawn bottom-up. */
+  .tiers {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    border: 2px solid var(--line);
+    background: var(--surface);
+    display: flex;
+    flex-direction: column-reverse;
+  }
+  .tiers li {
+    display: grid;
+    grid-template-columns: 64px 1fr;
+    align-items: center;
+    padding: 10px 14px;
+    border-top: 2px solid var(--line);
+  }
+  .tiers li:last-child {
+    border-top: 0;
+  }
+  @media (max-width: 760px) {
+    .hero {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 32px;
+      padding-top: 40px;
+      padding-bottom: 40px;
+    }
+  }
+</style>

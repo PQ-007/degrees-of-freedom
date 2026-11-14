@@ -1,0 +1,75 @@
+---
+import { t, type Lang } from "../lib/i18n";
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+---
+
+<button
+  class="btn small theme-toggle"
+  type="button"
+  data-to-dark={t(lang, "theme.toDark")}
+  data-to-light={t(lang, "theme.toLight")}
+  data-to-dark-label={t(lang, "theme.toDarkLabel")}
+  data-to-light-label={t(lang, "theme.toLightLabel")}
+  aria-label={t(lang, "theme.toDarkLabel")}
+>
+  <span class="theme-icon" aria-hidden="true"></span>
+  <span class="theme-text">{t(lang, "theme.toDark")}</span>
+</button>
+
+<style>
+  .theme-icon {
+    display: none;
+    width: 14px;
+    height: 14px;
+    border: 2px solid currentColor;
+    border-radius: 50%;
+    background: linear-gradient(90deg, currentColor 50%, transparent 50%);
+  }
+  /* Phones: the icon alone, so the header stays on one line in every language. */
+  @media (max-width: 480px) {
+    .theme-toggle {
+      padding: 8px 10px;
+    }
+    .theme-icon {
+      display: inline-block;
+    }
+    .theme-text {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      overflow: hidden;
+      clip-path: inset(50%);
+      white-space: nowrap;
+    }
+  }
+</style>
+
+<script>
+  import { applyTheme, currentTheme, saveTheme } from "../lib/theme";
+
+  for (const button of document.querySelectorAll<HTMLButtonElement>(
+    ".theme-toggle",
+  )) {
+    const render = () => {
+      const toDark = currentTheme() === "light";
+      const d = button.dataset;
+      const text = button.querySelector(".theme-text");
+      if (text) text.textContent = (toDark ? d["toDark"] : d["toLight"]) ?? "";
+      button.setAttribute(
+        "aria-label",
+        (toDark ? d["toDarkLabel"] : d["toLightLabel"]) ?? "",
+      );
+    };
+    render();
+    button.addEventListener("click", () => {
+      const next = currentTheme() === "light" ? "dark" : "light";
+      applyTheme(next);
+      saveTheme(next);
+      render();
+    });
+  }
+</script>

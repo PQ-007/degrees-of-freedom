@@ -1,0 +1,104 @@
+---
+import "@fontsource-variable/geist";
+import "@fontsource-variable/geist-mono";
+import "../styles/tokens.css";
+import "../styles/base.css";
+import "../styles/layout.css";
+import "../styles/look.css";
+import ThemeToggle from "../components/ThemeToggle.astro";
+import {
+  languages,
+  localePath,
+  otherLang,
+  switchLang,
+  t,
+  type Lang,
+} from "../lib/i18n";
+
+interface Props {
+  lang: Lang;
+  /** Page title; the site name is appended. Omit on the home page. */
+  title?: string;
+  description?: string;
+}
+
+const { lang, title, description = t(lang, "site.description") } = Astro.props;
+const base = import.meta.env.BASE_URL;
+const siteName = t(lang, "site.name");
+const fullTitle = title ? `${title} · ${siteName}` : siteName;
+const other = otherLang(lang);
+const pathname = Astro.url.pathname;
+---
+
+<!doctype html>
+<html lang={lang}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <link rel="icon" href={`${base}favicon.svg`} type="image/svg+xml" />
+    {languages.map((l) => (
+      <link
+        rel="alternate"
+        hreflang={l}
+        href={new URL(switchLang(base, pathname, l), Astro.site)}
+      />
+    ))}
+    <script is:inline>
+      // Before first paint: stored choice, else the system preference.
+      try {
+        const stored = localStorage.getItem("dof-theme");
+        document.documentElement.dataset.theme =
+          stored === "dark" || stored === "light"
+            ? stored
+            : matchMedia("(prefers-color-scheme: dark)").matches
+              ? "dark"
+              : "light";
+      } catch {
+        document.documentElement.dataset.theme = matchMedia(
+          "(prefers-color-scheme: dark)",
+        ).matches
+          ? "dark"
+          : "light";
+      }
+    </script>
+  </head>
+  <body>
+    <a class="skip" href="#main">
+      {t(lang, "site.skip")}
+    </a>
+    <header class="site-header">
+      <div class="wrap">
+        <a class="brand" href={localePath(base, lang)}>
+          <span class="brand-mark" aria-hidden="true"></span>
+          <span class="brand-name">{siteName}</span>
+        </a>
+        <div class="header-tools">
+          <a
+            class="lang-link"
+            href={switchLang(base, pathname, other)}
+            hreflang={other}
+            lang={other}
+            title={t(lang, "lang.otherLabel")}
+          >
+            {t(lang, "lang.other")}
+          </a>
+          <ThemeToggle lang={lang} />
+        </div>
+      </div>
+    </header>
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <footer class="site-footer">
+      <div class="wrap">
+        <span>{t(lang, "footer.license")}</span>
+        <span aria-hidden="true"> · </span>
+        <a href="https://github.com/PQ-007/degrees-of-freedom">
+          {t(lang, "footer.source")}
+        </a>
+      </div>
+    </footer>
+  </body>
+</html>

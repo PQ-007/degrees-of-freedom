@@ -1,0 +1,36 @@
+---
+// The site root has no content of its own: it sends readers to their language.
+// Mongolian browsers go to /mn/, everyone else to /en/ (also without JS).
+import { localePath } from "../lib/i18n";
+
+const base = import.meta.env.BASE_URL;
+const en = localePath(base, "en");
+const mn = localePath(base, "mn");
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Degrees of Freedom</title>
+    <noscript>
+      <meta http-equiv="refresh" content={`0; url=${en}`} />
+    </noscript>
+    <link rel="canonical" href={en} />
+    <script is:inline define:vars={{ en, mn }}>
+      const wantsMn = (navigator.languages || [navigator.language]).some((l) =>
+        /^mn\b/i.test(l),
+      );
+      location.replace(wantsMn ? mn : en);
+    </script>
+  </head>
+  <body>
+    <p>
+      <a href={en}>English</a> ·{" "}
+      <a href={mn} lang="mn">
+        Монгол
+      </a>
+    </p>
+  </body>
+</html>

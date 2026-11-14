@@ -1,0 +1,146 @@
+/* The neo-brutalist pieces: labels, IDs, tier marks, buttons, chips, cards,
+   the drafting grid. Colour appears only through --c / --d (see tokens.css). */
+
+/* Uppercase mono is kept for two things only: IDs and small eyebrows. */
+.label {
+  font: 500 12px/1.2 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.09em;
+  color: var(--muted);
+}
+.id {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  font: 700 12px/1 var(--mono);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.muted {
+  color: var(--muted);
+}
+
+/* Drafting grid: canvas-like areas only (hero, tree, signal chain). */
+.grid-bg {
+  background-image: radial-gradient(var(--grid) 1px, transparent 1.2px);
+  background-size: 20px 20px;
+  background-position: -10px -10px;
+}
+
+/* Tier square and tier bar. */
+.sq {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  border: 2px solid var(--line);
+  background: var(--c);
+  flex: none;
+}
+.bar {
+  position: relative;
+}
+.bar::before {
+  content: "";
+  position: absolute;
+  left: -2px;
+  right: -2px;
+  top: -2px;
+  height: 8px;
+  background: var(--c);
+  border: 2px solid var(--line);
+}
+
+/* Buttons: never coloured; the hard shadow shows in light theme only. */
+.btn {
+  font: 600 15px/1 var(--font);
+  background: var(--surface);
+  color: var(--ink);
+  border: 2px solid var(--line);
+  box-shadow: var(--shadow);
+  padding: 11px 16px;
+  cursor: pointer;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+.btn:hover {
+  transform: translate(2px, 2px);
+  box-shadow: var(--shadow-sm);
+}
+.btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: none;
+}
+.btn.primary {
+  background: var(--primary-bg);
+  color: var(--primary-fg);
+  border-color: var(--primary-bg);
+}
+.btn.small {
+  font-size: 14px;
+  padding: 8px 12px;
+}
+:root[data-theme="dark"] .btn:hover,
+:root[data-theme="dark"] .btn:active {
+  transform: none;
+  border-color: var(--ink);
+}
+:root[data-theme="dark"] .btn.primary:hover {
+  background: var(--ink);
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  font: 500 14px/1 var(--font);
+  padding: 6px 10px 6px 8px;
+  border: 2px solid var(--line);
+  background: var(--surface);
+  text-decoration: none;
+  margin: 0 6px 6px 0;
+}
+.chip:hover {
+  border-color: var(--ink);
+}
+.chip .sq {
+  width: 10px;
+  height: 10px;
+  border-width: 1.5px;
+}
+
+/* Cards: flat at rest; the shadow appears on hover. */
+.card {
+  display: block;
+  background: var(--surface);
+  border: 2px solid var(--line);
+  padding: 18px;
+  text-decoration: none;
+}
+a.card:hover {
+  box-shadow: var(--shadow);
+  transform: translate(-2px, -2px);
+}
+:root[data-theme="dark"] a.card:hover {
+  transform: none;
+  border-color: var(--ink);
+}
+.card.bar {
+  padding-top: 26px;
+}
+
+.callout {
+  border: 2px solid var(--line);
+  background: var(--surface);
+  padding: 14px 16px;
+  margin: 22px 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .btn:hover,
+  .btn:active,
+  a.card:hover {
+    transform: none;
+  }
+}
