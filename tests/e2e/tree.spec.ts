@@ -1,83 +1,75 @@
 import { expect, test } from "@playwright/test";
 
 test.describe("tech tree", () => {
-  test("shows all 71 topics in seven bands, T0 at the bottom", async ({
+  test("opens on T0, with the seven tiers in order from T0", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
     await page.goto("en/tree/");
-    await expect(page.locator(".graph-view")).toBeVisible();
-    await expect(page.locator("a.node")).toHaveCount(71);
-    const bands = page.locator(".band");
-    await expect(bands).toHaveCount(7);
-    await expect(bands.first()).toContainText("T6");
-    await expect(bands.last()).toContainText("T0");
+    const steps = page
+      .getByRole("navigation", { name: "Tiers" })
+      .getByRole("link");
+    await expect(steps).toHaveCount(7);
+    await expect(steps.first()).toContainText("T0");
+    await expect(steps.last()).toContainText("T6");
+    await expect(steps.first()).toHaveAttribute("aria-current", "step");
+    await expect(page.locator("section#T0")).toBeVisible();
+    await expect(page.locator("section#T0 .card")).toHaveCount(10);
+    await expect(page.locator("section#T1")).toBeHidden();
+    // Every topic is on the page, one tier showing at a time.
+    await expect(page.locator(".card")).toHaveCount(71);
   });
 
-  test("selecting a topic opens the panel and marks its needs and unlocks", async ({
+  test("the rail and the next button move between tiers", async ({ page }) => {
+    await page.setViewportSize({ width: 1280, height: 900 });
+    await page.goto("en/tree/");
+    await page.getByRole("link", { name: "T1 Components →" }).click();
+    await expect(page).toHaveURL(/#T1$/);
+    await expect(page.locator("section#T1")).toBeVisible();
+    await expect(page.locator("section#T0")).toBeHidden();
+    await expect(page.locator("section#T1 h2")).toBeFocused();
+
+    await page
+      .getByRole("navigation", { name: "Tiers" })
+      .getByRole("link", { name: /T3/ })
+      .click();
+    await expect(page.locator("section#T3 .card")).toHaveCount(11);
+    await page.goBack();
+    await expect(page.locator("section#T1")).toBeVisible();
+  });
+
+  test("a card's needs and unlocks jump to that topic, in any tier", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 900 });
-    await page.goto("en/tree/");
-    const panel = page.getByRole("complementary", { name: "Selected topic" });
-    await expect(panel).toContainText("Select a topic");
+    await page.goto("en/tree/#M5");
+    const m5 = page.locator("li#M5");
+    await expect(m5).toBeVisible();
+    await expect(m5).toHaveClass(/flash/);
+    await expect(m5.locator("dd").first()).toContainText("L4 Motor control");
+    await expect(m5.locator("dd").last()).toContainText("M6 Modern control");
 
-    await page.locator('a.node[data-id="M5"]').click();
-    await expect(page).toHaveURL(/\/en\/tree\/\?topic=M5$/);
-    await expect(page.locator('a.node[data-id="M5"]')).toHaveClass(/\bon\b/);
-    await expect(page.locator('a.node[data-id="L4"]')).toHaveClass(/\bneed\b/);
-    await expect(page.locator('a.node[data-id="M6"]')).toHaveClass(
-      /\bunlock\b/,
-    );
-    await expect(page.locator('a.node[data-id="F0"]')).toHaveClass(/^node t0$/);
-    await expect(panel.locator("h2")).toHaveText("Classical control");
-    await expect(panel.locator(".needs")).toContainText("L4 Motor control");
-    await expect(panel.locator(".unlocks")).toContainText("M6 Modern control");
-    await expect(panel.locator(".unlocks")).toContainText(
-      "M11 Flight and vehicle control",
-    );
-    await expect(panel.locator("summary")).toContainText(
-      "Everything it builds on (",
-    );
+    await m5.getByRole("link", { name: "L4 Motor control" }).click();
+    await expect(page).toHaveURL(/#L4$/);
+    await expect(page.locator("section#T2")).toBeVisible();
+    await expect(page.locator("li#L4")).toHaveClass(/flash/);
+    await expect(page.locator("li#L4 h3 a")).toBeFocused();
 
-    // Walk the tree from inside the panel.
-    await panel.getByRole("button", { name: "L4 Motor control" }).click();
-    await expect(panel.locator("h2")).toHaveText("Motor control");
-    await expect(page).toHaveURL(/\?topic=L4$/);
-    await expect(panel.locator("h2")).toBeFocused();
-
-    await panel.getByRole("link", { name: "Open the page" }).click();
+    await page.locator("li#L4 h3 a").click();
     await expect(page).toHaveURL(/\/en\/node\/motor-control\/$/);
   });
 
-  test("a link with ?topic= opens with that topic selected; Escape clears it", async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 900, height: 800 });
-    await page.goto("mn/tree/?topic=P2");
-    const panel = page.getByRole("complementary", { name: "Сонгосон сэдэв" });
-    await expect(panel).toBeVisible(); // a bottom sheet below 1100px
-    await expect(panel.locator("h2")).toHaveText("Калманы шүүлтүүр");
-    await page.keyboard.press("Escape");
-    await expect(panel).toBeHidden();
-    await expect(page).toHaveURL(/\/mn\/tree\/$/);
-  });
-  test("the list is the default on phones, and the choice is remembered", async ({
-    page,
-  }) => {
-    await page.setViewportSize({ width: 390, height: 800 });
-    await page.goto("mn/tree/");
-    await expect(page.locator(".list-view")).toBeVisible();
-    await expect(page.locator(".graph-view")).toBeHidden();
-    await expect(page.locator(".node-list li")).toHaveCount(71);
-    await page.getByRole("button", { name: "Граф" }).click();
-    await expect(page.locator(".graph-view")).toBeVisible();
-    await expect(page.getByRole("button", { name: "Граф" })).toHaveAttribute(
-      "aria-pressed",
-      "true",
-    );
-    await page.reload();
-    await expect(page.locator(".graph-view")).toBeVisible();
+  test("phones get a strip of tier tabs", async ({ page }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto("mn/tree/#P2");
+    await expect(page.locator("section#T4")).toBeVisible();
+    await expect(page.locator("li#P2 h3")).toHaveText("Калманы шүүлтүүр");
+    const steps = page
+      .getByRole("navigation", { name: "Түвшнүүд" })
+      .getByRole("link");
+    await expect(steps.nth(4)).toHaveAttribute("aria-current", "step");
+    await steps.nth(0).click();
+    await expect(page.locator("section#T0")).toBeVisible();
   });
 
   test("a node page shows its needs and what uses it", async ({ page }) => {
