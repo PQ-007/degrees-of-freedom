@@ -58,13 +58,28 @@ test.describe("signal chain", () => {
     await expect(page.locator("section.sources li")).toHaveCount(3);
   });
 
-  test("is in the header", async ({ page }) => {
+  test("isn't in the header; Hardware, F0 and its topics link to it", async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto("en/");
-    await page
-      .getByRole("navigation", { name: "Site" })
-      .getByRole("link", { name: "Signal chain" })
-      .click();
+    await expect(
+      page
+        .getByRole("navigation", { name: "Site" })
+        .getByRole("link", { name: "Signal chain" }),
+    ).toHaveCount(0);
+    await page.goto("en/hardware/");
+    await page.getByRole("link", { name: "The signal chain →" }).click();
     await expect(page).toHaveURL(/\/en\/signal-chain\/$/);
+    await page.goto("en/node/what-is-robotics/");
+    await page.getByRole("link", { name: "The signal chain" }).click();
+    await expect(page).toHaveURL(/\/en\/signal-chain\/$/);
+    await page.goto("en/node/classical-control/");
+    const row = page
+      .locator(".meta dt", { hasText: "Signal chain" })
+      .locator("+ dd");
+    await row.getByRole("link", { name: "9. Control" }).click();
+    await expect(page).toHaveURL(/\/en\/signal-chain\/#stage-control$/);
+    await expect(page.locator(".detail:visible h3")).toContainText("Control");
   });
 });

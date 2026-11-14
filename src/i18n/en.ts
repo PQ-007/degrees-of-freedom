@@ -9,7 +9,6 @@ export const en = {
   "nav.label": "Site",
   "nav.menu": "Menu",
   "nav.tree": "Roadmap",
-  "nav.chain": "Signal chain",
   "nav.hardware": "Hardware",
   "nav.robots": "Robots",
   "nav.builds": "Builds",
@@ -269,6 +268,9 @@ export const en = {
   "hardware.more": "More {category}",
   "carousel.prev": "Scroll back",
   "carousel.next": "Scroll on",
+  "hardware.chain": "How these parts pass a signal from one to the next",
+  "hardware.chainLink": "The signal chain",
+  "node.chain": "Signal chain",
   "footer.license": "Code: MIT. Text: CC BY-SA 4.0.",
   "footer.source": "Source on GitHub",
 } as const;

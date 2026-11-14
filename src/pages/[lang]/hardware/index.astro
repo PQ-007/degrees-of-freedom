@@ -5,7 +5,7 @@
 import Base from "../../../layouts/Base.astro";
 import Carousel from "../../../components/Carousel.astro";
 import { getHardware } from "../../../lib/atlas";
-import { languages, t, type Lang } from "../../../lib/i18n";
+import { languages, localePath, t, type Lang } from "../../../lib/i18n";
 import type { MessageKey } from "../../../i18n/en";
 
 export function getStaticPaths() {
@@ -20,6 +20,12 @@ const categories = await getHardware(lang);
   <div class="wrap page">
     <h1>{t(lang, "hardware.title")}</h1>
     <p class="lead">{t(lang, "hardware.lead")}</p>
+    <p class="chain">
+      {t(lang, "hardware.chain")}:{" "}
+      <a href={localePath(import.meta.env.BASE_URL, lang, "signal-chain/")}>
+        {t(lang, "hardware.chainLink")} →
+      </a>
+    </p>
     {categories.map((c) => (
       <Carousel
         id={c.data.slug}
@@ -50,8 +56,12 @@ const categories = await getHardware(lang);
   }
   .lead {
     font-size: 1.1rem;
-    margin: 0 0 32px;
+    margin: 0 0 10px;
     max-width: 46rem;
+  }
+  .chain {
+    margin: 0 0 32px;
+    font-size: 15px;
   }
   .next {
     margin: 8px 0 0;

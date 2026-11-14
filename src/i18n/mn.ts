@@ -11,7 +11,6 @@ export const mn: Record<MessageKey, string> = {
   "nav.label": "Сайт",
   "nav.menu": "Цэс",
   "nav.tree": "Roadmap",
-  "nav.chain": "Дохионы гинж",
   "nav.hardware": "Техник хангамж",
   "nav.robots": "Роботууд",
   "nav.builds": "Build-ууд",
@@ -273,6 +272,9 @@ export const mn: Record<MessageKey, string> = {
   "hardware.more": "Бусад {category}",
   "carousel.prev": "Буцааж гүйлгэх",
   "carousel.next": "Цааш гүйлгэх",
+  "hardware.chain": "Эдгээр эд анги дохиог нэгээс нөгөөд хэрхэн дамжуулдаг вэ",
+  "hardware.chainLink": "Дохионы гинж",
+  "node.chain": "Дохионы гинж",
   "footer.license": "Код: MIT. Бичвэр: CC BY-SA 4.0.",
   "footer.source": "GitHub дээрх эх код",
 };

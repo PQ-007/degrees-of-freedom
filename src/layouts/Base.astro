@@ -32,10 +32,6 @@ const other = otherLang(lang);
 const pathname = Astro.url.pathname;
 const nav = [
   { href: localePath(base, lang, "tree/"), label: t(lang, "nav.tree") },
-  {
-    href: localePath(base, lang, "signal-chain/"),
-    label: t(lang, "nav.chain"),
-  },
   { href: localePath(base, lang, "hardware/"), label: t(lang, "nav.hardware") },
   { href: localePath(base, lang, "robots/"), label: t(lang, "nav.robots") },
   { href: localePath(base, lang, "builds/"), label: t(lang, "nav.builds") },

@@ -19,7 +19,7 @@ Every robot in this atlas, from a toy line follower to a Mars rover, runs the sa
 2. **Think.** A computer turns those signals into a decision: where am I, where should I go, how hard should each motor push?
 3. **Act.** Motors and other [[~actuator|actuators]] turn the decision into force and motion, and the world changes.
 
-The sensors see that change, and the loop starts again. A real robot runs many of these loops at once, nested inside each other: a fast one keeps each motor at the right speed, a slower one keeps the robot balanced, and a much slower one decides where to go next.
+The sensors see that change, and the loop starts again. A real robot runs many of these loops at once, nested inside each other: a fast one keeps each motor at the right speed, a slower one keeps the robot balanced, and a much slower one decides where to go next. [The signal chain](../../signal-chain/) follows one trip round the loop, stage by stage, from a sensor to a moving motor.
 
 ## What every robot is made of
 

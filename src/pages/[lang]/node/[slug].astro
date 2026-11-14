@@ -7,6 +7,7 @@ import SourceList from "../../../components/SourceList.astro";
 import Base from "../../../layouts/Base.astro";
 import {
   getAtlas,
+  getChain,
   getHardware,
   getGlossary,
   getRoadmaps,
@@ -65,6 +66,12 @@ const hwCategories =
 const roadmaps = (await getRoadmaps(lang)).filter((r) =>
   pathNodes(r.roadmap).includes(id),
 );
+// The signal chain's stages this topic covers (the chain has no header tab;
+// topics link into it, the user, 2026-11-15).
+const chain = await getChain(lang);
+const chainStages = chain.stages
+  .map((st, i) => ({ ...st, n: i + 1 }))
+  .filter((st) => st.node === id);
 const glossary = await getGlossary(lang);
 const terms = [...glossary.terms.values()]
   .filter((g) => g.node === id)
@@ -179,6 +186,21 @@ const chips = (list: string[]) =>
                   <>
                     {i > 0 && <span aria-hidden="true"> · </span>}
                     <a href={`${glossary.url}#${g.id}`}>{g.term[lang]}</a>
+                  </>
+                ))}
+              </dd>
+            </>
+          )}
+          {chainStages.length > 0 && (
+            <>
+              <dt>{t(lang, "node.chain")}</dt>
+              <dd>
+                {chainStages.map((st, i) => (
+                  <>
+                    {i > 0 && <span aria-hidden="true"> · </span>}
+                    <a href={`${chain.url}#stage-${st.id}`}>
+                      {st.n}. {st.name[lang]}
+                    </a>
                   </>
                 ))}
               </dd>
