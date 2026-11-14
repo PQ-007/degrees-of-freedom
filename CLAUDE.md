@@ -14,7 +14,7 @@ Degrees of Freedom (DOF): a static, browser-only atlas of the whole of robotics,
 
 - M0 (scaffold): done. Astro (static), strict TypeScript, en/mn routing, tokens and the look from the style preview, self-hosted Geist fonts, light/dark theme, Vitest, Playwright + axe, lint, CI, GitHub Pages deploy from `main`.
 - M1 (content model): done. 71 nodes (`content/tree/nodes.yaml` + `content/nodes/<lang>/`), build-time checks, the tech-tree page (graph + list), stub node pages, Pagefind search, header nav with a phone menu. The prerequisites are a first draft awaiting the user's review.
-- M2 (page types): in progress, one page type at a time, each shown to the user. Done: the full node page with F0 What is robotics written in English and Mongolian (cited). Next: compare, robot teardown, roadmap, Build, signal chain, glossary.
+- M2 (page types): in progress, one page type at a time, each shown to the user. Done: the full node page with F0 What is robotics (cited, en + mn); the compare page with X1 Actuators (table + how to choose, chosen by the user). Next: robot teardown, roadmap, Build, signal chain, glossary.
 - Keep this section up to date when a step lands.
 
 ## Commands
@@ -48,6 +48,8 @@ npx playwright test -g "home · mn · dark · 360px"    # one e2e test
 - Search: Pagefind indexes only elements with `data-pagefind-body` (node pages), one index per `<html lang>`; `src/lib/search.ts` drives our own results list. It works only on a build (`npm run build`), not in `npm run dev`.
 - Node pages (`src/pages/[lang]/node/[slug].astro`): the tier's topics on the left, the article (tier rule, breadcrumb, needs/used-by chips, text, Sources, previous/next) in the middle, "On this page" on the right; below 1200px the left panel folds into a bar above the text, below 900px the right one too. Stubs show a note instead of text.
 - Markdown syntax (`src/lib/remark-atlas.ts`, a remark plugin; Astro 7 needs `@astrojs/markdown-remark` for remark plugins): `[@source-id]` is a citation, numbered by first use, listed under Sources from `content/sources.yaml`; `[[C4]]` links to a node with its title in the page's language, `[[C4|text]]` with your own text (not inside table cells: `|` splits them). An unknown source or node fails the build. Real named products and robots go in `<aside class="examples">` ("Real examples", dated), not in the running text (the user, 2026-11-14).
+- Compare pages: the table is `content/compare/<slug>.yaml` (columns of type `rating` 1–5 or `text`; every text cell as `en:`/`mn:` in block style; ratings are relative guides and the page says so), the prose is `content/compare/<lang>/<slug>.md` (How to choose, then each option, citations, Real examples). `src/lib/compare.ts` checks every cell and translation at build time. The page (`src/pages/[lang]/compare/[slug].astro`) has one Sort-by select that reorders the table and the phone cards; node pages listed in `nodes:` link back to it.
+- Shared pieces: `src/components/SourceList.astro` (the numbered Sources list) and `src/styles/prose.css` (Markdown text, citations, the examples box).
 - Theme: an inline script in `Base.astro` sets `data-theme` before first paint (stored choice in `localStorage["dof-theme"]`, else the system preference); `src/lib/theme.ts` + `ThemeToggle.astro` switch it.
 
 ## Rules

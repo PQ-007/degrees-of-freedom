@@ -103,3 +103,66 @@
     - title: "NASA's Perseverance rover completes first AI-planned drive on Mars (NASA JPL, 30 January 2026)"
       url: https://www.nasa.gov/centers-and-facilities/jpl/nasas-perseverance-rover-completes-first-ai-planned-drive-on-mars/
   checked: web, 2026-11-14
+
+- id: stepper-lost-steps
+  claim: >-
+    An open-loop stepper counts steps instead of measuring position, so when
+    the load exceeds its torque it can lose steps without anything noticing.
+  sources:
+    - title: "Why open-loop steppers lose steps, and how to solve the problem (D. Labriola, Machine Design, 2005)"
+      url: https://www.machinedesign.com/motors-drives/article/21833271/why-open-loop-steppers-lose-steps-and-how-to-solve-the-problem
+  checked: web, 2026-11-14
+
+- id: harmonic-drive
+  claim: >-
+    A strain-wave (harmonic) gear gives a large reduction in a single stage,
+    with almost no backlash: its teeth stay engaged under a permanent preload.
+  sources:
+    - title: "Harmonic Drive technology (Harmonic Drive LLC)"
+      url: https://www.harmonicdrive.net/technology
+    - title: "Harmonic Drive gears (Harmonic Drive SE)"
+      url: https://harmonicdrive.de/en/technology/harmonic-drive-gears
+  checked: web search, 2026-11-14
+  uncertain:
+    en: >-
+      The makers quote different single-stage ratio ranges (about 30:1 to 160:1
+      as standard, up to 320:1 or more in some designs), so the page gives no
+      single range.
+    mn: >-
+      Үйлдвэрлэгчид нэг шатны харьцааг өөр өөрөөр заадаг (стандартаар ойролцоогоор
+      30:1-ээс 160:1, зарим загварт 320:1 ба түүнээс дээш), тиймээс хуудсанд нэг
+      хүрээ өгөөгүй.
+
+- id: sea-pratt-1995
+  claim: >-
+    A series elastic actuator puts a spring between the motor's transmission
+    and the load; the spring's deflection measures the force, which makes force
+    control easier and protects the gears from shocks (Pratt and Williamson, 1995).
+  sources:
+    - title: "G. Pratt and M. Williamson, Series elastic actuators, IROS 1995, pp. 399–406 (CMU Robotics Institute listing)"
+      url: https://www.ri.cmu.edu/project/locomoting-systems-series-elastic-actuation
+    - title: "M. Williamson, Series elastic actuators, MIT MS thesis, 1995 (DSpace@MIT)"
+      url: https://dspace.mit.edu/handle/1721.1/36966
+  checked: web search, 2026-11-14
+
+- id: qdd-cheetah
+  claim: >-
+    The MIT Cheetah's actuators pair high-torque electric motors with low gear
+    ratios, so the joints can be driven backwards, survive impacts, and sense
+    force from motor current instead of a separate force sensor (Wensing et al.,
+    IEEE Transactions on Robotics, 2017).
+  sources:
+    - title: "P. Wensing et al., Proprioceptive actuator design in the MIT Cheetah, IEEE T-RO 33(3), 2017 (DSpace@MIT)"
+      url: https://dspace.mit.edu/handle/1721.1/119863
+    - title: "Optimal actuator design (MIT Biomimetic Robotics Lab)"
+      url: https://biomimetics.mit.edu/research/1a9ba04b-d200-4743-b8fc-bf231f3231f0
+  checked: web search, 2026-11-14
+
+- id: atlas-electric
+  claim: >-
+    In April 2024 Boston Dynamics retired its hydraulic Atlas humanoid and
+    introduced a fully electric Atlas.
+  sources:
+    - title: "An electric new era for Atlas (Boston Dynamics)"
+      url: https://bostondynamics.com/blog/electric-new-era-for-atlas/
+  checked: web, 2026-11-14 (the date from April 2024 news coverage; the post itself shows none)

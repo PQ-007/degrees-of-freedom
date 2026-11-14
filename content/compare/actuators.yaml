@@ -1,0 +1,273 @@
+# X1 Actuators: the table. The prose (how to choose, each option) is in
+# content/compare/<lang>/actuators.md.
+#
+# Ratings are 1–5 and compare these options with each other for typical small
+# and medium robot joints: rough guides, not measurements. The page says so.
+# Every row must have every column (checked at build time).
+
+id: X1
+slug: actuators
+nodes: [C4, C5, C6]
+
+columns:
+  - key: how
+    type: text
+    label:
+      en: "How it works"
+      mn: "Хэрхэн ажилладаг"
+  - key: torque
+    type: rating
+    label:
+      en: "Torque for its size"
+      mn: "Хэмжээндээ харьцуулсан момент"
+  - key: speed
+    type: rating
+    label:
+      en: "Speed"
+      mn: "Хурд"
+  - key: precision
+    type: rating
+    label:
+      en: "Position precision"
+      mn: "Байрлалын нарийвчлал"
+  - key: backdrivable
+    type: text
+    label:
+      en: "Backdrivable"
+      mn: "Гараар эргүүлэх (backdrivable)"
+  - key: sensor
+    type: text
+    label:
+      en: "Needs a position sensor"
+      mn: "Байрлалын мэдрэгч хэрэгтэй юу"
+  - key: cost
+    type: rating
+    label:
+      en: "Cost"
+      mn: "Үнэ"
+  - key: used
+    type: text
+    label:
+      en: "Typical robots"
+      mn: "Түгээмэл робот"
+
+rows:
+  - key: gearmotor
+    name:
+      en: "Brushed DC gearmotor"
+      mn: "Араатай сойзтой DC хөдөлгүүр"
+    values:
+      how:
+        en: A simple DC motor with a gearbox; more voltage, more speed
+        mn: Араатай энгийн тогтмол гүйдлийн хөдөлгүүр; хүчдэл их бол хурд их
+      torque: 2
+      speed: 3
+      precision: 2
+      backdrivable:
+        en: "Depends on the gears; worm gears lock"
+        mn: "Арааноос хамаарна; өт араа түгждэг"
+      sensor:
+        en: "Yes; add an encoder"
+        mn: "Тийм; энкодер нэмнэ"
+      cost: 1
+      used:
+        en: "Small wheeled robots, line followers"
+        mn: "Жижиг дугуйт робот, шугам дагагч"
+
+  - key: hobby-servo
+    name:
+      en: "Hobby servo"
+      mn: "Хобби servo"
+    values:
+      how:
+        en: A small gearmotor with its own position loop inside, steered by a pulse
+        mn: Байрлалын давталт нь дотроо байдаг жижиг араат хөдөлгүүр, импульсээр удирдана
+      torque: 2
+      speed: 3
+      precision: 2
+      backdrivable:
+        en: "Barely"
+        mn: "Бараг үгүй"
+      sensor:
+        en: "Built in (a potentiometer)"
+        mn: "Дотроо бий (потенциометр)"
+      cost: 1
+      used:
+        en: "Small arms, toy legs, RC models"
+        mn: "Жижиг гар, тоглоомон хөл, RC загвар"
+
+  - key: bus-servo
+    name:
+      en: "Smart bus servo"
+      mn: "Ухаалаг bus servo"
+    values:
+      how:
+        en: A servo with its own controller, set and read over a shared data bus
+        mn: Өөрийн контроллертой servo; нийтлэг өгөгдлийн bus-аар тохируулж, уншина
+      torque: 3
+      speed: 3
+      precision: 3
+      backdrivable:
+        en: "Barely"
+        mn: "Бараг үгүй"
+      sensor:
+        en: "Built in, and it reports its position"
+        mn: "Дотроо бий, байрлалаа мэдээлнэ"
+      cost: 2
+      used:
+        en: "Hobby humanoids, small arms"
+        mn: "Хобби хүн дүрст робот, жижиг гар"
+
+  - key: stepper
+    name:
+      en: "Stepper motor"
+      mn: "Алхамт хөдөлгүүр"
+    values:
+      how:
+        en: Moves one fixed step per pulse, so its position is counted, not measured
+        mn: Импульс бүрд нэг тогтмол алхам хөдөлнө; байрлалыг хэмждэггүй, тоолдог
+      torque: 2
+      speed: 2
+      precision: 4
+      backdrivable:
+        en: "Yes, when unpowered"
+        mn: "Тийм, тэжээлгүй үед"
+      sensor:
+        en: "No, but it can lose steps unnoticed"
+        mn: "Үгүй, гэхдээ алхам алдсанаа мэдэхгүй байж болно"
+      cost: 2
+      used:
+        en: "3D printers, camera sliders, desktop machines"
+        mn: "3D принтер, камерын гулсуур, ширээний машин"
+
+  - key: bldc-gearbox
+    name:
+      en: "Brushless motor + gearbox"
+      mn: "Сойзгүй хөдөлгүүр + редуктор"
+    values:
+      how:
+        en: An efficient brushless motor with a planetary or similar gearbox, run by a driver
+        mn: Гариг маягийн буюу төстэй редуктортой, драйвераар ажилладаг үр ашигтай сойзгүй хөдөлгүүр
+      torque: 4
+      speed: 3
+      precision: 4
+      backdrivable:
+        en: "Partly, at low gear ratios"
+        mn: "Хэсэгчлэн, арааны харьцаа бага үед"
+      sensor:
+        en: "Yes; an encoder"
+        mn: "Тийм; энкодер"
+      cost: 3
+      used:
+        en: "Mobile robots, robot arms"
+        mn: "Хөдөлгөөнт робот, роботын гар"
+
+  - key: qdd
+    name:
+      en: "Quasi-direct-drive (QDD)"
+      mn: "Quasi-direct-drive (QDD)"
+    values:
+      how:
+        en: A high-torque brushless motor with only a little gearing
+        mn: Цөөхөн араатай, өндөр моменттой сойзгүй хөдөлгүүр
+      torque: 3
+      speed: 5
+      precision: 3
+      backdrivable:
+        en: "Yes"
+        mn: "Тийм"
+      sensor:
+        en: "Yes; its current also tells the force"
+        mn: "Тийм; гүйдэл нь хүчийг ч хэлж өгнө"
+      cost: 3
+      used:
+        en: "Quadrupeds and other legged robots"
+        mn: "Дөрвөн хөлт ба бусад хөлт робот"
+
+  - key: harmonic
+    name:
+      en: "Harmonic-drive joint"
+      mn: "Harmonic-drive үе"
+    values:
+      how:
+        en: A motor with a strain-wave gear; a large reduction in one stage, almost no backlash
+        mn: Strain-wave араатай хөдөлгүүр; нэг шатанд их бууралт, бараг сул зайгүй
+      torque: 4
+      speed: 2
+      precision: 5
+      backdrivable:
+        en: "Barely"
+        mn: "Бараг үгүй"
+      sensor:
+        en: "Yes; an encoder"
+        mn: "Тийм; энкодер"
+      cost: 4
+      used:
+        en: "Industrial and collaborative arms, humanoid arms"
+        mn: "Үйлдвэрийн ба хамтран ажилладаг гар, хүн дүрст роботын гар"
+
+  - key: sea
+    name:
+      en: "Series elastic actuator (SEA)"
+      mn: "Series elastic актуатор (SEA)"
+    values:
+      how:
+        en: A spring between the gearbox and the load; how far it stretches tells the force
+        mn: Редуктор ба ачааны хооронд пүрш; хэр сунаснаас нь хүчийг мэднэ
+      torque: 3
+      speed: 3
+      precision: 3
+      backdrivable:
+        en: "Yes, through the spring"
+        mn: "Тийм, пүршээр дамжин"
+      sensor:
+        en: "Yes; for position and for the spring"
+        mn: "Тийм; байрлал болон пүршинд"
+      cost: 4
+      used:
+        en: "Legged research robots, exoskeletons, robots that touch people"
+        mn: "Хөлт судалгааны робот, экзоскелет, хүнд хүрдэг робот"
+
+  - key: hydraulic
+    name:
+      en: "Hydraulic actuator"
+      mn: "Гидравлик актуатор"
+    values:
+      how:
+        en: Oil under pressure pushes a piston, controlled by valves
+        mn: Даралттай тос поршень түлхэж, хавхлагаар удирдагдана
+      torque: 5
+      speed: 4
+      precision: 3
+      backdrivable:
+        en: "Depends on the valves"
+        mn: "Хавхлагаас хамаарна"
+      sensor:
+        en: "Yes; position and pressure"
+        mn: "Тийм; байрлал ба даралт"
+      cost: 5
+      used:
+        en: "Heavy machines, early large humanoids"
+        mn: "Хүнд машин, анхны том хүн дүрст робот"
+
+  - key: pneumatic
+    name:
+      en: "Pneumatic actuator"
+      mn: "Пневматик актуатор"
+    values:
+      how:
+        en: Compressed air pushes a piston or inflates a soft chamber
+        mn: Шахсан агаар поршень түлхэх эсвэл зөөлөн камерыг хийлнэ
+      torque: 3
+      speed: 5
+      precision: 1
+      backdrivable:
+        en: "Yes; the air compresses"
+        mn: "Тийм; агаар шахагддаг"
+      sensor:
+        en: "Often none; it moves from end to end"
+        mn: "Ихэвчлэн үгүй; нэг захаас нөгөө зах хүртэл хөдөлнө"
+      cost: 3
+      used:
+        en: "Grippers, factory pick-and-place, soft robots"
+        mn: "Атгагч, үйлдвэрийн авч тавих, зөөлөн робот"
