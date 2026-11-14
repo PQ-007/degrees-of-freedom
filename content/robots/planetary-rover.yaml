@@ -1,0 +1,60 @@
+# R5 Planetary rover: the language-independent parts of the teardown.
+# The text is content/robots/<lang>/planetary-rover.md, with the 12 template
+# sections in order (src/lib/robots.ts). Callout numbers match data-callout in
+# the drawing, planetary-rover.svg (an original line drawing of a generic rover).
+
+id: R5
+slug: planetary-rover
+figure: planetary-rover.svg
+nodes: [C3, C7, C11, C12, M2, P4, I3, S6]
+
+callouts:
+  - n: 1
+    role: sense
+    node: C10
+    section: sensors
+    label:
+      en: "Mast cameras"
+      mn: "Мачтын камерууд"
+  - n: 2
+    role: sense
+    node: C10
+    section: sensors
+    label:
+      en: "Hazard cameras"
+      mn: "Саад илрүүлэх камерууд"
+  - n: 3
+    role: think
+    node: C11
+    section: compute
+    label:
+      en: "Computers, inside the warm body"
+      mn: "Дулаан их бие доторх компьютерууд"
+  - n: 4
+    role: act
+    node: C3
+    section: body
+    label:
+      en: "Six wheels on a rocker-bogie suspension"
+      mn: "Rocker-bogie түдгэлзүүр дээрх зургаан дугуй"
+  - n: 5
+    role: act
+    node: M3
+    section: actuators
+    label:
+      en: "Robotic arm with a tool turret"
+      mn: "Багажны толгойтой роботын гар"
+  - n: 6
+    role: none
+    node: C7
+    section: power
+    label:
+      en: "Power source (nuclear or solar)"
+      mn: "Тэжээлийн эх үүсвэр (цөмийн эсвэл нарны)"
+  - n: 7
+    role: none
+    node: C12
+    section: communication
+    label:
+      en: "Antennas"
+      mn: "Антеннууд"

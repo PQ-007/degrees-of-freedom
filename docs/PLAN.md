@@ -195,6 +195,8 @@ Colour never carries meaning alone: tiers keep their `T3` label, Sense/Think/Act
 
 Hairline line drawings in ink, as in Sand to Tetris, with **one accent line**: the part the figure is about (the encoder in a motor drawing, the lidar on a rover). Teardown callouts are numbered, in ink boxes, with a Sense / Think / Act square.
 
+Teardown drawings are original SVG line drawings of a generic robot of each type (not of a specific product), drawn from coordinates so callouts land exactly on parts; they use `currentColor`, so they follow the theme.
+
 ### Home figure
 
 A Hairline figure made with the `hairline-create` skill.
@@ -209,7 +211,7 @@ A Hairline figure made with the `hairline-create` skill.
 | **Tech tree** | A step rail of the seven tiers, **T0 first, top to bottom** (the user: begin from the bottom tier, don't put the highest on top), each with its square, name and count; the chosen tier's topics as cards (tier bar, ID, title linking to the page, summary, Needs and Unlocks chips). A chip jumps to that topic in its tier; `#T3` opens a tier, `#M5` a topic. Previous/next tier buttons. Phones: the rail becomes seven equal tabs. Without JS all tiers show in order. Roadmap highlighting comes with roadmaps |
 | **Node** | Three columns as in Sand to Tetris chapters: tree nav, article (max ~46rem, **not boxed**: an 8px tier-colour rule on top, then plain text; only callouts, code and go-deeper boxes have borders), "On this page". Breadcrumb `■ T3 › M5`; prerequisite and "used by" chips (bordered, tier square). Bottom: a small "How it connects" graph, next nodes, "Mark as learned" |
 | **Compare** | (Chosen by the user, 2026-11-14: table + how to choose.) Breadcrumb, title, summary, the topics it covers; a **Sort by** select (each rating column, highest or lowest first, or the usual order); a note that ratings are relative guides; the bordered table (inverted header row, first column sticky while the rest scrolls sideways), ratings `●●●○○` with a word; then How to choose, each option in a paragraph, Real examples, Sources. Phones: one card per option, sorted by the same select |
-| **Robot teardown** | Line drawing with numbered callouts; the 12 template sections with the same anchors on every robot; a link to the matrix |
+| **Robot teardown** | (Chosen by the user, 2026-11-14: drawing + sections.) Breadcrumb, title, summary; the line drawing on the drafting grid with numbered callouts; "The numbered parts" (number, Sense/Think/Act square and word, a link to its section and a topic chip; pointing at one fills its number in the drawing); At a glance; key topics; the 12 template sections with fixed anchors (`{#job}` … `{#start}`), Real examples inside `{#examples}`; Sources. "On this page" on the right, folding into a bar below 900px |
 | **Robots matrix** | Robot types as columns, the template's rows as rows |
 | **Signal chain** | On the drafting grid: three bordered columns (Sense · Think · Act), each headed by its square and name in ink; the steps as bordered blocks; horizontal on wide screens, vertical on phones; clicking a step shows its signal |
 | **Roadmap** | The tree filtered to the roadmap, plus an ordered checklist |

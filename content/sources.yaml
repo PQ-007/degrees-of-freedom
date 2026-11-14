@@ -166,3 +166,70 @@
     - title: "An electric new era for Atlas (Boston Dynamics)"
       url: https://bostondynamics.com/blog/electric-new-era-for-atlas/
   checked: web, 2026-11-14 (the date from April 2024 news coverage; the post itself shows none)
+
+- id: perseverance-components
+  claim: >-
+    Perseverance has six wheels, each with its own motor; the front and rear
+    wheels also steer. A rocker-bogie suspension lets it drive over obstacles
+    or through dips about as large as a wheel (52.5 cm), and it is designed to
+    withstand a 45° tilt in any direction, while drivers avoid terrain that
+    tilts it more than 30°. Its main computer is a radiation-hardened RAD750
+    running at up to 200 MHz, with two identical compute elements so one is
+    always a spare. Hazard cameras let it choose its own path between rocks.
+  sources:
+    - title: "Rover components (NASA Science, Mars 2020: Perseverance)"
+      url: https://science.nasa.gov/mission/mars-2020-perseverance/rover-components/
+  checked: web, 2026-11-14
+
+- id: perseverance-size
+  claim: >-
+    Perseverance weighs about 1,025 kg, is about 3 m long, 2.7 m wide and 2.2 m
+    tall, carries 19 cameras on the rover itself, and has a 2 m, five-jointed
+    robotic arm. A separate Vision Compute Element helps it navigate around
+    obstacles on its own.
+  sources:
+    - title: "Perseverance rover (NASA JPL, Mars 2020 landing press kit)"
+      url: https://www.jpl.nasa.gov/news/press_kits/mars_2020/landing/mission/spacecraft/perseverance_rover/
+  checked: web, 2026-11-14
+
+- id: perseverance-power
+  claim: >-
+    Perseverance's MMRTG turns heat from the decay of plutonium-238 into about
+    110 W of electricity at the start of the mission, falling a little each
+    year; it charges two lithium-ion batteries that cover peaks of up to 900 W.
+  sources:
+    - title: "Electrical power (NASA JPL, Mars 2020 launch press kit)"
+      url: https://www.jpl.nasa.gov/news/press_kits/mars_2020/launch/mission/spacecraft/power/
+  checked: web, 2026-11-14
+
+- id: perseverance-telecom
+  claim: >-
+    About 99.9% of Perseverance's science data goes by UHF radio to passing
+    orbiters (NASA's MAVEN and Mars Reconnaissance Orbiter, ESA's Trace Gas
+    Orbiter); its X-band high-gain antenna is mainly used to receive commands
+    from Earth each Martian morning.
+  sources:
+    - title: "Telecommunications (NASA JPL, Mars 2020 launch press kit)"
+      url: https://www.jpl.nasa.gov/news/press_kits/mars_2020/launch/mission/spacecraft/telecommunications/
+  checked: web, 2026-11-14
+
+- id: mars-light-time
+  claim: >-
+    The distance between Earth and Mars varies from about 54.6 million km
+    (about 3 minutes of light time) to about 400.2 million km (about 22.4
+    minutes).
+  sources:
+    - title: "Mars Relay Network (NASA Science)"
+      url: https://science.nasa.gov/?p=434038
+  checked: web, 2026-11-14
+
+- id: mer-solar
+  claim: >-
+    NASA's solar-powered twin rovers Spirit and Opportunity landed in early
+    2004, designed for 90 sols; engineers expected dust on their solar panels
+    to limit their lives. A dust storm that covered Mars in 2018 ended
+    Opportunity's mission.
+  sources:
+    - title: "Mars rover mission comes to an end, but science legacy lives on (NASA JPL Education, 13 February 2019)"
+      url: https://jpl.nasa.gov/edu/news/2019/2/13/mars-rover-mission-comes-to-an-end-but-science-legacy-live-on
+  checked: web, 2026-11-14
