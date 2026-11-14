@@ -1,0 +1,375 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Degrees of Freedom · Style preview</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Geist:wght@400;500;600;700;800&family=Geist+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<script>
+  try { const t = localStorage.getItem('dof-theme'); document.documentElement.dataset.theme = t || (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'); } catch { document.documentElement.dataset.theme = 'light'; }
+</script>
+<style>
+/* ---------- Tokens ---------- */
+:root {
+  --bg: #F4F3EE; --surface: #FFFFFF; --ink: #0B0B10; --line: #0B0B10; --muted: #55555F; --rule: #D9D8D2; --error: #B42318;
+  --head-bg: #0B0B10; --head-fg: #F4F3EE; --primary-bg: #0B0B10; --primary-fg: #F4F3EE;
+  --grid: rgba(11, 11, 16, 0.13);
+  --shadow: 4px 4px 0 var(--line); --shadow-sm: 2px 2px 0 var(--line);
+  --font: "Geist", system-ui, sans-serif; --mono: "Geist Mono", ui-monospace, monospace;
+  /* Marks: tier squares and bars */
+  --yellow: #FACC15; --orange: #FB923C; --lime: #84CC16; --cyan: #06B6D4; --magenta: #D946EF; --violet: #8B5CF6;
+  /* Data: plot traces, sim highlights */
+  --d-yellow: #CA9A04; --d-orange: #EA6C0A; --d-lime: #65A30D; --d-cyan: #0891B2; --d-magenta: #C026D3; --d-violet: #7C3AED;
+  color-scheme: light;
+}
+:root[data-theme="dark"] {
+  --bg: #050506; --surface: #0C0C10; --ink: #E4E4E8; --line: #3A3A44; --muted: #8A8A96; --rule: #1C1C23; --error: #E5675C;
+  --head-bg: #15151B; --head-fg: #E4E4E8; --primary-bg: #D4D4DA; --primary-fg: #050506;
+  --grid: rgba(228, 228, 232, 0.07);
+  --shadow: none; --shadow-sm: none;
+  --yellow: #94800F; --orange: #9E4A1A; --lime: #5A8420; --cyan: #136F84; --magenta: #84287A; --violet: #57459A;
+  --d-yellow: #E0BE12; --d-orange: #E57F2A; --d-lime: #8DC62E; --d-cyan: #1EB3D0; --d-magenta: #CC3DB4; --d-violet: #8A6EDB;
+  color-scheme: dark;
+}
+.t0 { --c: var(--ink); --d: var(--ink); }
+:root[data-theme="dark"] .t0 { --c: var(--muted); }
+.t1, .act { --c: var(--yellow); --d: var(--d-yellow); }
+.t2 { --c: var(--orange); --d: var(--d-orange); }
+.t3 { --c: var(--lime); --d: var(--d-lime); }
+.t4, .sense { --c: var(--cyan); --d: var(--d-cyan); }
+.t5, .think { --c: var(--magenta); --d: var(--d-magenta); }
+.t6 { --c: var(--violet); --d: var(--d-violet); }
+
+/* ---------- Base ---------- */
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 400 17px/1.6 var(--font); -webkit-font-smoothing: antialiased; }
+a { color: inherit; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; }
+a:hover { text-decoration-thickness: 2px; }
+:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+h1, h2, h3 { line-height: 1.08; letter-spacing: -0.025em; margin: 0 0 .5em; font-weight: 800; }
+h1 { font-size: clamp(2.4rem, 6.4vw, 4rem); letter-spacing: -0.04em; }
+h2 { font-size: 1.55rem; }
+h3 { font-size: 1.08rem; font-weight: 700; letter-spacing: -0.01em; }
+/* Uppercase mono is kept for two things only: IDs and small eyebrows */
+.label { font: 500 12px/1.2 var(--mono); text-transform: uppercase; letter-spacing: .09em; color: var(--muted); }
+.id { display: inline-flex; align-items: center; gap: 8px; font: 700 12px/1 var(--mono); text-transform: uppercase; letter-spacing: .08em; }
+.muted { color: var(--muted); }
+.wrap { max-width: 1120px; margin: 0 auto; padding: 0 16px; }
+section { border-top: 2px solid var(--line); padding: 44px 0; }
+.section-head { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; margin-bottom: 22px; }
+.section-head h2 { margin: 0; }
+.note { font-size: 14px; color: var(--muted); margin: -8px 0 20px; max-width: 70ch; }
+
+/* Drafting grid: only on canvas-like areas (hero, tree, signal chain) */
+.grid-bg { background-image: radial-gradient(var(--grid) 1px, transparent 1.2px); background-size: 20px 20px; background-position: -10px -10px; }
+
+/* ---------- Colour carriers ---------- */
+.sq { display: inline-block; width: 13px; height: 13px; border: 2px solid var(--line); background: var(--c); flex: none; }
+.bar { position: relative; }
+.bar::before { content: ""; position: absolute; left: -2px; right: -2px; top: -2px; height: 8px; background: var(--c); border: 2px solid var(--line); }
+
+/* ---------- Header ---------- */
+header { position: sticky; top: 0; z-index: 5; background: var(--bg); border-bottom: 2px solid var(--line); }
+header .wrap { height: 60px; display: flex; align-items: center; gap: 24px; }
+.brand { font-weight: 800; letter-spacing: -0.02em; text-decoration: none; display: flex; align-items: center; gap: 10px; white-space: nowrap; }
+.brand-mark { width: 22px; height: 22px; border: 2px solid var(--ink); background: var(--ink); position: relative; }
+.brand-mark::after { content: ""; position: absolute; inset: 4px; background: var(--bg); }
+nav { display: flex; gap: 20px; flex: 1; overflow-x: auto; font-size: 15px; }
+nav a { text-decoration: none; white-space: nowrap; padding: 4px 0; border-bottom: 2px solid transparent; }
+nav a[aria-current] { border-bottom-color: var(--ink); font-weight: 600; }
+
+/* ---------- Buttons: the one place hard shadows always show ---------- */
+.btn { font: 600 15px/1 var(--font); background: var(--surface); color: var(--ink); border: 2px solid var(--line); box-shadow: var(--shadow); padding: 11px 16px; cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 8px; }
+.btn:hover { transform: translate(2px, 2px); box-shadow: var(--shadow-sm); }
+.btn:active { transform: translate(4px, 4px); box-shadow: none; }
+.btn.primary { background: var(--primary-bg); color: var(--primary-fg); border-color: var(--primary-bg); }
+:root[data-theme="dark"] .btn:hover, :root[data-theme="dark"] .btn:active { transform: none; border-color: var(--ink); }
+:root[data-theme="dark"] .btn.primary:hover { background: var(--ink); }
+.chip { display: inline-flex; align-items: center; gap: 7px; font: 500 14px/1 var(--font); padding: 6px 10px 6px 8px; border: 2px solid var(--line); background: var(--surface); text-decoration: none; margin: 0 6px 6px 0; }
+.chip:hover { border-color: var(--ink); }
+.chip .sq { width: 10px; height: 10px; border-width: 1.5px; }
+
+/* ---------- Hero ---------- */
+.hero-band { border-bottom: 2px solid var(--line); }
+.hero { display: grid; grid-template-columns: 1.15fr 1fr; gap: 56px; align-items: center; padding: 64px 16px 56px; }
+.lead { font-size: 1.2rem; max-width: 34ch; margin: 0 0 26px; }
+.actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.tiers { list-style: none; margin: 0; padding: 0; border: 2px solid var(--line); background: var(--surface); display: flex; flex-direction: column-reverse; }
+.tiers li { display: grid; grid-template-columns: 64px 1fr auto; align-items: center; padding: 10px 14px; border-top: 2px solid var(--line); }
+.tiers li:last-child { border-top: 0; }
+.tiers .n { font: 13px var(--mono); color: var(--muted); }
+
+/* ---------- Cards: flat at rest; the shadow appears on hover ---------- */
+.grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; }
+.cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); gap: 20px; }
+.card { display: block; background: var(--surface); border: 2px solid var(--line); padding: 18px; text-decoration: none; }
+a.card:hover { box-shadow: var(--shadow); transform: translate(-2px, -2px); }
+:root[data-theme="dark"] a.card:hover { transform: none; border-color: var(--ink); }
+.card.entry { box-shadow: var(--shadow); }
+.card.entry:hover { transform: translate(2px, 2px); box-shadow: var(--shadow-sm); }
+.card.bar { padding-top: 26px; }
+.card h3 { margin: 12px 0 4px; }
+.card p { margin: 0; color: var(--muted); font-size: 15px; }
+.status { display: inline-flex; align-items: center; gap: 8px; margin-top: 14px; font-size: 14px; }
+.st { width: 13px; height: 13px; border: 2px solid var(--ink); display: inline-grid; place-items: center; font-size: 9px; line-height: 1; flex: none; }
+.st.half { background: linear-gradient(90deg, var(--ink) 50%, transparent 50%); }
+.st.full { background: var(--ink); color: var(--bg); }
+
+/* ---------- Tech tree: compact one-line nodes ---------- */
+.tree { border: 2px solid var(--line); }
+.band { display: grid; grid-template-columns: 180px 1fr; border-top: 2px solid var(--line); }
+.band:first-child { border-top: 0; }
+.band-name { padding: 14px; border-right: 2px solid var(--line); background: var(--bg); }
+.band-name .id { margin-bottom: 6px; }
+.band-name span:last-child { display: block; font-size: 14px; font-weight: 600; }
+.band-nodes { padding: 12px; display: flex; flex-wrap: wrap; gap: 8px; align-content: flex-start; }
+.node { display: inline-flex; align-items: center; gap: 8px; padding: 6px 10px 6px 8px; background: var(--surface); border: 2px solid var(--line); font-size: 14px; text-decoration: none; }
+.node .nid { font: 700 11.5px var(--mono); letter-spacing: .04em; color: var(--muted); }
+.node .st { width: 11px; height: 11px; border-width: 1.5px; font-size: 7px; margin-left: 2px; }
+.node:hover, .node.on { border-color: var(--ink); }
+.node.on { box-shadow: var(--shadow-sm); }
+:root[data-theme="dark"] .node.on { outline: 1px solid var(--ink); }
+.node.dim { opacity: .38; }
+
+/* ---------- Node page: the reading column is not boxed ---------- */
+.doc { display: grid; grid-template-columns: 210px minmax(0, 1fr) 170px; gap: 40px; }
+.doc aside { font-size: 14px; }
+.doc aside ul { list-style: none; padding: 0; margin: 12px 0 0; }
+.doc aside li { padding: 5px 0; }
+.doc aside li[aria-current] { font-weight: 700; }
+.toc li { padding-left: 12px; border-left: 2px solid transparent; }
+.toc li[aria-current] { border-left-color: var(--ink); font-weight: 700; }
+.article { max-width: 46rem; border-top: 8px solid var(--c); padding-top: 22px; }
+.article .title { font-size: 2.3rem; letter-spacing: -0.035em; margin: 12px 0 16px; }
+.article p { max-width: 68ch; }
+.meta { display: grid; grid-template-columns: auto 1fr; gap: 6px 14px; align-items: baseline; margin-bottom: 18px; font-size: 14px; }
+.meta > span:nth-child(odd) { color: var(--muted); font-weight: 500; }
+.callout { border: 2px solid var(--line); background: var(--surface); padding: 14px 16px; margin: 22px 0; }
+.callout b { display: block; margin-bottom: 4px; }
+details { border: 2px dashed var(--line); padding: 12px 16px; margin: 22px 0; }
+summary { cursor: pointer; font-weight: 600; }
+pre { font: 14px/1.55 var(--mono); background: var(--surface); border: 2px solid var(--line); padding: 14px 16px; overflow-x: auto; }
+.err { color: var(--error); font-weight: 600; }
+
+/* ---------- Compare ---------- */
+.table-wrap { overflow-x: auto; border: 2px solid var(--line); background: var(--surface); }
+table { border-collapse: collapse; width: 100%; min-width: 760px; font-size: 15px; }
+th, td { text-align: left; padding: 10px 14px; border-bottom: 1px solid var(--rule); vertical-align: top; }
+tbody tr:last-child > * { border-bottom: 0; }
+thead th { background: var(--head-bg); color: var(--head-fg); font: 600 13px var(--font); position: sticky; top: 0; }
+tbody th { font-weight: 600; position: sticky; left: 0; background: var(--surface); border-right: 2px solid var(--line); }
+.rating { font-family: var(--mono); white-space: nowrap; letter-spacing: 2px; }
+.rating small { letter-spacing: 0; color: var(--muted); margin-left: 6px; font-family: var(--font); }
+
+/* ---------- Signal chain ---------- */
+.chain { display: grid; grid-template-columns: repeat(3, 1fr); border: 2px solid var(--line); }
+.col { padding: 0 14px 14px; border-right: 2px solid var(--line); }
+.col:last-child { border-right: 0; }
+.col h3 { display: flex; align-items: center; gap: 10px; margin: 0 -14px 14px; padding: 12px 14px; border-bottom: 2px solid var(--line); background: var(--surface); font-size: 1rem; }
+.step { display: flex; justify-content: space-between; gap: 8px; border: 2px solid var(--line); background: var(--surface); padding: 8px 10px; margin-bottom: 8px; font-size: 14.5px; }
+.step span:last-child { font: 12px var(--mono); color: var(--muted); white-space: nowrap; }
+
+/* ---------- Sim ---------- */
+.sim { display: grid; grid-template-columns: 1.4fr 1fr; border: 2px solid var(--line); background: var(--surface); }
+.scene { min-height: 290px; display: grid; place-items: center; position: relative; background: var(--bg); border-right: 2px solid var(--line); }
+.scene .label { position: absolute; left: 14px; top: 14px; }
+.scene .btn { position: absolute; right: 14px; bottom: 14px; }
+.controls { padding: 18px; display: flex; flex-direction: column; gap: 14px; }
+.controls label { display: grid; grid-template-columns: 36px 1fr 36px; gap: 12px; align-items: center; font: 13px var(--mono); }
+input[type=range] { accent-color: var(--ink); width: 100%; }
+.plot { border: 2px solid var(--line); height: 96px; background: var(--bg); }
+.legend { display: flex; gap: 16px; flex-wrap: wrap; font-size: 13px; }
+.legend span { display: inline-flex; gap: 7px; align-items: center; }
+.swatch-line { display: inline-block; width: 18px; height: 0; border-top: 3px solid var(--d); }
+.swatch-line.dashed { border-top-style: dashed; }
+
+/* ---------- Palette ---------- */
+.swatches { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 16px; }
+.sw { border: 2px solid var(--line); background: var(--surface); padding: 24px 12px 12px; }
+.sw p { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+.sw .trace { height: 0; border-top: 3px solid var(--d); margin-top: 10px; }
+
+@media (max-width: 1000px) { .doc { grid-template-columns: minmax(0, 1fr); } .doc aside { display: none; } }
+@media (max-width: 760px) {
+  .hero, .grid3, .chain, .sim { grid-template-columns: 1fr; }
+  .hero { padding: 40px 16px; gap: 32px; }
+  .band { grid-template-columns: 1fr; }
+  .band-name { border-right: 0; border-bottom: 2px solid var(--line); }
+  .col { border-right: 0; border-bottom: 2px solid var(--line); }
+  .col:last-child { border-bottom: 0; }
+  .scene { border-right: 0; border-bottom: 2px solid var(--line); }
+  nav { display: none; }
+}
+@media (prefers-reduced-motion: reduce) { .btn:hover, a.card:hover, .card.entry:hover { transform: none; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap">
+    <a class="brand" href="#"><span class="brand-mark" aria-hidden="true"></span>Degrees of Freedom</a>
+    <nav aria-label="Site">
+      <a href="#" aria-current="page">Tree</a><a href="#">Signal chain</a><a href="#">Compare</a><a href="#">Robots</a><a href="#">Roadmaps</a><a href="#">Builds</a><a href="#">Glossary</a>
+    </nav>
+    <button class="btn" id="theme" type="button">Dark</button>
+  </div>
+</header>
+
+<div class="hero-band grid-bg">
+  <div class="wrap hero">
+    <div>
+      <div class="label">Style preview · after the review</div>
+      <h1>Degrees of Freedom</h1>
+      <p class="lead">Everything a robot is made of, mapped from first principles to Mars rovers and humanoids. Choose your own path.</p>
+      <div class="actions"><a class="btn primary" href="#">Start with foundations</a><a class="btn" href="#">Pick a robot</a></div>
+    </div>
+    <ol class="tiers" aria-label="The seven tiers, T0 at the bottom">
+      <li class="t0"><span class="id"><span class="sq"></span>T0</span><span>Foundations</span><span class="n">10</span></li>
+      <li class="t1"><span class="id"><span class="sq"></span>T1</span><span>Components</span><span class="n">12</span></li>
+      <li class="t2"><span class="id"><span class="sq"></span>T2</span><span>Low-level integration</span><span class="n">7</span></li>
+      <li class="t3"><span class="id"><span class="sq"></span>T3</span><span>Motion &amp; control</span><span class="n">11</span></li>
+      <li class="t4"><span class="id"><span class="sq"></span>T4</span><span>Perception &amp; estimation</span><span class="n">9</span></li>
+      <li class="t5"><span class="id"><span class="sq"></span>T5</span><span>Intelligence</span><span class="n">14</span></li>
+      <li class="t6"><span class="id"><span class="sq"></span>T6</span><span>Systems &amp; the real world</span><span class="n">8</span></li>
+    </ol>
+  </div>
+</div>
+
+<main class="wrap">
+  <section style="border-top:0">
+    <div class="section-head"><h2>Three ways in</h2><span class="label">entry cards</span></div>
+    <p class="note">The only cards with a resting hard shadow (light theme): they are the first choice on the site.</p>
+    <div class="grid3">
+      <a class="card entry" href="#"><span class="label">By topic</span><h3>Walk the tech tree</h3><p>Tier by tier, from math and electrons to whole-body control.</p></a>
+      <a class="card entry" href="#"><span class="label">By robot</span><h3>Pick a robot</h3><p>Humanoid, quadruped, Mars rover, drone: see what's inside.</p></a>
+      <a class="card entry" href="#"><span class="label">By question</span><h3>Which motor should I use?</h3><p>Side-by-side tables with a guide for choosing.</p></a>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Tech tree</h2><span class="label">compact nodes · drafting grid</span></div>
+    <p class="note">One-line nodes so ~75 fit on a screen. Here M5 is focused: what it needs and what it unlocks stay solid, the rest fades.</p>
+    <div class="tree grid-bg">
+      <div class="band t5"><div class="band-name"><span class="id"><span class="sq"></span>T5</span><span>Intelligence</span></div>
+        <div class="band-nodes"><a class="node dim t5" href="#"><span class="sq"></span><span class="nid">I1</span>Path planning<span class="st"></span></a><a class="node t5" href="#"><span class="sq"></span><span class="nid">I6</span>Legged locomotion<span class="st"></span></a><a class="node dim t5" href="#"><span class="sq"></span><span class="nid">I8</span>Manipulation<span class="st"></span></a><a class="node dim t5" href="#"><span class="sq"></span><span class="nid">I9</span>Reinforcement learning<span class="st"></span></a></div></div>
+      <div class="band t3"><div class="band-name"><span class="id"><span class="sq"></span>T3</span><span>Motion &amp; control</span></div>
+        <div class="band-nodes"><a class="node dim t3" href="#"><span class="sq"></span><span class="nid">M1</span>Frames and transforms<span class="st full">✓</span></a><a class="node dim t3" href="#"><span class="sq"></span><span class="nid">M3</span>Kinematics: arms<span class="st half"></span></a><a class="node on t3" href="#"><span class="sq"></span><span class="nid">M5</span>Classical control<span class="st half"></span></a><a class="node t3" href="#"><span class="sq"></span><span class="nid">M7</span>MPC<span class="st"></span></a><a class="node t3" href="#"><span class="sq"></span><span class="nid">M9</span>Whole-body control<span class="st"></span></a></div></div>
+      <div class="band t2"><div class="band-name"><span class="id"><span class="sq"></span>T2</span><span>Low-level integration</span></div>
+        <div class="band-nodes"><a class="node dim t2" href="#"><span class="sq"></span><span class="nid">L1</span>Embedded firmware<span class="st full">✓</span></a><a class="node dim t2" href="#"><span class="sq"></span><span class="nid">L3</span>Motor drivers<span class="st full">✓</span></a><a class="node t2" href="#"><span class="sq"></span><span class="nid">L4</span>Motor control<span class="st full">✓</span></a></div></div>
+      <div class="band t0"><div class="band-name"><span class="id"><span class="sq"></span>T0</span><span>Foundations</span></div>
+        <div class="band-nodes"><a class="node dim t0" href="#"><span class="sq"></span><span class="nid">F1</span>Geometry and linear algebra<span class="st full">✓</span></a><a class="node t0" href="#"><span class="sq"></span><span class="nid">F2</span>Calculus<span class="st full">✓</span></a><a class="node dim t0" href="#"><span class="sq"></span><span class="nid">F7</span>Electronics basics<span class="st full">✓</span></a></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Node cards</h2><span class="label">flat at rest · hover for the shadow</span></div>
+    <p class="note">For lists (search results, "next topics"). T0's bar is now solid ink, not an empty strip.</p>
+    <div class="cards">
+      <a class="card bar t0" href="#"><span class="id"><span class="sq"></span>T0 · F7</span><h3>Electronics basics</h3><p>Voltage, current, Ohm's law, MOSFETs.</p><span class="status"><span class="st full">✓</span>Learned</span></a>
+      <a class="card bar t1" href="#"><span class="id"><span class="sq"></span>T1 · C4</span><h3>Electric motors</h3><p>Brushed, stepper, brushless; torque and back-EMF.</p><span class="status"><span class="st half"></span>Reading</span></a>
+      <a class="card bar t3" href="#"><span class="id"><span class="sq"></span>T3 · M5</span><h3>Classical control</h3><p>Feedback, PID, stability, tuning.</p><span class="status"><span class="st"></span>Not started</span></a>
+      <a class="card bar t4" href="#"><span class="id"><span class="sq"></span>T4 · P2</span><h3>Kalman filters</h3><p>Fusing noisy sensors into one belief.</p><span class="status"><span class="st"></span>Not started</span></a>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Node page</h2><span class="label">reading column without a box</span></div>
+    <div class="doc t3">
+      <aside aria-label="Tree navigation">
+        <span class="id"><span class="sq"></span>T3 · Motion &amp; control</span>
+        <ul><li>M1 Frames and transforms</li><li>M2 Kinematics: mobile</li><li>M3 Kinematics: arms</li><li>M4 Dynamics</li><li aria-current="page">M5 Classical control</li><li>M6 Modern control</li></ul>
+      </aside>
+      <article class="article">
+        <span class="id"><span class="sq"></span>T3 · M5</span>
+        <h2 class="title">Classical control</h2>
+        <div class="meta">
+          <span>Needs</span><span><a class="chip t0" href="#"><span class="sq"></span>F2 Calculus</a><a class="chip t2" href="#"><span class="sq"></span>L4 Motor control</a></span>
+          <span>Used by</span><span><a class="chip t3" href="#"><span class="sq"></span>M9 Whole-body control</a><a class="chip t5" href="#"><span class="sq"></span>I6 Legged locomotion</a></span>
+        </div>
+        <p>Don't just command: measure and correct. A <a href="#">feedback loop</a> compares where the joint is with where it should be, and pushes in proportion to the error. That one idea turns a sloppy motor into a precise one, as long as the loop doesn't overshoot and oscillate.</p>
+        <p>Every robot in this atlas runs loops like this, nested inside each other: a current loop inside a velocity loop inside a position loop, each one faster than the one around it.</p>
+        <div class="callout"><b>Common mistake</b>Integrating with a fixed dt when the loop actually runs late. Measure dt every cycle.</div>
+        <details><summary>Go deeper: the PID law</summary><p>u(t) = Kp·e(t) + Ki·∫e dt + Kd·de/dt</p></details>
+<pre>u = kp * err + ki * integral + kd * (err - prev) / dt
+u = clamp(u, -u_max, u_max)   # saturate, then anti-windup</pre>
+        <p class="err">Unstable: the gain is too high, so the demo stopped the simulation.</p>
+      </article>
+      <aside class="toc" aria-label="On this page"><span class="label">On this page</span><ul><li>What it is</li><li aria-current="true">How it works</li><li>How it connects</li><li>Try it</li><li>Sources</li></ul></aside>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Compare</h2><span class="label">X1 · actuators · ratings are placeholders</span></div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Actuator</th><th>Torque density</th><th>Precision</th><th>Backdrivable</th><th>Needs feedback</th><th>Typical robots</th></tr></thead>
+        <tbody>
+          <tr><th>Hobby servo</th><td class="rating">●●○○○<small>low</small></td><td class="rating">●●○○○<small>low</small></td><td>No</td><td>Built in</td><td>Small arms, toy legs</td></tr>
+          <tr><th>Stepper</th><td class="rating">●●○○○<small>low</small></td><td class="rating">●●●●○<small>high</small></td><td>Partly</td><td>Optional</td><td>3D printers, camera sliders</td></tr>
+          <tr><th>BLDC + harmonic drive</th><td class="rating">●●●●○<small>high</small></td><td class="rating">●●●●●<small>very high</small></td><td>Barely</td><td>Yes</td><td>Industrial and collaborative arms</td></tr>
+          <tr><th>Quasi-direct-drive</th><td class="rating">●●●○○<small>medium</small></td><td class="rating">●●●○○<small>medium</small></td><td>Yes</td><td>Yes</td><td>Quadrupeds, humanoid legs</td></tr>
+          <tr><th>Hydraulic</th><td class="rating">●●●●●<small>very high</small></td><td class="rating">●●●○○<small>medium</small></td><td>Depends</td><td>Yes</td><td>Heavy machinery, early humanoids</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Signal chain</h2><span class="label">sense · think · act</span></div>
+    <div class="chain grid-bg">
+      <div class="col sense"><h3><span class="sq"></span>Sense</h3><div class="step"><span>Encoder pulses</span><span>A/B</span></div><div class="step"><span>Timer counts ticks</span><span>MCU</span></div><div class="step"><span>Estimator fuses IMU</span><span>1 kHz</span></div></div>
+      <div class="col think"><h3><span class="sq"></span>Think</h3><div class="step"><span>RL policy</span><span>50 Hz</span></div><div class="step"><span>Joint targets</span><span>12 × q</span></div><div class="step"><span>Sent over CAN</span><span>bus</span></div></div>
+      <div class="col act"><h3><span class="sq"></span>Act</h3><div class="step"><span>PD in joint driver</span><span>10 kHz</span></div><div class="step"><span>FOC current loop</span><span>40 kHz</span></div><div class="step"><span>Torque at the joint</span><span>N·m</span></div></div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Sim demo</h2><span class="label">data colours are brighter than marks</span></div>
+    <div class="sim">
+      <div class="scene">
+        <span class="label">MuJoCo · cart-pole</span>
+        <svg width="260" height="190" viewBox="0 0 260 190" role="img" aria-label="A cart on a rail balancing a pole" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="10" y1="160" x2="250" y2="160"/>
+          <rect x="95" y="128" width="70" height="26" fill="var(--surface)"/>
+          <circle cx="110" cy="160" r="5" fill="var(--surface)"/><circle cx="150" cy="160" r="5" fill="var(--surface)"/>
+          <line x1="130" y1="128" x2="150" y2="30" stroke="var(--d-lime)" stroke-width="5"/>
+          <circle cx="130" cy="128" r="4" fill="currentColor"/>
+        </svg>
+        <button class="btn primary" type="button">Run simulation</button>
+      </div>
+      <div class="controls">
+        <label>Kp <input type="range" min="0" max="100" value="40"> <span>40</span></label>
+        <label>Ki <input type="range" min="0" max="100" value="5"> <span>5</span></label>
+        <label>Kd <input type="range" min="0" max="100" value="12"> <span>12</span></label>
+        <div class="plot" role="img" aria-label="Pole angle and motor force over time">
+          <svg width="100%" height="100%" viewBox="0 0 300 92" preserveAspectRatio="none" fill="none" stroke-width="2"><line x1="0" y1="46" x2="300" y2="46" stroke="var(--rule)"/><path d="M0 12 C30 84 60 64 90 32 S150 52 180 47 S260 46 300 46" stroke="var(--d-lime)"/><path d="M0 68 C40 20 70 40 100 56 S170 44 200 46 S270 46 300 46" stroke="var(--d-yellow)" stroke-dasharray="5 4"/></svg>
+        </div>
+        <div class="legend"><span class="t3"><span class="swatch-line"></span>Pole angle</span><span class="act"><span class="swatch-line dashed"></span>Motor force</span></div>
+      </div>
+    </div>
+  </section>
+
+  <section>
+    <div class="section-head"><h2>Accents</h2><span class="label">mark (square, bar) · data (trace)</span></div>
+    <div class="swatches">
+      <div class="sw bar t0"><span class="id"><span class="sq"></span>T0</span><p>Foundations · ink</p><div class="trace"></div></div>
+      <div class="sw bar t1"><span class="id"><span class="sq"></span>T1 · Act</span><p>Components</p><div class="trace"></div></div>
+      <div class="sw bar t2"><span class="id"><span class="sq"></span>T2</span><p>Low-level</p><div class="trace"></div></div>
+      <div class="sw bar t3"><span class="id"><span class="sq"></span>T3</span><p>Motion</p><div class="trace"></div></div>
+      <div class="sw bar t4"><span class="id"><span class="sq"></span>T4 · Sense</span><p>Perception</p><div class="trace"></div></div>
+      <div class="sw bar t5"><span class="id"><span class="sq"></span>T5 · Think</span><p>Intelligence</p><div class="trace"></div></div>
+      <div class="sw bar t6"><span class="id"><span class="sq"></span>T6</span><p>Systems</p><div class="trace"></div></div>
+    </div>
+  </section>
+</main>
+
+<script>
+  const root = document.documentElement, btn = document.getElementById('theme');
+  const label = () => { btn.textContent = root.dataset.theme === 'dark' ? 'Light' : 'Dark'; };
+  label();
+  btn.addEventListener('click', () => { root.dataset.theme = root.dataset.theme === 'dark' ? 'light' : 'dark'; try { localStorage.setItem('dof-theme', root.dataset.theme); } catch {} label(); });
+  document.querySelectorAll('.controls label').forEach(l => { const r = l.querySelector('input'), o = l.querySelector('span'); r.addEventListener('input', () => { o.textContent = r.value; }); });
+</script>
+</body>
+</html>
