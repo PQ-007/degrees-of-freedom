@@ -150,6 +150,12 @@ const nav = [
       </div>
     </footer>
     <script>
+      // Demos written into the Markdown (<cartpole-demo>…) load as they near
+      // the screen; pages without one load nothing.
+      import { upgradeDemos } from "../demos/registry";
+      upgradeDemos();
+    </script>
+    <script>
       // Phones: the nav and the language link fold into a menu.
       const header = document.querySelector<HTMLElement>(".site-header");
       const toggle = header?.querySelector<HTMLButtonElement>(".menu-toggle");

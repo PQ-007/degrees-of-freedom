@@ -17,6 +17,7 @@ const types = {
   ".png": "image/png",
   ".json": "application/json",
   ".xml": "application/xml",
+  ".wasm": "application/wasm",
 };
 
 async function file(path) {

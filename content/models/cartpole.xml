@@ -1,0 +1,34 @@
+<!--
+  Cart-pole: a cart on a straight rail with a pole hinged on top. The demo on
+  M5 Classical control pushes the cart to keep the pole upright.
+
+  What it simplifies: the cart slides without wheels, the motor is an ideal
+  force on the cart (limited to ±20 N, no motor dynamics), the hinge has no
+  friction, and nothing is flexible. Lengths in metres, masses in kilograms.
+  The rail's ends stop the cart at ±1.4 m.
+-->
+<mujoco model="cartpole">
+  <option timestep="0.002" integrator="implicitfast"/>
+  <default>
+    <joint damping="0"/>
+    <geom contype="0" conaffinity="0"/>
+  </default>
+  <worldbody>
+    <geom name="floor" type="plane" size="2 1 0.05" pos="0 0 -0.12"/>
+    <geom name="rail" type="box" size="1.6 0.03 0.02" pos="0 0 -0.07"/>
+    <geom name="stop-left" type="box" size="0.02 0.05 0.06" pos="-1.62 0 -0.04"/>
+    <geom name="stop-right" type="box" size="0.02 0.05 0.06" pos="1.62 0 -0.04"/>
+    <body name="cart" pos="0 0 0">
+      <joint name="slide" type="slide" axis="1 0 0" limited="true" range="-1.4 1.4"/>
+      <geom name="cart" type="box" size="0.18 0.1 0.05" mass="1"/>
+      <body name="pole" pos="0 0 0.05">
+        <joint name="hinge" type="hinge" axis="0 1 0"/>
+        <geom name="pole" type="capsule" fromto="0 0 0 0 0 0.8" size="0.022" mass="0.1"/>
+        <geom name="tip" type="sphere" pos="0 0 0.8" size="0.045" mass="0.02"/>
+      </body>
+    </body>
+  </worldbody>
+  <actuator>
+    <motor name="push" joint="slide" gear="1" ctrllimited="true" ctrlrange="-20 20"/>
+  </actuator>
+</mujoco>

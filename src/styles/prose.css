@@ -44,3 +44,15 @@
 .cite a:hover {
   text-decoration: underline;
 }
+
+/* Demos written into the Markdown (<cartpole-demo>…): until the element
+   loads, and without JavaScript, its own note shows in a plain frame. */
+.prose :is(cartpole-demo) {
+  display: block;
+}
+.prose .demo-nojs {
+  border: 2px dashed var(--line);
+  padding: 14px 16px;
+  margin: 28px 0;
+  color: var(--muted);
+}
