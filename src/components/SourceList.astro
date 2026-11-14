@@ -1,0 +1,82 @@
+---
+// The numbered Sources list under a page's text, for the IDs the page cites
+// (in order of first citation; see src/lib/remark-atlas.ts).
+import { getCollection } from "astro:content";
+import { t, type Lang } from "../lib/i18n";
+
+interface Props {
+  lang: Lang;
+  ids: string[];
+}
+const { lang, ids } = Astro.props;
+const all = new Map(
+  (await getCollection("sources")).map((s) => [s.data.id, s.data]),
+);
+const cited = ids.map((id) => ({ id, ...all.get(id) }));
+---
+
+{cited.length > 0 && (
+  <section class="sources" aria-labelledby="sources" data-pagefind-ignore>
+    <h2 id="sources">{t(lang, "node.sources")}</h2>
+    <ol>
+      {cited.map((s) => (
+        <li id={`src-${s.id}`}>
+          {s.sources?.map((src, i) => (
+            <>
+              {i > 0 && "; "}
+              <a href={src.url}>{src.title}</a>
+            </>
+          ))}
+          .{" "}
+          <span class="muted">
+            {t(lang, "node.checked")}: {s.checked}.
+          </span>{" "}
+          {s.uncertain && (
+            <span class="contested">
+              <strong>{t(lang, "node.contested")}:</strong> {s.uncertain[lang]}
+            </span>
+          )}{" "}
+          <a
+            class="back"
+            href={`#ref-${s.id}-1`}
+            aria-label={t(lang, "node.backToText")}
+          >
+            ↩
+          </a>
+        </li>
+      ))}
+    </ol>
+  </section>
+)}
+
+<style>
+  .sources {
+    border-top: 2px solid var(--line);
+    margin-top: 40px;
+    padding: 0;
+    font-size: 14px;
+  }
+  .sources h2 {
+    font-size: 1.2rem;
+    margin: 24px 0 12px;
+    scroll-margin-top: 84px;
+  }
+  .sources ol {
+    padding-left: 1.4em;
+  }
+  .sources li {
+    margin: 0 0 10px;
+    scroll-margin-top: 84px;
+  }
+  .sources li:target {
+    outline: 2px solid var(--hover-line);
+    outline-offset: 4px;
+  }
+  .contested {
+    display: block;
+    margin-top: 4px;
+  }
+  .back {
+    text-decoration: none;
+  }
+</style>

@@ -55,4 +55,44 @@ const sources = defineCollection({
   }),
 });
 
-export const collections = { tree, nodes, sources };
+// Compare pages: the table (one YAML per page, every language inside) and the
+// prose per language (content/compare/<lang>/<slug>.md).
+const localized = z.record(z.string(), z.string());
+const compareTables = defineCollection({
+  loader: glob({ pattern: "*.yaml", base: "content/compare" }),
+  schema: z.object({
+    id: z.string().regex(/^X\d+$/),
+    slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/),
+    nodes: z.array(z.string()),
+    columns: z.array(
+      z.object({
+        key: z.string(),
+        type: z.enum(["rating", "text"]),
+        label: localized,
+      }),
+    ),
+    rows: z.array(
+      z.object({
+        key: z.string(),
+        name: localized,
+        values: z.record(z.string(), z.union([z.number(), localized])),
+      }),
+    ),
+  }),
+});
+const comparePages = defineCollection({
+  loader: glob({
+    pattern: "*/*.md",
+    base: "content/compare",
+    generateId: ({ entry }) => entry.replace(/\.md$/, ""),
+  }),
+  schema: z.object({ title: z.string().min(1), summary: z.string().min(1) }),
+});
+
+export const collections = {
+  tree,
+  nodes,
+  sources,
+  compareTables,
+  comparePages,
+};

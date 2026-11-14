@@ -2,6 +2,7 @@
 // (src/lib/tree.ts) and fails the build with every problem listed.
 import { getCollection, type CollectionEntry } from "astro:content";
 import { languages, localePath, type Lang } from "./i18n";
+import { checkCompare, type CompareTable } from "./compare";
 import { checkTree, compareIds, usedBy, type TreeNode } from "./tree";
 
 export interface AtlasNode extends TreeNode {
@@ -50,6 +51,66 @@ export async function getAtlas(lang: Lang): Promise<AtlasNode[]> {
       summary: entry.data.summary,
       usedBy: users.get(n.id) ?? [],
       url: localePath(base, lang, `node/${n.slug}/`),
+      entry,
+    };
+  });
+}
+
+export interface ComparePage {
+  table: CompareTable;
+  title: string;
+  summary: string;
+  url: string;
+  entry: CollectionEntry<"comparePages">;
+}
+
+let comparesChecked:
+  | Promise<{
+      tables: CompareTable[];
+      pages: CollectionEntry<"comparePages">[];
+    }>
+  | undefined;
+
+function loadCompares() {
+  comparesChecked ??= (async () => {
+    const { nodes } = await load();
+    const tables = (await getCollection("compareTables"))
+      .map((e) => e.data as CompareTable)
+      .sort((a, b) => Number(a.id.slice(1)) - Number(b.id.slice(1)));
+    const pages = await getCollection("comparePages");
+    const nodeIds = new Set(nodes.map((n) => n.id));
+    const errors = tables.flatMap((table) =>
+      checkCompare(
+        table,
+        nodeIds,
+        languages,
+        pages
+          .filter((p) => p.id.endsWith(`/${table.slug}`))
+          .map((p) => p.id.split("/")[0] ?? ""),
+      ),
+    );
+    if (errors.length > 0) {
+      throw new Error(
+        `The compare pages have ${errors.length} problem(s):\n- ${errors.join("\n- ")}`,
+      );
+    }
+    return { tables, pages };
+  })();
+  return comparesChecked;
+}
+
+/** Every compare page, in ID order, with its text in `lang`. */
+export async function getCompares(lang: Lang): Promise<ComparePage[]> {
+  const { tables, pages } = await loadCompares();
+  const base = import.meta.env.BASE_URL;
+  return tables.map((table) => {
+    const entry = pages.find((p) => p.id === `${lang}/${table.slug}`);
+    if (!entry) throw new Error(`${table.id} has no ${lang} page`); // checkCompare already rules this out
+    return {
+      table,
+      title: entry.data.title,
+      summary: entry.data.summary,
+      url: localePath(base, lang, `compare/${table.slug}/`),
       entry,
     };
   });

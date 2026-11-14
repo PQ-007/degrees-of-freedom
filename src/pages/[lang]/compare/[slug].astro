@@ -1,0 +1,355 @@
+---
+// A compare page: one table (options as rows, fixed columns, ratings as dots
+// with a word), sortable; then "How to choose" and each option in the text;
+// then sources. On phones the table becomes one card per option.
+import { render } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import SourceList from "../../../components/SourceList.astro";
+import { getAtlas, getCompares } from "../../../lib/atlas";
+import { dots, type Localized } from "../../../lib/compare";
+import { format, languages, localePath, t, type Lang } from "../../../lib/i18n";
+import type { MessageKey } from "../../../i18n/en";
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of languages) {
+    for (const page of await getCompares(lang)) {
+      paths.push({
+        params: { lang, slug: page.table.slug },
+        props: { id: page.table.id },
+      });
+    }
+  }
+  return paths;
+}
+
+const lang = Astro.params.lang as Lang;
+const { id } = Astro.props;
+const page = (await getCompares(lang)).find((p) => p.table.id === id);
+if (!page) throw new Error(`no compare page ${id}`);
+const { table } = page;
+const atlas = await getAtlas(lang);
+const topics = table.nodes
+  .map((n) => atlas.find((a) => a.id === n))
+  .filter((n) => n !== undefined);
+const { Content, remarkPluginFrontmatter } = await render(page.entry);
+const citedIds =
+  (remarkPluginFrontmatter["citations"] as string[] | undefined) ?? [];
+
+const L = (v: Localized) => v[lang] ?? "";
+const ratingWord = (n: number) => t(lang, `rating.${n}` as MessageKey);
+const ratingCols = table.columns.filter((c) => c.type === "rating");
+const ratingData = (values: Record<string, number | Localized>) =>
+  Object.fromEntries(
+    ratingCols.map((c) => [`data-r-${c.key}`, String(values[c.key])]),
+  );
+const base = import.meta.env.BASE_URL;
+---
+
+<Base lang={lang} title={page.title} description={page.summary}>
+  <div class="wrap page">
+    <article data-pagefind-body data-pagefind-meta={`id:${table.id}`}>
+      <nav class="crumbs" aria-label="Breadcrumb" data-pagefind-ignore>
+        <a href={localePath(base, lang, "compare/")}>
+          {t(lang, "compare.title")}
+        </a>
+        <span aria-hidden="true">›</span>
+        <span class="id">{table.id}</span>
+      </nav>
+      <h1>{page.title}</h1>
+      <p class="summary">{page.summary}</p>
+
+      {topics.length > 0 && (
+        <dl class="meta" data-pagefind-ignore>
+          <dt>{t(lang, "compare.topics")}</dt>
+          <dd>
+            {topics.map((n) => (
+              <a class={`chip t${n.tier}`} href={n.url}>
+                <span class="sq" aria-hidden="true" />
+                {n.id} {n.title}
+              </a>
+            ))}
+          </dd>
+        </dl>
+      )}
+
+      <div class="tools" data-pagefind-ignore>
+        <label for="sort">{t(lang, "compare.sortBy")}</label>
+        <select id="sort" data-sort>
+          <option value="">{t(lang, "compare.authored")}</option>
+          {ratingCols.map((c) => (
+            <>
+              <option value={`${c.key}:desc`}>
+                {format(t(lang, "compare.highFirst"), { column: L(c.label) })}
+              </option>
+              <option value={`${c.key}:asc`}>
+                {format(t(lang, "compare.lowFirst"), { column: L(c.label) })}
+              </option>
+            </>
+          ))}
+        </select>
+      </div>
+      <p class="note muted">{t(lang, "compare.ratingsNote")}</p>
+
+      <div
+        class="table-frame"
+        tabindex="0"
+        role="region"
+        aria-label={page.title}
+      >
+        <table class="compare">
+          <thead>
+            <tr>
+              <th scope="col">{t(lang, "compare.option")}</th>
+              {table.columns.map((c) => (
+                <th scope="col">{L(c.label)}</th>
+              ))}
+            </tr>
+          </thead>
+          <tbody data-sortable>
+            {table.rows.map((row, i) => (
+              <tr data-order={i} {...ratingData(row.values)}>
+                <th scope="row">{L(row.name)}</th>
+                {table.columns.map((c) => {
+                  const v = row.values[c.key];
+                  return typeof v === "number" ? (
+                    <td class="rating">
+                      <span class="dots" aria-hidden="true">
+                        {dots(v)}
+                      </span>{" "}
+                      {ratingWord(v)}
+                      <span class="visually-hidden">
+                        {" "}
+                        ({format(t(lang, "compare.outOf"), { n: v })})
+                      </span>
+                    </td>
+                  ) : (
+                    <td>{v ? L(v) : ""}</td>
+                  );
+                })}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <ul class="option-cards" data-sortable>
+        {table.rows.map((row, i) => (
+          <li class="card" data-order={i} {...ratingData(row.values)}>
+            <h2>{L(row.name)}</h2>
+            <dl>
+              {table.columns.map((c) => {
+                const v = row.values[c.key];
+                return (
+                  <>
+                    <dt>{L(c.label)}</dt>
+                    <dd class={typeof v === "number" ? "rating" : undefined}>
+                      {typeof v === "number" ? (
+                        <>
+                          <span class="dots" aria-hidden="true">
+                            {dots(v)}
+                          </span>{" "}
+                          {ratingWord(v)}
+                          <span class="visually-hidden">
+                            {" "}
+                            ({format(t(lang, "compare.outOf"), { n: v })})
+                          </span>
+                        </>
+                      ) : v ? (
+                        L(v)
+                      ) : (
+                        ""
+                      )}
+                    </dd>
+                  </>
+                );
+              })}
+            </dl>
+          </li>
+        ))}
+      </ul>
+
+      <div class="prose">
+        <Content />
+      </div>
+
+      <SourceList lang={lang} ids={citedIds} />
+    </article>
+  </div>
+</Base>
+
+<style>
+  .page {
+    max-width: 1320px;
+    padding-top: 40px;
+    padding-bottom: 64px;
+  }
+  article > .prose,
+  article > .crumbs,
+  article > h1,
+  article > .summary,
+  article > .meta {
+    max-width: 46rem;
+  }
+  .crumbs {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    font-size: 14px;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 2.6rem);
+    letter-spacing: -0.035em;
+    margin: 16px 0 12px;
+  }
+  .summary {
+    font-size: 1.15rem;
+    margin: 0 0 20px;
+  }
+  .meta {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 16px;
+    align-items: baseline;
+    margin: 0 0 24px;
+    font-size: 14px;
+  }
+  .meta dt {
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .meta dd {
+    margin: 0;
+  }
+
+  .tools {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  select {
+    font: 500 14px var(--font);
+    color: var(--ink);
+    background: var(--surface);
+    border: 2px solid var(--line);
+    padding: 7px 10px;
+    border-radius: 0;
+    max-width: 100%;
+  }
+  select:hover {
+    border-color: var(--hover-line);
+  }
+  .note {
+    font-size: 13.5px;
+    margin: 10px 0 14px;
+  }
+
+  /* The table: bordered, inverted header row, first column stays put while
+     the rest scrolls sideways. */
+  .table-frame {
+    /* Positioned, so the visually hidden "n of 5" texts (absolutely
+       positioned) are clipped by the frame instead of widening the page. */
+    position: relative;
+    overflow-x: auto;
+    border: 2px solid var(--line);
+    background: var(--surface);
+  }
+  table.compare {
+    display: table;
+    width: 100%;
+    min-width: 1100px;
+    margin: 0;
+    border: 0;
+    font-size: 14px;
+  }
+  .compare th[scope="row"] {
+    position: sticky;
+    left: 0;
+    background: var(--surface);
+    border-right: 2px solid var(--line);
+    font-weight: 700;
+    min-width: 170px;
+  }
+  .compare thead th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    border-right: 2px solid var(--line);
+  }
+  .compare td,
+  .compare th {
+    padding: 10px 12px;
+  }
+  .rating {
+    white-space: nowrap;
+  }
+  .dots {
+    font-family: var(--mono);
+    letter-spacing: 1px;
+  }
+
+  .option-cards {
+    display: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 16px;
+  }
+  .option-cards h2 {
+    font-size: 1.1rem;
+    margin: 0 0 10px;
+  }
+  .option-cards dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 40%) minmax(0, 1fr);
+    gap: 6px 12px;
+    font-size: 14px;
+  }
+  .option-cards dt {
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .option-cards dd {
+    margin: 0;
+  }
+  .option-cards .rating {
+    white-space: normal;
+  }
+
+  @media (max-width: 760px) {
+    .table-frame {
+      display: none;
+    }
+    .option-cards {
+      display: grid;
+    }
+    .meta {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 4px;
+    }
+  }
+</style>
+
+<script>
+  // Sort the table rows and the phone cards together.
+  const select = document.querySelector<HTMLSelectElement>("[data-sort]");
+  const lists = document.querySelectorAll<HTMLElement>("[data-sortable]");
+  select?.addEventListener("change", () => {
+    const [key, dir] = select.value.split(":");
+    for (const list of lists) {
+      const items = [...list.children] as HTMLElement[];
+      const order = (el: HTMLElement) => Number(el.dataset["order"]);
+      items.sort((a, b) => {
+        if (!key) return order(a) - order(b);
+        const va = Number(a.getAttribute(`data-r-${key}`));
+        const vb = Number(b.getAttribute(`data-r-${key}`));
+        return (dir === "asc" ? va - vb : vb - va) || order(a) - order(b);
+      });
+      list.append(...items);
+    }
+  });
+</script>

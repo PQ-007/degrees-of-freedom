@@ -8,6 +8,8 @@ const pages = [
   { name: "tree-topic", path: "{lang}/tree/#M5" },
   { name: "node", path: "{lang}/node/classical-control/" },
   { name: "node-full", path: "{lang}/node/what-is-robotics/" },
+  { name: "compare-index", path: "{lang}/compare/" },
+  { name: "compare", path: "{lang}/compare/actuators/" },
   { name: "search", path: "{lang}/search/?q=control" },
   { name: "404", path: "404.html" },
 ];

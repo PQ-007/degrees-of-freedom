@@ -2,9 +2,10 @@
 // A node page: the tier's topics on the left, the article in the middle, "On
 // this page" on the right (PLAN.md §4). Below ~1200px the tier list folds into
 // a bar above the article; below ~900px so does "On this page".
-import { getCollection, render } from "astro:content";
+import { render } from "astro:content";
+import SourceList from "../../../components/SourceList.astro";
 import Base from "../../../layouts/Base.astro";
-import { getAtlas } from "../../../lib/atlas";
+import { getAtlas, getCompares } from "../../../lib/atlas";
 import { format, languages, localePath, t, type Lang } from "../../../lib/i18n";
 import { tiers } from "../../../lib/tiers";
 
@@ -35,18 +36,19 @@ const { Content, headings, remarkPluginFrontmatter } = await render(node.entry);
 const hasBody = (node.entry.body ?? "").trim().length > 0;
 const citedIds =
   (remarkPluginFrontmatter["citations"] as string[] | undefined) ?? [];
-const allSources = new Map(
-  (await getCollection("sources")).map((s) => [s.data.id, s.data]),
-);
-const cited = citedIds.map((sid) => ({ id: sid, ...allSources.get(sid) }));
 
 const toc = [
   ...headings
     .filter((h) => h.depth === 2)
     .map((h) => ({ slug: h.slug, text: h.text })),
-  ...(cited.length ? [{ slug: "sources", text: t(lang, "node.sources") }] : []),
+  ...(citedIds.length
+    ? [{ slug: "sources", text: t(lang, "node.sources") }]
+    : []),
 ];
 const base = import.meta.env.BASE_URL;
+const compares = (await getCompares(lang)).filter((c) =>
+  c.table.nodes.includes(id),
+);
 const tierUrl = localePath(base, lang, `tree/#${tier?.id ?? ""}`);
 const chips = (list: string[]) =>
   list.map((x) => byId.get(x)).filter((x) => x !== undefined);
@@ -131,6 +133,18 @@ const chips = (list: string[]) =>
                   </a>
                 ))}
           </dd>
+          {compares.length > 0 && (
+            <>
+              <dt>{t(lang, "node.compare")}</dt>
+              <dd>
+                {compares.map((c) => (
+                  <a class="chip" href={c.url}>
+                    {c.table.id} {c.title}
+                  </a>
+                ))}
+              </dd>
+            </>
+          )}
         </dl>
 
         {toc.length > 0 && (
@@ -156,44 +170,7 @@ const chips = (list: string[]) =>
           )}
         </div>
 
-        {cited.length > 0 && (
-          <section
-            class="sources"
-            aria-labelledby="sources"
-            data-pagefind-ignore
-          >
-            <h2 id="sources">{t(lang, "node.sources")}</h2>
-            <ol>
-              {cited.map((s) => (
-                <li id={`src-${s.id}`}>
-                  {s.sources?.map((src, i) => (
-                    <>
-                      {i > 0 && "; "}
-                      <a href={src.url}>{src.title}</a>
-                    </>
-                  ))}
-                  .{" "}
-                  <span class="muted">
-                    {t(lang, "node.checked")}: {s.checked}.
-                  </span>{" "}
-                  {s.uncertain && (
-                    <span class="contested">
-                      <strong>{t(lang, "node.contested")}:</strong>{" "}
-                      {s.uncertain[lang]}
-                    </span>
-                  )}{" "}
-                  <a
-                    class="back"
-                    href={`#ref-${s.id}-1`}
-                    aria-label={t(lang, "node.backToText")}
-                  >
-                    ↩
-                  </a>
-                </li>
-              ))}
-            </ol>
-          </section>
-        )}
+        <SourceList lang={lang} ids={citedIds} />
 
         <nav class="pager" aria-label={tierName} data-pagefind-ignore>
           {prev ? (
@@ -336,75 +313,6 @@ const chips = (list: string[]) =>
   }
   .meta dd {
     margin: 0;
-  }
-
-  /* The text itself: unboxed, one reading column. */
-  .prose :global(h2) {
-    font-size: 1.45rem;
-    margin: 40px 0 12px;
-    scroll-margin-top: 84px;
-  }
-  .prose :global(p),
-  .prose :global(li) {
-    max-width: 68ch;
-  }
-  .prose :global(ol),
-  .prose :global(ul) {
-    padding-left: 1.4em;
-  }
-  .prose :global(li) {
-    margin: 6px 0;
-  }
-  .prose :global(.examples) {
-    border: 2px solid var(--line);
-    background: var(--surface);
-    padding: 4px 18px;
-    margin: 32px 0;
-  }
-  .prose :global(.examples ul) {
-    padding-left: 1.2em;
-  }
-  :global(.cite) {
-    font: 600 11px var(--mono);
-    line-height: 0;
-    margin-left: 1px;
-  }
-  :global(.cite a) {
-    text-decoration: none;
-    padding: 0 2px;
-  }
-  :global(.cite a:hover) {
-    text-decoration: underline;
-  }
-
-  .sources {
-    border-top: 2px solid var(--line);
-    margin-top: 40px;
-    padding: 0;
-    font-size: 14px;
-  }
-  .sources h2 {
-    font-size: 1.2rem;
-    margin: 24px 0 12px;
-    scroll-margin-top: 84px;
-  }
-  .sources ol {
-    padding-left: 1.4em;
-  }
-  .sources li {
-    margin: 0 0 10px;
-    scroll-margin-top: 84px;
-  }
-  .sources li:target {
-    outline: 2px solid var(--hover-line);
-    outline-offset: 4px;
-  }
-  .contested {
-    display: block;
-    margin-top: 4px;
-  }
-  .back {
-    text-decoration: none;
   }
 
   .pager {

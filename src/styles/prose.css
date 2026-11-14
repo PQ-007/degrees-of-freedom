@@ -1,0 +1,46 @@
+/* Page text written in Markdown (node and compare pages): unboxed, one
+   reading column; citations; the dated Real examples box. */
+
+.prose h2 {
+  font-size: 1.45rem;
+  margin: 40px 0 12px;
+  scroll-margin-top: 84px;
+}
+.prose h3 {
+  font-size: 1.1rem;
+  margin: 28px 0 8px;
+  scroll-margin-top: 84px;
+}
+.prose p,
+.prose li {
+  max-width: 68ch;
+}
+.prose ol,
+.prose ul {
+  padding-left: 1.4em;
+}
+.prose li {
+  margin: 6px 0;
+}
+.prose .examples {
+  border: 2px solid var(--line);
+  background: var(--surface);
+  padding: 4px 18px;
+  margin: 32px 0;
+}
+.prose .examples ul {
+  padding-left: 1.2em;
+}
+
+.cite {
+  font: 600 11px var(--mono);
+  line-height: 0;
+  margin-left: 1px;
+}
+.cite a {
+  text-decoration: none;
+  padding: 0 2px;
+}
+.cite a:hover {
+  text-decoration: underline;
+}

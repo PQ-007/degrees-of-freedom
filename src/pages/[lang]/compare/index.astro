@@ -1,0 +1,62 @@
+---
+// All compare pages. More arrive as they are written (CONTENT_PLAN.md §4).
+import Base from "../../../layouts/Base.astro";
+import { getCompares } from "../../../lib/atlas";
+import { languages, t, type Lang } from "../../../lib/i18n";
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const compares = await getCompares(lang);
+---
+
+<Base lang={lang} title={t(lang, "compare.title")}>
+  <div class="wrap page">
+    <h1>{t(lang, "compare.title")}</h1>
+    <p class="lead">{t(lang, "compare.lead")}</p>
+    <ul class="list">
+      {compares.map((c) => (
+        <li>
+          <a class="card" href={c.url}>
+            <span class="id">{c.table.id}</span>
+            <h2>{c.title}</h2>
+            <p>{c.summary}</p>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </div>
+</Base>
+
+<style>
+  .page {
+    padding-top: 40px;
+    padding-bottom: 64px;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+  }
+  .lead {
+    font-size: 1.1rem;
+    margin: 0 0 28px;
+  }
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 20px;
+  }
+  .card h2 {
+    font-size: 1.25rem;
+    margin: 10px 0 6px;
+  }
+  .card p {
+    margin: 0;
+    color: var(--muted);
+    font-size: 15px;
+  }
+</style>
