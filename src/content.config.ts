@@ -89,6 +89,7 @@ const hardwareData = defineCollection({
   schema: z.object({
     id: z.string(),
     slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/),
+    role: z.enum(["sense", "think", "act"]),
     nodes: z.array(z.string()),
     compare: z.string().optional(),
     types: z.array(z.object({ key: z.string(), node: z.string() })),

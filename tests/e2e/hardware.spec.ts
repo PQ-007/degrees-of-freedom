@@ -170,4 +170,31 @@ test.describe("Hardware", () => {
       page.locator("details.compare-fold table.compare tbody tr"),
     ).toHaveCount(6);
   });
+
+  test("the sensors row: eight kinds, each page cited", async ({ page }) => {
+    await page.goto("en/hardware/");
+    const row = page.getByRole("region", { name: "Sensors" });
+    await expect(row.locator(".tile")).toHaveCount(8);
+    await row.locator(".tile", { hasText: "2D lidar" }).click();
+    await expect(page).toHaveURL(/\/en\/hardware\/sensors\/lidar\/$/);
+    await expect(page.locator("aside.examples")).toContainText("RPLIDAR A1");
+    await expect(page.locator("li#src-rplidar-a1")).toBeAttached();
+  });
+
+  test("each row has its Sense, Think or Act colour, named in words", async ({
+    page,
+  }) => {
+    await page.goto("en/hardware/");
+    for (const [name, role, word] of [
+      ["Motors and actuators", "act", "Act"],
+      ["Microcontrollers and computers", "think", "Think"],
+      ["Sensors", "sense", "Sense"],
+    ] as const) {
+      const row = page.getByRole("region", { name });
+      await expect(row).toHaveClass(new RegExp(`\\b${role}\\b`));
+      await expect(row.locator(".tone")).toHaveText(word);
+    }
+    await page.goto("en/hardware/sensors/imu/");
+    await expect(page.locator(".wrap.page")).toHaveClass(/\bsense\b/);
+  });
 });

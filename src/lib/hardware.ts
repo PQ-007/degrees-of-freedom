@@ -24,6 +24,9 @@ export interface HardwareType {
 export interface HardwareCategory {
   id: string;
   slug: string;
+  /** Its place in Sense · Think · Act: the colour of its row and pages
+   * (the user, 2026-11-15: not all yellow). */
+  role: "sense" | "think" | "act";
   nodes: string[];
   compare?: string | undefined;
   types: HardwareType[];
@@ -59,6 +62,8 @@ export function checkHardware(
   const errors: string[] = [];
   const at = `hardware/${cat.slug}.yaml`;
   if (!/^H\d+$/.test(cat.id)) errors.push(`${at}: the ID is H and a number`);
+  if (!["sense", "think", "act"].includes(cat.role))
+    errors.push(`${at}: role must be sense, think or act`);
   for (const n of cat.nodes) {
     if (!nodeIds.has(n))
       errors.push(`${at} links node ${n}, which is not in nodes.yaml`);

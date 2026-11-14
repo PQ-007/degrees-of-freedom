@@ -52,7 +52,7 @@ const rowLinks = Object.fromEntries(
 ---
 
 <Base lang={lang} title={type.title} description={type.summary}>
-  <div class="wrap page t1">
+  <div class={`wrap page ${category.data.role}`}>
     <article data-pagefind-body>
       <nav class="crumbs" aria-label="Breadcrumb" data-pagefind-ignore>
         <a href={localePath(base, lang, "hardware/")}>

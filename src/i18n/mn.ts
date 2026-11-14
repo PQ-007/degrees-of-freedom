@@ -57,7 +57,7 @@ export const mn: Record<MessageKey, string> = {
   "hardware.title": "Техник хангамж",
   "hardware.lead":
     "Роботыг бүтээдэг эд ангиуд, төрөл бүр нэг эгнээнд. Хэрхэн ажилладаг, юунд тохирох, бодит загваруудыг нь харахын тулд картаа сонго.",
-  "hardware.next": "Дараа нь: мэдрэгч.",
+  "hardware.next": "Дараа нь: тэжээл, хөдөлгүүрийн драйвер.",
   "hardware.types": "Төрлүүд",
   "hardware.compare": "Зэрэгцүүлэн харьцуулах",
   "hardware.compareLead":

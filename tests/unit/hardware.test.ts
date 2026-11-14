@@ -29,6 +29,7 @@ const figures = new Set(
 const cat = (): HardwareCategory => ({
   id: "H9",
   slug: "demo",
+  role: "sense",
   nodes: ["C4"],
   types: [
     { key: "stepper", node: "C4" },

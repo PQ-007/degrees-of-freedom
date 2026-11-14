@@ -23,18 +23,44 @@ interface Props {
   href?: string | undefined;
   items: Item[];
   level?: 2 | 3;
+  /** A colour class (sense, think, act) for the drawings' accent. */
+  tone?: string | undefined;
+  /** The word for that colour (Sense, Think, Act), shown with its square,
+   * so the colour never carries the meaning alone. */
+  toneLabel?: string | undefined;
 }
 
-const { id, lang, heading, summary, href, items, level = 2 } = Astro.props;
+const {
+  id,
+  lang,
+  heading,
+  summary,
+  href,
+  items,
+  level = 2,
+  tone,
+  toneLabel,
+} = Astro.props;
 const H = level === 2 ? "h2" : "h3";
 // The drawings are decorative on cards (the title says what it is).
 const art = (svg: string) =>
   svg.replace(/<svg\b/, '<svg aria-hidden="true" focusable="false"');
 ---
 
-<section class="row" id={id} aria-labelledby={`${id}-title`} data-carousel>
+<section
+  class:list={["row", tone]}
+  id={id}
+  aria-labelledby={`${id}-title`}
+  data-carousel
+>
   <div class="row-head">
     <div>
+      {toneLabel && (
+        <p class="tone">
+          <span class="sq" aria-hidden="true" />
+          {toneLabel}
+        </p>
+      )}
       <H id={`${id}-title`}>{href ? <a href={href}>{heading}</a> : heading}</H>
       {summary && <p class="muted">{summary}</p>}
     </div>
@@ -97,6 +123,16 @@ const art = (svg: string) =>
   .row-head p {
     margin: 4px 0 0;
     font-size: 14.5px;
+  }
+  .row-head .tone {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin: 0 0 6px;
+    font: 600 12px/1 var(--mono);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--muted);
   }
   .arrows {
     display: flex;

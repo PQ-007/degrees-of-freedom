@@ -236,6 +236,9 @@ a.card:hover {
   :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .wobble {
     animation: art-wobble 2s ease-in-out infinite;
   }
+  :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .press {
+    animation: art-press 1.2s ease-in-out infinite;
+  }
   :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .grip-right {
     animation: art-grip-right 1.4s ease-in-out infinite;
   }
@@ -335,5 +338,10 @@ a.card:hover {
   }
   50% {
     transform: rotate(9deg);
+  }
+}
+@keyframes art-press {
+  50% {
+    transform: translateY(6px);
   }
 }
