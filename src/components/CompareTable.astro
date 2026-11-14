@@ -11,11 +11,14 @@ interface Props {
   table: CompareTable;
   lang: Lang;
   label: string;
-  /** Row key → the anchor of that option's entry on the page. */
+  /** Row key → the link to that option's entry. */
   rowLinks?: Record<string, string>;
+  /** The phone cards' heading level, to follow the page's own headings. */
+  cardLevel?: 2 | 3;
 }
 
-const { table, lang, label, rowLinks = {} } = Astro.props;
+const { table, lang, label, rowLinks = {}, cardLevel = 3 } = Astro.props;
+const CardHeading = cardLevel === 2 ? "h2" : "h3";
 const L = (v: Localized) => v[lang] ?? "";
 const ratingWord = (n: number) => t(lang, `rating.${n}` as MessageKey);
 const ratingCols = table.columns.filter((c) => c.type === "rating");
@@ -91,13 +94,13 @@ const sortId = `sort-${table.id}`;
   <ul class="option-cards" data-sortable>
     {table.rows.map((row, i) => (
       <li class="card" data-order={i} {...ratingData(row.values)}>
-        <h3>
+        <CardHeading class="card-title">
           {rowLinks[row.key] ? (
             <a href={rowLinks[row.key]}>{L(row.name)}</a>
           ) : (
             L(row.name)
           )}
-        </h3>
+        </CardHeading>
         <dl>
           {table.columns.map((c) => {
             const v = row.values[c.key];
@@ -207,7 +210,7 @@ const sortId = `sort-${table.id}`;
     padding: 0;
     gap: 16px;
   }
-  .option-cards h3 {
+  .option-cards .card-title {
     font-size: 1.1rem;
     margin: 0 0 10px;
   }

@@ -1,0 +1,218 @@
+---
+// A row of picture cards that scrolls sideways (the user, 2026-11-14:
+// Hardware like a streaming catalogue). The cards are plain links in a list,
+// so the row works from the keyboard and without JavaScript (swipe or
+// scroll); Previous and Next scroll it by a screenful.
+import { t, type Lang } from "../lib/i18n";
+
+interface Item {
+  url: string;
+  title: string;
+  summary: string;
+  svg: string;
+  /** Marks the card for the page you're on. */
+  current?: boolean;
+}
+
+interface Props {
+  id: string;
+  lang: Lang;
+  heading: string;
+  summary?: string | undefined;
+  /** Where the heading links to, if anywhere. */
+  href?: string | undefined;
+  items: Item[];
+  level?: 2 | 3;
+}
+
+const { id, lang, heading, summary, href, items, level = 2 } = Astro.props;
+const H = level === 2 ? "h2" : "h3";
+// The drawings are decorative on cards (the title says what it is).
+const art = (svg: string) =>
+  svg.replace(/<svg\b/, '<svg aria-hidden="true" focusable="false"');
+---
+
+<section class="row" id={id} aria-labelledby={`${id}-title`} data-carousel>
+  <div class="row-head">
+    <div>
+      <H id={`${id}-title`}>{href ? <a href={href}>{heading}</a> : heading}</H>
+      {summary && <p class="muted">{summary}</p>}
+    </div>
+    <div class="arrows js-only">
+      <button
+        type="button"
+        class="btn small"
+        data-step="-1"
+        aria-label={`${t(lang, "carousel.prev")}: ${heading}`}
+      >
+        ←
+      </button>
+      <button
+        type="button"
+        class="btn small"
+        data-step="1"
+        aria-label={`${t(lang, "carousel.next")}: ${heading}`}
+      >
+        →
+      </button>
+    </div>
+  </div>
+  <ul class="track" data-track>
+    {items.map((item) => (
+      <li>
+        <a
+          class="tile"
+          href={item.url}
+          aria-current={item.current ? "page" : undefined}
+        >
+          <span class="art line-art" set:html={art(item.svg)} />
+          <span class="name">{item.title}</span>
+          <span class="line">{item.summary}</span>
+        </a>
+      </li>
+    ))}
+  </ul>
+</section>
+
+<style>
+  .row {
+    margin: 0 0 40px;
+    scroll-margin-top: 84px;
+  }
+  .row-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 12px;
+  }
+  .row-head h2,
+  .row-head h3 {
+    margin: 0;
+    font-size: 1.35rem;
+  }
+  .row-head h3 {
+    font-size: 1.15rem;
+  }
+  .row-head p {
+    margin: 4px 0 0;
+    font-size: 14.5px;
+  }
+  .arrows {
+    display: flex;
+    gap: 8px;
+    flex: none;
+  }
+  .arrows .btn:disabled {
+    opacity: 0.4;
+    cursor: default;
+    box-shadow: none;
+    transform: none;
+  }
+  :global(html:not(.js)) .js-only {
+    display: none;
+  }
+
+  /* The track: one line of cards, scrolling sideways, snapping to cards. */
+  .track {
+    /* Positioned, so a card's offsetLeft is measured from the track. */
+    position: relative;
+    list-style: none;
+    margin: 0;
+    padding: 4px 4px 12px;
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(200px, 230px);
+    gap: 16px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scroll-padding-left: 4px;
+    scrollbar-width: thin;
+  }
+  .track > li {
+    scroll-snap-align: start;
+  }
+  .tile {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    border: 2px solid var(--line);
+    background: var(--surface);
+    text-decoration: none;
+    color: var(--ink);
+  }
+  .tile:hover {
+    border-color: var(--hover-line);
+    box-shadow: var(--shadow-sm);
+    transform: translate(-2px, -2px);
+  }
+  .tile[aria-current] {
+    outline: 3px solid var(--line);
+    outline-offset: -6px;
+  }
+  .art {
+    display: block;
+    padding: 10px 14px 4px;
+    border-bottom: 2px solid var(--line);
+    background-image: radial-gradient(var(--grid) 1px, transparent 1.2px);
+    background-size: 16px 16px;
+  }
+  .name {
+    display: block;
+    padding: 10px 12px 2px;
+    font-weight: 700;
+    font-size: 15.5px;
+  }
+  .line {
+    display: block;
+    padding: 0 12px 12px;
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .tile:hover {
+      transform: none;
+    }
+    .track {
+      scroll-behavior: auto;
+    }
+  }
+</style>
+
+<script>
+  // Previous / Next scroll a row by about a screenful, and turn off at the ends.
+  for (const row of document.querySelectorAll<HTMLElement>("[data-carousel]")) {
+    const track = row.querySelector<HTMLElement>("[data-track]");
+    const buttons = [
+      ...row.querySelectorAll<HTMLButtonElement>("button[data-step]"),
+    ];
+    if (!track) continue;
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
+    const sync = () => {
+      const max = track.scrollWidth - track.clientWidth - 2;
+      for (const b of buttons) {
+        const back = b.dataset["step"] === "-1";
+        b.disabled = back ? track.scrollLeft <= 2 : track.scrollLeft >= max;
+      }
+    };
+    for (const b of buttons) {
+      b.addEventListener("click", () => {
+        track.scrollBy({
+          left: Number(b.dataset["step"]) * track.clientWidth * 0.9,
+          behavior: reduced.matches ? "auto" : "smooth",
+        });
+      });
+    }
+    track.addEventListener("scroll", sync, { passive: true });
+    window.addEventListener("resize", sync);
+    // Start with the current card in view, if there is one (scrolling only
+    // the row, not the page).
+    const current = track
+      .querySelector<HTMLElement>("[aria-current]")
+      ?.closest("li");
+    if (current)
+      track.scrollLeft =
+        current.offsetLeft - (track.clientWidth - current.clientWidth) / 2;
+    sync();
+  }
+</script>

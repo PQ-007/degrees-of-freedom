@@ -1,0 +1,215 @@
+---
+// One kind of part (the user, 2026-11-14: figures first, little text): its
+// drawing, name and one line; the facts card, a paragraph and common models;
+// the category's comparison folded in as a side feature, with its "Which
+// one?" advice; more of the same category as a row of cards; sources.
+import { render } from "astro:content";
+import Base from "../../../../layouts/Base.astro";
+import Carousel from "../../../../components/Carousel.astro";
+import CompareTable from "../../../../components/CompareTable.astro";
+import SourceList from "../../../../components/SourceList.astro";
+import { getHardware } from "../../../../lib/atlas";
+import {
+  format,
+  languages,
+  localePath,
+  t,
+  type Lang,
+} from "../../../../lib/i18n";
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of languages) {
+    for (const c of await getHardware(lang)) {
+      for (const ty of c.types) {
+        paths.push({
+          params: { lang, category: c.data.slug, type: ty.key },
+          props: { slug: c.data.slug, key: ty.key },
+        });
+      }
+    }
+  }
+  return paths;
+}
+
+const lang = Astro.params.lang as Lang;
+const { slug, key } = Astro.props;
+const category = (await getHardware(lang)).find((c) => c.data.slug === slug);
+const type = category?.types.find((ty) => ty.key === key);
+if (!category || !type) throw new Error(`no Hardware page ${slug}/${key}`);
+const { Content, remarkPluginFrontmatter } = await render(type.entry);
+const citedIds =
+  (remarkPluginFrontmatter["citations"] as string[] | undefined) ?? [];
+const { Content: Advice } = await render(category.entry);
+const base = import.meta.env.BASE_URL;
+const figure = type.svg.replace(
+  /<svg\b/,
+  `<svg role="img" aria-label="${type.figureAlt.replace(/"/g, "&quot;")}"`,
+);
+const rowLinks = Object.fromEntries(
+  category.types.map((ty) => [ty.key, ty.url]),
+);
+---
+
+<Base lang={lang} title={type.title} description={type.summary}>
+  <div class="wrap page t1">
+    <article data-pagefind-body>
+      <nav class="crumbs" aria-label="Breadcrumb" data-pagefind-ignore>
+        <a href={localePath(base, lang, "hardware/")}>
+          {t(lang, "hardware.title")}
+        </a>
+        <span aria-hidden="true">›</span>
+        <a href={category.url}>{category.title}</a>
+      </nav>
+
+      <header class="hero">
+        <figure class="art line-art grid-bg" set:html={figure} />
+        <div>
+          <h1>{type.title}</h1>
+          <p class="summary">{type.summary}</p>
+        </div>
+      </header>
+
+      <div class="prose entry">
+        <Content />
+      </div>
+
+      {category.table && (
+        <details class="compare-fold" data-pagefind-ignore>
+          <summary>
+            {format(t(lang, "hardware.compareWith"), {
+              category: category.title.toLowerCase(),
+            })}
+          </summary>
+          <div class="prose advice">
+            <Advice />
+          </div>
+          <CompareTable
+            table={category.table}
+            lang={lang}
+            label={`${t(lang, "hardware.compare")}: ${category.title}`}
+            rowLinks={rowLinks}
+            cardLevel={2}
+          />
+        </details>
+      )}
+
+      <SourceList lang={lang} ids={citedIds} />
+    </article>
+
+    <div class="more" data-pagefind-ignore>
+      <Carousel
+        id="more"
+        lang={lang}
+        heading={format(t(lang, "hardware.more"), {
+          category: category.title.toLowerCase(),
+        })}
+        href={category.url}
+        items={category.types.map((ty) => ({
+          url: ty.url,
+          title: ty.title,
+          summary: ty.summary,
+          svg: ty.svg,
+          current: ty.key === key,
+        }))}
+      />
+    </div>
+  </div>
+</Base>
+
+<style>
+  .page {
+    padding-top: 32px;
+    padding-bottom: 48px;
+  }
+  .crumbs {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    flex-wrap: wrap;
+    font-size: 14px;
+  }
+
+  /* The drawing first, big, beside the name. */
+  .hero {
+    display: grid;
+    grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+    gap: 28px;
+    align-items: center;
+    margin: 18px 0 24px;
+  }
+  .art {
+    margin: 0;
+    padding: 16px 20px;
+    border: 2px solid var(--line);
+    background-color: var(--surface);
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    letter-spacing: -0.035em;
+    margin: 0 0 10px;
+  }
+  .summary {
+    font-size: 1.2rem;
+    margin: 0;
+    max-width: 30rem;
+  }
+
+  /* The facts: the list the page opens with, as a card. */
+  .entry {
+    max-width: 46rem;
+  }
+  .entry :global(> ul:first-child) {
+    list-style: none;
+    margin: 0 0 20px;
+    padding: 12px 16px;
+    border: 2px solid var(--line);
+    background: var(--surface);
+  }
+  .entry :global(> ul:first-child li) {
+    margin: 5px 0;
+  }
+
+  .compare-fold {
+    margin: 32px 0 8px;
+    border: 2px solid var(--line);
+    background: var(--bg);
+  }
+  .compare-fold > summary {
+    cursor: pointer;
+    padding: 12px 16px;
+    font-weight: 700;
+    font-size: 1.05rem;
+  }
+  .compare-fold[open] > summary {
+    border-bottom: 2px solid var(--line);
+  }
+  .compare-fold > :not(summary) {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+  .compare-fold > :last-child {
+    margin-bottom: 16px;
+  }
+  .advice {
+    max-width: 46rem;
+    font-size: 15px;
+  }
+
+  .more {
+    margin-top: 40px;
+    border-top: 2px solid var(--line);
+    padding-top: 24px;
+  }
+
+  @media (max-width: 760px) {
+    .hero {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 16px;
+    }
+    .compare-fold > :not(summary) {
+      margin-left: 10px;
+      margin-right: 10px;
+    }
+  }
+</style>

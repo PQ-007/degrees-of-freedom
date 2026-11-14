@@ -1,19 +1,24 @@
 // The Hardware section as data: pure functions, no Astro, no DOM
 // (tests/unit/hardware.test.ts).
 //
-// Chosen by the user, 2026-11-14: Hardware replaces the Compare tab. Each
-// category (content/hardware/<slug>.yaml) lists its types; its page
-// (content/hardware/<lang>/<slug>.md) has an intro, then one section per type,
-// `## Name {#key}`, which starts with a short facts list (good for, not for,
-// typical, topic). A category may fold a compare table in at the end, as a
-// side feature: its rows must be the category's types, in the same order.
-import type { CompareTable, Localized } from "./compare";
+// Chosen by the user, 2026-11-14: Hardware replaces the Compare tab, laid out
+// like a streaming catalogue: one row of picture cards per category (motors,
+// then microcontrollers, then sensors…), and a short page per type with its
+// drawing, facts, a paragraph, common models and the category's compare table
+// folded in as a side feature.
+//
+//   content/hardware/<slug>.yaml           the category: ID, topics, compare
+//                                          table, types (key, topic)
+//   content/hardware/<lang>/<slug>.md      title, summary, "Which one?" advice
+//   content/hardware/<lang>/<slug>/<key>.md  a type: title, one-line summary,
+//                                          figureAlt; opens with a facts list
+//   content/figures/hw-<key>.svg           the type's drawing
+import type { CompareTable } from "./compare";
 
 export interface HardwareType {
   key: string;
   /** The topic that teaches how this kind of part works. */
   node: string;
-  name: Localized;
 }
 
 export interface HardwareCategory {
@@ -24,21 +29,20 @@ export interface HardwareCategory {
   types: HardwareType[];
 }
 
-const KEY = /^[a-z0-9]+(-[a-z0-9]+)*$/;
-
-/** The `{#key}` anchors of the `## …` headings in a Markdown body, in order. */
-export function sectionKeys(body: string): string[] {
-  return [...body.matchAll(/^## .*\{#([a-z0-9-]+)\}\s*$/gm)].map(
-    (m) => m[1] ?? "",
-  );
+export interface TypePage {
+  lang: string;
+  key: string;
+  body: string;
 }
 
-/** Whether the type's section opens with a list (its facts). */
-function opensWithList(body: string, key: string): boolean {
-  const at = body.search(new RegExp(`^## .*\\{#${key}\\}\\s*$`, "m"));
-  if (at < 0) return false;
-  const after = body.slice(at).split("\n").slice(1);
-  const first = after.find((line) => line.trim() !== "");
+const KEY = /^[a-z0-9]+(-[a-z0-9]+)*$/;
+
+/** The drawing's file name for a type. */
+export const figureName = (key: string) => `hw-${key}`;
+
+/** Whether a type's page opens with its facts list. */
+export function opensWithFacts(body: string): boolean {
+  const first = body.split("\n").find((line) => line.trim() !== "");
   return first?.startsWith("- **") ?? false;
 }
 
@@ -48,7 +52,9 @@ export function checkHardware(
   nodeIds: ReadonlySet<string>,
   tables: ReadonlyMap<string, CompareTable>,
   languages: readonly string[],
-  pages: readonly { lang: string; body: string }[],
+  categoryLangs: readonly string[],
+  typePages: readonly TypePage[],
+  figures: ReadonlySet<string>,
 ): string[] {
   const errors: string[] = [];
   const at = `hardware/${cat.slug}.yaml`;
@@ -65,9 +71,10 @@ export function checkHardware(
     if (keys.indexOf(t.key) !== i) errors.push(`${where} is listed twice`);
     if (!nodeIds.has(t.node))
       errors.push(`${where} links node ${t.node}, which is not in nodes.yaml`);
-    for (const l of languages) {
-      if (!t.name[l]?.trim()) errors.push(`${where} has no ${l} name`);
-    }
+    if (!figures.has(figureName(t.key)))
+      errors.push(
+        `${where} has no drawing: add content/figures/${figureName(t.key)}.svg`,
+      );
   });
   if (cat.compare) {
     const table = tables.get(cat.compare);
@@ -84,32 +91,26 @@ export function checkHardware(
     }
   }
   for (const lang of languages) {
-    const page = pages.find((p) => p.lang === lang);
-    if (!page) {
+    if (!categoryLangs.includes(lang))
       errors.push(
         `${at} has no ${lang} text: add content/hardware/${lang}/${cat.slug}.md`,
       );
-      continue;
-    }
-    const found = sectionKeys(page.body).filter((k) => keys.includes(k));
-    if (found.join() !== keys.join())
-      errors.push(
-        `hardware/${lang}/${cat.slug}.md: needs one "## Name {#key}" section per type, in order (${keys.join(", ")})`,
-      );
-    // Each box is a landmark, so screen readers need a different name for each.
-    const labels = [
-      ...page.body.matchAll(/<aside[^>]*aria-label="([^"]*)"/g),
-    ].map((m) => m[1] ?? "");
-    for (const l of new Set(labels.filter((l, i) => labels.indexOf(l) !== i)))
-      errors.push(
-        `hardware/${lang}/${cat.slug}.md: two boxes are labelled "${l}"; add the type's name to each label`,
-      );
-    for (const k of keys) {
-      if (found.includes(k) && !opensWithList(page.body, k))
+    for (const key of keys) {
+      const page = typePages.find((p) => p.lang === lang && p.key === key);
+      const file = `hardware/${lang}/${cat.slug}/${key}.md`;
+      if (!page)
+        errors.push(`${at}: type ${key} has no ${lang} page: add ${file}`);
+      else if (!opensWithFacts(page.body))
         errors.push(
-          `hardware/${lang}/${cat.slug}.md: section {#${k}} must open with its facts list ("- **Good for:** …")`,
+          `${file} must open with its facts list ("- **Good for:** …")`,
         );
     }
+  }
+  for (const p of typePages) {
+    if (!keys.includes(p.key))
+      errors.push(
+        `hardware/${p.lang}/${cat.slug}/${p.key}.md isn't a type in ${at}: add it there or remove the page`,
+      );
   }
   return errors;
 }

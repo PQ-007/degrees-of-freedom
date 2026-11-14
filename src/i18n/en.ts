@@ -54,7 +54,7 @@ export const en = {
   "node.next": "Next",
   "hardware.title": "Hardware",
   "hardware.lead":
-    "The parts robots are built from: how each kind works, what it's good and bad for, and common models. Each category ends with a table to compare its types side by side.",
+    "The parts robots are built from, one row per kind. Pick a card to see how it works, what it's good for, and real models.",
   "hardware.next": "Coming next: microcontrollers, then sensors.",
   "hardware.types": "Types",
   "hardware.compare": "Compare side by side",
@@ -265,6 +265,10 @@ export const en = {
   "demo.fit.axisY": "true distance (m)",
   "demo.fit.axisA": "slope a",
   "demo.fit.axisB": "offset b",
+  "hardware.compareWith": "Compare with the others in this category",
+  "hardware.more": "More {category}",
+  "carousel.prev": "Scroll back",
+  "carousel.next": "Scroll on",
   "footer.license": "Code: MIT. Text: CC BY-SA 4.0.",
   "footer.source": "Source on GitHub",
 } as const;

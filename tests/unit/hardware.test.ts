@@ -4,8 +4,10 @@ import { parse } from "yaml";
 import type { CompareTable } from "../../src/lib/compare";
 import {
   checkHardware,
-  sectionKeys,
+  figureName,
+  opensWithFacts,
   type HardwareCategory,
+  type TypePage,
 } from "../../src/lib/hardware";
 import { languages } from "../../src/lib/i18n";
 
@@ -21,81 +23,71 @@ const tables = new Map(
     .map((f) => read<CompareTable>(`compare/${f}`))
     .map((t) => [t.id, t]),
 );
-const t = { en: "x", mn: "х" };
+const figures = new Set(
+  readdirSync(new URL("figures/", root)).map((f) => f.replace(/\.svg$/, "")),
+);
 const cat = (): HardwareCategory => ({
   id: "H9",
   slug: "demo",
   nodes: ["C4"],
   types: [
-    { key: "a", node: "C4", name: t },
-    { key: "b", node: "C9", name: t },
+    { key: "stepper", node: "C4" },
+    { key: "gearmotor", node: "C4" },
   ],
 });
-const page = (body: string) => languages.map((lang) => ({ lang, body }));
-const good =
-  "Intro.\n\n## A {#a}\n\n- **Good for:** x\n\nText.\n\n## B {#b}\n\n- **Good for:** y\n";
+const facts = "- **Good for:** x\n\nText.\n";
+const pages = (keys: string[], body = facts): TypePage[] =>
+  languages.flatMap((lang) => keys.map((key) => ({ lang, key, body })));
+const check = (
+  c: HardwareCategory,
+  p: TypePage[],
+  langs: readonly string[] = languages,
+) => checkHardware(c, nodeIds, tables, languages, langs, p, figures);
 
 describe("checkHardware", () => {
-  it("accepts a category whose page has a section per type, opening with facts", () => {
-    expect(
-      checkHardware(cat(), nodeIds, tables, languages, page(good)),
-    ).toEqual([]);
+  it("accepts a category with a page and a drawing for every type", () => {
+    expect(check(cat(), pages(["stepper", "gearmotor"]))).toEqual([]);
   });
 
-  it("finds the sections' keys in order", () => {
-    expect(sectionKeys(good)).toEqual(["a", "b"]);
+  it("a type's page opens with its facts", () => {
+    expect(opensWithFacts("\n- **Good for:** x")).toBe(true);
+    expect(opensWithFacts("Text first.\n\n- **Good for:** x")).toBe(false);
   });
 
-  it("rejects missing or misordered sections, sections without facts, and a missing language", () => {
-    const swapped = "## B {#b}\n\n- **x:** y\n\n## A {#a}\n\nNo facts.\n";
-    expect(
-      checkHardware(cat(), nodeIds, tables, languages, [
-        { lang: "en", body: swapped },
-      ]),
-    ).toEqual([
-      'hardware/en/demo.md: needs one "## Name {#key}" section per type, in order (a, b)',
-      'hardware/en/demo.md: section {#a} must open with its facts list ("- **Good for:** …")',
+  it("rejects missing pages, pages without facts, stray pages and a missing category page", () => {
+    const p = pages(["stepper"]).concat([
+      { lang: "en", key: "gearmotor", body: "No facts." },
+      { lang: "en", key: "warp", body: facts },
+    ]);
+    expect(check(cat(), p, ["en"])).toEqual([
+      'hardware/en/demo/gearmotor.md must open with its facts list ("- **Good for:** …")',
       "hardware/demo.yaml has no mn text: add content/hardware/mn/demo.md",
+      "hardware/demo.yaml: type gearmotor has no mn page: add hardware/mn/demo/gearmotor.md",
+      "hardware/en/demo/warp.md isn't a type in hardware/demo.yaml: add it there or remove the page",
+    ]);
+  });
+
+  it("rejects a type without a drawing, bad keys and nodes", () => {
+    const c = cat();
+    c.id = "Q1";
+    c.types = [{ key: "Bad Key", node: "Z9" }];
+    expect(check(c, pages(["Bad Key"]))).toEqual([
+      "hardware/demo.yaml: the ID is H and a number",
+      "hardware/demo.yaml: type 1 (Bad Key): a key is lowercase words joined by -",
+      "hardware/demo.yaml: type 1 (Bad Key) links node Z9, which is not in nodes.yaml",
+      `hardware/demo.yaml: type 1 (Bad Key) has no drawing: add content/figures/${figureName("Bad Key")}.svg`,
     ]);
   });
 
   it("rejects a compare table whose rows aren't the category's types", () => {
     const c = cat();
     c.compare = "X1";
-    expect(checkHardware(c, nodeIds, tables, languages, page(good))[0]).toMatch(
+    expect(check(c, pages(["stepper", "gearmotor"]))[0]).toMatch(
       /the types must match compare table X1's rows, in order/,
     );
     c.compare = "X99";
-    expect(checkHardware(c, nodeIds, tables, languages, page(good))).toEqual([
+    expect(check(c, pages(["stepper", "gearmotor"]))).toEqual([
       "hardware/demo.yaml folds in compare table X99, which doesn't exist",
-    ]);
-  });
-
-  it("rejects bad IDs, keys, nodes and names", () => {
-    const c = cat();
-    c.id = "Q1";
-    c.types = [{ key: "Bad Key", node: "Z9", name: { en: "x" } }];
-    expect(
-      checkHardware(c, nodeIds, tables, languages, page("## X {#bad-key}\n")),
-    ).toEqual([
-      "hardware/demo.yaml: the ID is H and a number",
-      "hardware/demo.yaml: type 1 (Bad Key): a key is lowercase words joined by -",
-      "hardware/demo.yaml: type 1 (Bad Key) links node Z9, which is not in nodes.yaml",
-      "hardware/demo.yaml: type 1 (Bad Key) has no mn name",
-      'hardware/en/demo.md: needs one "## Name {#key}" section per type, in order (Bad Key)',
-      'hardware/mn/demo.md: needs one "## Name {#key}" section per type, in order (Bad Key)',
-    ]);
-  });
-});
-
-describe("Common models boxes", () => {
-  it("need a different label each", () => {
-    const box = '<aside class="examples" aria-label="Common models">';
-    const body = good.replace("Text.", `${box}\n\n${box}`);
-    expect(
-      checkHardware(cat(), nodeIds, tables, ["en"], [{ lang: "en", body }]),
-    ).toEqual([
-      'hardware/en/demo.md: two boxes are labelled "Common models"; add the type\'s name to each label',
     ]);
   });
 });
@@ -106,14 +98,27 @@ describe("the real Hardware categories", () => {
   )) {
     it(`${f} passes every check`, () => {
       const c = read<HardwareCategory>(`hardware/${f}`);
-      const pages = languages.map((lang) => ({
-        lang,
-        body: readFileSync(
-          new URL(`hardware/${lang}/${c.slug}.md`, root),
-          "utf8",
-        ),
-      }));
-      expect(checkHardware(c, nodeIds, tables, languages, pages)).toEqual([]);
+      const typePages: TypePage[] = [];
+      const catLangs: string[] = [];
+      for (const lang of languages) {
+        const dir = readdirSync(new URL(`hardware/${lang}/`, root));
+        if (dir.includes(`${c.slug}.md`)) catLangs.push(lang);
+        for (const file of readdirSync(
+          new URL(`hardware/${lang}/${c.slug}/`, root),
+        ))
+          typePages.push({
+            lang,
+            key: file.replace(/\.md$/, ""),
+            body: readFileSync(
+              new URL(`hardware/${lang}/${c.slug}/${file}`, root),
+              "utf8",
+            )
+              .split("---")
+              .slice(2)
+              .join("---"),
+          });
+      }
+      expect(check(c, typePages, catLangs)).toEqual([]);
     });
   }
 });

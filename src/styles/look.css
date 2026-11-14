@@ -145,3 +145,162 @@ a.card:hover {
     transform: none;
   }
 }
+
+/* Line drawings of parts (Hardware): ink lines, light fills, the part that
+   matters in the page's accent colour. */
+.line-art svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  fill: none;
+  stroke: var(--ink);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.line-art .thin {
+  stroke-width: 1.5;
+}
+.line-art .thick {
+  stroke-width: 2.5;
+}
+.line-art .soft {
+  fill: var(--surface);
+}
+.line-art .accent-fill {
+  fill: var(--d, var(--ink));
+}
+.line-art .area {
+  fill-opacity: 0.6;
+  stroke: none;
+}
+.line-art .accent-stroke {
+  stroke: var(--d, var(--ink));
+  stroke-width: 6;
+}
+.line-art .accent-tick {
+  stroke: var(--d, var(--ink));
+  stroke-width: 2.5;
+}
+.line-art .under {
+  stroke: var(--ink);
+  stroke-width: 9.5;
+}
+
+/* Motion (the user, 2026-11-14): each part's drawing moves on hover or
+   keyboard focus: motors turn, servos swing, actuators push. Origins are in
+   the drawing's own units; nothing moves for reduced motion. */
+.line-art svg g {
+  transform-box: view-box;
+}
+@media (prefers-reduced-motion: no-preference) {
+  :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .spin {
+    animation: art-turn 1.6s linear infinite;
+  }
+  :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .spin.slow {
+    animation-duration: 4s;
+  }
+  :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .orbit {
+    animation: art-turn 6s linear infinite reverse;
+  }
+  :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .step {
+    animation: art-turn 4.8s steps(24) infinite;
+  }
+  :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .swing {
+    animation: art-swing 1.6s ease-in-out infinite;
+  }
+  :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .flow path {
+    stroke-dasharray: 8 6;
+    animation: art-flow 0.6s linear infinite;
+  }
+  :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .squash {
+    animation: art-squash 1.2s ease-in-out infinite;
+  }
+  :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .push {
+    animation: art-push 1.2s ease-in-out infinite;
+  }
+  :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .extend {
+    animation: art-extend 1.6s ease-in-out infinite;
+  }
+  :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .fill {
+    animation: art-fill 1.6s ease-in-out infinite;
+  }
+  :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .grip-left {
+    animation: art-grip 1.4s ease-in-out infinite;
+  }
+  :is(.tile:hover, .tile:focus-visible, .hero .line-art:hover) .grip-right {
+    animation: art-grip-right 1.4s ease-in-out infinite;
+  }
+}
+@keyframes art-turn {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes art-swing {
+  0%,
+  100% {
+    transform: rotate(-35deg);
+  }
+  50% {
+    transform: rotate(35deg);
+  }
+}
+@keyframes art-flow {
+  to {
+    stroke-dashoffset: -14;
+  }
+}
+@keyframes art-squash {
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(0.72);
+  }
+}
+@keyframes art-push {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-20.7px);
+  }
+}
+@keyframes art-extend {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(30px);
+  }
+}
+@keyframes art-fill {
+  0%,
+  100% {
+    transform: scaleX(1);
+  }
+  50% {
+    transform: scaleX(1.6);
+  }
+}
+@keyframes art-grip {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(7px);
+  }
+}
+@keyframes art-grip-right {
+  0%,
+  100% {
+    transform: translateX(0);
+  }
+  50% {
+    transform: translateX(-7px);
+  }
+}

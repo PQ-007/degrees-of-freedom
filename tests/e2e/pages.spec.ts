@@ -15,7 +15,7 @@ const pages = [
   { name: "node-sim", path: "{lang}/node/classical-control/" },
   { name: "signal-chain", path: "{lang}/signal-chain/" },
   { name: "hardware-index", path: "{lang}/hardware/" },
-  { name: "hardware", path: "{lang}/hardware/motors/" },
+  { name: "hardware-type", path: "{lang}/hardware/motors/stepper/" },
   { name: "robots-index", path: "{lang}/robots/" },
   { name: "robot", path: "{lang}/robots/planetary-rover/" },
   { name: "roadmaps-index", path: "{lang}/roadmaps/" },

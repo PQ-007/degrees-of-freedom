@@ -2,7 +2,7 @@ import AxeBuilder from "@axe-core/playwright";
 import { expect, test } from "@playwright/test";
 
 test.describe("Hardware", () => {
-  test("the header's Hardware tab lists the categories with their types", async ({
+  test("the Hardware tab shows a row of picture cards per category", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
@@ -11,70 +11,94 @@ test.describe("Hardware", () => {
     await expect(nav.getByRole("link", { name: "Compare" })).toHaveCount(0);
     await nav.getByRole("link", { name: "Hardware" }).click();
     await expect(page).toHaveURL(/\/en\/hardware\/$/);
-    const card = page.getByRole("link", { name: /H1\s*Motors and actuators/ });
-    await expect(card).toContainText("Stepper motor");
-    await card.click();
-    await expect(page).toHaveURL(/\/en\/hardware\/motors\/$/);
+    const row = page.getByRole("region", { name: "Motors and actuators" });
+    const cards = row.locator(".tile");
+    await expect(cards).toHaveCount(10);
+    // Every card has a drawing (decorative: the card's name says what it is).
+    await expect(row.locator(".tile svg[aria-hidden='true']")).toHaveCount(10);
+    await expect(cards.first()).toContainText("Brushed DC gearmotor");
   });
 
-  test("each type has an entry that opens with its facts, and models are cited", async ({
+  test("Next and Previous scroll the row, and turn off at the ends", async ({
     page,
   }) => {
-    await page.goto("en/hardware/motors/");
-    await expect(page.locator("h1")).toHaveText("Motors and actuators");
-    const entries = page.locator(".prose h2[id]");
-    await expect(entries).toHaveCount(11); // ten types and "Which one?"
-    await page
-      .locator(".jump")
-      .getByRole("link", { name: "Stepper motor" })
-      .click();
-    await expect(page).toHaveURL(/#stepper$/);
-    const facts = page.locator("#stepper + ul");
-    await expect(facts).toContainText("Good for:");
-    await expect(facts).toContainText("200 steps per turn");
-    await expect(page.locator("section.sources li")).toHaveCount(10);
-    await expect(page.locator("li#src-dynamixel-xl430")).toContainText(
-      "ROBOTIS",
-    );
+    await page.setViewportSize({ width: 1024, height: 800 });
+    await page.goto("en/hardware/");
+    const row = page.getByRole("region", { name: "Motors and actuators" });
+    const back = row.getByRole("button", { name: /Scroll back/ });
+    const on = row.getByRole("button", { name: /Scroll on/ });
+    const track = row.locator("[data-track]");
+    await expect(back).toBeDisabled();
+    await on.click();
+    await expect
+      .poll(() => track.evaluate((el) => el.scrollLeft))
+      .toBeGreaterThan(100);
+    await expect(back).toBeEnabled();
   });
 
-  test("the comparison is folded at the end, sorts, and links back to each entry", async ({
+  test("a card opens its page: drawing, facts, models and sources", async ({
+    page,
+  }) => {
+    await page.goto("en/hardware/");
+    await page.locator(".tile", { hasText: "Stepper motor" }).click();
+    await expect(page).toHaveURL(/\/en\/hardware\/motors\/stepper\/$/);
+    await expect(page.locator("h1")).toHaveText("Stepper motor");
+    await expect(page.locator(".hero svg")).toHaveAttribute(
+      "aria-label",
+      /square stepper motor/,
+    );
+    const facts = page.locator(".entry > ul").first();
+    await expect(facts).toContainText("Good for:");
+    await expect(facts).toContainText("200 steps per turn");
+    await expect(page.locator("aside.examples")).toContainText("NEMA 17");
+    await expect(page.locator("section.sources li")).toHaveCount(2);
+  });
+
+  test("the comparison is folded, sorts, and its rows open the other pages", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
-    await page.goto("en/hardware/motors/");
-    const fold = page.locator("details#compare");
+    await page.goto("en/hardware/motors/stepper/");
+    const fold = page.locator("details.compare-fold");
     await expect(fold).not.toHaveAttribute("open");
     await fold.locator("summary").click();
+    await expect(fold.locator(".advice")).toContainText("Start from the job");
     const rows = fold.locator("table.compare tbody tr");
     await expect(rows).toHaveCount(10);
-    const harmonicPrecision = fold
-      .locator("table.compare tr", { hasText: "Harmonic-drive joint" })
-      .locator("td")
-      .nth(3);
-    await expect(harmonicPrecision).toContainText("●●●●●");
-    await expect(harmonicPrecision).toContainText("(5 of 5)");
-    const firstRow = rows.first().locator("th");
     await fold
       .getByLabel("Sort by")
       .selectOption({ label: "Torque for its size: highest first" });
-    await expect(firstRow).toHaveText("Hydraulic actuator");
-    await fold.getByLabel("Sort by").selectOption({ label: "The usual order" });
-    await firstRow.getByRole("link").click();
-    await expect(page).toHaveURL(/#gearmotor$/);
+    await expect(rows.first().locator("th")).toHaveText("Hydraulic actuator");
+    await rows.first().getByRole("link").click();
+    await expect(page).toHaveURL(/\/en\/hardware\/motors\/hydraulic\/$/);
   });
 
-  test("phones get the comparison as cards, in Mongolian, and pass axe", async ({
+  test("More shows the category as cards, this one marked", async ({
+    page,
+  }) => {
+    await page.goto("en/hardware/motors/qdd/");
+    const more = page.getByRole("region", {
+      name: "More motors and actuators",
+    });
+    await expect(more.locator(".tile")).toHaveCount(10);
+    await expect(more.locator(".tile[aria-current='page']")).toContainText(
+      "Quasi-direct drive",
+    );
+  });
+
+  test("phones, in Mongolian: stacked page, cards in the fold, and axe passes", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 360, height: 800 });
-    await page.goto("mn/hardware/motors/");
-    await page.locator("details#compare summary").click();
+    await page.goto("mn/hardware/motors/qdd/");
+    await page.locator("details.compare-fold summary").click();
     await expect(page.locator(".table-frame")).toBeHidden();
     const cards = page.locator(".option-cards > li");
     await expect(cards).toHaveCount(10);
     await page.getByLabel("Эрэмбэлэх").selectOption({ index: 1 });
-    await expect(cards.first().locator("h3")).toHaveText("Гидравлик актуатор");
+    await expect(cards.first().locator(".card-title")).toHaveText(
+      "Гидравлик актуатор",
+    );
     const overflow = await page.evaluate(
       () =>
         document.documentElement.scrollWidth -
@@ -85,7 +109,7 @@ test.describe("Hardware", () => {
     expect(axe.violations.map((v) => v.id)).toEqual([]);
   });
 
-  test("a topic page links the kinds of part it teaches", async ({ page }) => {
+  test("topic and Build pages link the parts' pages", async ({ page }) => {
     await page.goto("en/node/electric-motors/");
     const row = page
       .locator(".meta dt", { hasText: "Hardware" })
@@ -96,6 +120,34 @@ test.describe("Hardware", () => {
       "Brushless motor + gearbox",
     ]);
     await row.getByRole("link", { name: "Stepper motor" }).click();
-    await expect(page).toHaveURL(/\/en\/hardware\/motors\/#stepper$/);
+    await expect(page).toHaveURL(/\/en\/hardware\/motors\/stepper\/$/);
+    await page.goto("en/builds/rocker-bogie-rover/");
+    await page
+      .getByRole("link", { name: "Hardware: Brushed DC gearmotor" })
+      .click();
+    await expect(page).toHaveURL(/\/en\/hardware\/motors\/gearmotor\/$/);
+  });
+
+  test("hovering a card plays its drawing's motion; reduced motion keeps it still", async ({
+    browser,
+    baseURL,
+  }) => {
+    const moving = async (reducedMotion: "reduce" | "no-preference") => {
+      const context = await browser.newContext({
+        ...(baseURL ? { baseURL } : {}),
+        reducedMotion,
+      });
+      const page = await context.newPage();
+      await page.goto("en/hardware/");
+      const tile = page.locator(".tile", { hasText: "Stepper motor" });
+      await tile.hover();
+      const name = await tile
+        .locator("g.step")
+        .evaluate((g) => getComputedStyle(g).animationName);
+      await context.close();
+      return name;
+    };
+    expect(await moving("no-preference")).toBe("art-turn");
+    expect(await moving("reduce")).toBe("none");
   });
 });

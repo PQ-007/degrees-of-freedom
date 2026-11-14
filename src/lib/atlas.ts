@@ -8,7 +8,7 @@ import { parse } from "yaml";
 import { checkBuild, type Build } from "./builds";
 import { checkChain, type Stage } from "./chain";
 import { checkCompare, type CompareTable } from "./compare";
-import { checkHardware, type HardwareCategory } from "./hardware";
+import { checkHardware, figureName, type HardwareCategory } from "./hardware";
 import {
   checkGlossary,
   groupByTier,
@@ -94,14 +94,28 @@ function loadCompares() {
   return comparesChecked;
 }
 
+export interface HardwareTypePage {
+  key: string;
+  node: string;
+  title: string;
+  summary: string;
+  figureAlt: string;
+  /** The drawing's SVG markup (inlined, so it follows the theme). */
+  svg: string;
+  url: string;
+  entry: CollectionEntry<"hardwareTypes">;
+}
+
 export interface HardwarePage {
   data: HardwareCategory;
-  /** The compare table folded in at the end, if any. */
+  /** The compare table folded into each type's page, if any. */
   table: CompareTable | undefined;
   title: string;
   summary: string;
+  /** The category's row on the Hardware page. */
   url: string;
   entry: CollectionEntry<"hardwarePages">;
+  types: HardwareTypePage[];
 }
 
 let hardwareChecked:
@@ -109,6 +123,8 @@ let hardwareChecked:
       categories: HardwareCategory[];
       tables: Map<string, CompareTable>;
       pages: CollectionEntry<"hardwarePages">[];
+      typePages: CollectionEntry<"hardwareTypes">[];
+      svgs: Map<string, string>;
     }>
   | undefined;
 
@@ -120,6 +136,15 @@ function loadHardware() {
       .map((e) => e.data as HardwareCategory)
       .sort((a, b) => Number(a.id.slice(1)) - Number(b.id.slice(1)));
     const pages = await getCollection("hardwarePages");
+    const typePages = await getCollection("hardwareTypes");
+    const svgs = new Map<string, string>();
+    for (const f of readdirSync(join(process.cwd(), "content/figures"))) {
+      if (f.endsWith(".svg"))
+        svgs.set(
+          f.slice(0, -4),
+          readFileSync(join(process.cwd(), "content/figures", f), "utf8"),
+        );
+    }
     const nodeIds = new Set(nodes.map((n) => n.id));
     const errors = categories.flatMap((cat) =>
       checkHardware(
@@ -129,7 +154,14 @@ function loadHardware() {
         languages,
         pages
           .filter((p) => p.id.endsWith(`/${cat.slug}`))
-          .map((p) => ({ lang: p.id.split("/")[0] ?? "", body: p.body ?? "" })),
+          .map((p) => p.id.split("/")[0] ?? ""),
+        typePages
+          .filter((p) => p.id.split("/")[1] === cat.slug)
+          .map((p) => {
+            const [lang = "", , key = ""] = p.id.split("/");
+            return { lang, key, body: p.body ?? "" };
+          }),
+        new Set(svgs.keys()),
       ),
     );
     for (const id of tables.keys()) {
@@ -143,44 +175,54 @@ function loadHardware() {
         `The Hardware pages have ${errors.length} problem(s):\n- ${errors.join("\n- ")}`,
       );
     }
-    return { categories, tables, pages };
+    return { categories, tables, pages, typePages, svgs };
   })();
   return hardwareChecked;
 }
 
-/** Every Hardware category, in ID order, with its text in `lang`. */
+/** Every Hardware category, in ID order, with its types, in `lang`. */
 export async function getHardware(lang: Lang): Promise<HardwarePage[]> {
-  const { categories, tables, pages } = await loadHardware();
+  const { categories, tables, pages, typePages, svgs } = await loadHardware();
   const base = import.meta.env.BASE_URL;
   return categories.map((data) => {
     const entry = pages.find((p) => p.id === `${lang}/${data.slug}`);
     if (!entry) throw new Error(`${data.id} has no ${lang} page`); // checkHardware rules this out
+    const types = data.types.map((t) => {
+      const page = typePages.find(
+        (p) => p.id === `${lang}/${data.slug}/${t.key}`,
+      );
+      if (!page) throw new Error(`${t.key} has no ${lang} page`); // ruled out too
+      return {
+        key: t.key,
+        node: t.node,
+        title: page.data.title,
+        summary: page.data.summary,
+        figureAlt: page.data.figureAlt,
+        svg: svgs.get(figureName(t.key)) ?? "",
+        url: localePath(base, lang, `hardware/${data.slug}/${t.key}/`),
+        entry: page,
+      };
+    });
     return {
       data,
       table: data.compare ? tables.get(data.compare) : undefined,
       title: entry.data.title,
       summary: entry.data.summary,
-      url: localePath(base, lang, `hardware/${data.slug}/`),
+      url: `${localePath(base, lang, "hardware/")}#${data.slug}`,
       entry,
+      types,
     };
   });
 }
 
-/** Each Hardware type by key: its name in `lang`, its link and its category. */
+/** Each Hardware type by key, with its category, in `lang`. */
 export async function getHardwareTypes(lang: Lang) {
   const types = new Map<
     string,
-    { name: string; url: string; node: string; category: HardwarePage }
+    HardwareTypePage & { category: HardwarePage }
   >();
-  for (const page of await getHardware(lang)) {
-    for (const t of page.data.types) {
-      types.set(t.key, {
-        name: t.name[lang] ?? t.key,
-        url: `${page.url}#${t.key}`,
-        node: t.node,
-        category: page,
-      });
-    }
+  for (const category of await getHardware(lang)) {
+    for (const t of category.types) types.set(t.key, { ...t, category });
   }
   return types;
 }

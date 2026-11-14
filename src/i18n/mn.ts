@@ -56,7 +56,7 @@ export const mn: Record<MessageKey, string> = {
   "node.next": "Дараах",
   "hardware.title": "Техник хангамж",
   "hardware.lead":
-    "Роботыг бүтээдэг эд ангиуд: төрөл бүр хэрхэн ажилладаг, юунд тохирох, тохирохгүй, түгээмэл загварууд. Ангилал бүр төрлүүдээ зэрэгцүүлэн харьцуулах хүснэгтээр төгсдөг.",
+    "Роботыг бүтээдэг эд ангиуд, төрөл бүр нэг эгнээнд. Хэрхэн ажилладаг, юунд тохирох, бодит загваруудыг нь харахын тулд картаа сонго.",
   "hardware.next": "Дараа нь: микроконтроллер, дараа нь мэдрэгч.",
   "hardware.types": "Төрлүүд",
   "hardware.compare": "Зэрэгцүүлэн харьцуулах",
@@ -269,6 +269,10 @@ export const mn: Record<MessageKey, string> = {
   "demo.fit.axisY": "жинхэнэ зай (м)",
   "demo.fit.axisA": "налуу a",
   "demo.fit.axisB": "шилжилт b",
+  "hardware.compareWith": "Энэ ангиллын бусадтай харьцуулах",
+  "hardware.more": "Бусад {category}",
+  "carousel.prev": "Буцааж гүйлгэх",
+  "carousel.next": "Цааш гүйлгэх",
   "footer.license": "Код: MIT. Бичвэр: CC BY-SA 4.0.",
   "footer.source": "GitHub дээрх эх код",
 };

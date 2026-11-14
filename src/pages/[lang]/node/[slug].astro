@@ -56,12 +56,9 @@ const base = import.meta.env.BASE_URL;
 // categories that list it.
 const hardware = await getHardware(lang);
 const hwTypes = hardware.flatMap((c) =>
-  c.data.types
+  c.types
     .filter((ty) => ty.node === id)
-    .map((ty) => ({
-      name: ty.name[lang] ?? ty.key,
-      url: `${c.url}#${ty.key}`,
-    })),
+    .map((ty) => ({ name: ty.title, url: ty.url })),
 );
 const hwCategories =
   hwTypes.length > 0 ? [] : hardware.filter((c) => c.data.nodes.includes(id));

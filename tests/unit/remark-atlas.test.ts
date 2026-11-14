@@ -204,7 +204,11 @@ describe("the real content", () => {
     for (const dir of ["nodes", "hardware", "robots", "roadmaps", "builds"]) {
       for (const lang of ["en", "mn"]) {
         const loaded = loadRefs(root, lang);
-        for (const f of readdirSync(`${root}content/${dir}/${lang}`)) {
+        for (const f of readdirSync(`${root}content/${dir}/${lang}`, {
+          recursive: true,
+        })
+          .map(String)
+          .filter((f) => f.endsWith(".md"))) {
           const body = readFileSync(
             `${root}content/${dir}/${lang}/${f}`,
             "utf8",
