@@ -131,6 +131,19 @@ export const mn: Record<MessageKey, string> = {
     "Энд хайлт ажиллахгүй: хайлтын индекс сайттай хамт бүтээгддэг (npm run build).",
   "search.noscript":
     "Хайлтад JavaScript хэрэгтэй. Оронд нь tech tree-г үзэж болно.",
+  "glossary.title": "Нэр томьёоны толь",
+  "glossary.lead":
+    "Энэ атласын хэрэглэдэг үгс, тус бүр товч тайлбар болон түүнийг заадаг сэдэвтэйгээ. Нэр томьёог тэр сэдвийн түвшнээр, T0-ээс эхлэн бүлэглэсэн.",
+  "glossary.filter": "Нэр томьёо шүүх",
+  "glossary.tiers": "Түвшингүүд",
+  "glossary.one": "1 нэр томьёо",
+  "glossary.many": "{n} нэр томьёо",
+  "glossary.none": "“{q}”-д тохирох нэр томьёо алга.",
+  "glossary.topic": "Заадаг сэдэв",
+  "glossary.see": "Мөн үзэх",
+  "glossary.english": "Англиар",
+  "node.terms": "Нэр томьёо",
+  "footer.glossary": "Нэр томьёоны толь",
   "footer.license": "Код: MIT. Бичвэр: CC BY-SA 4.0.",
   "footer.source": "GitHub дээрх эх код",
 };

@@ -14,6 +14,9 @@ const refs: AtlasRefs = {
     ["C4", { slug: "electric-motors", title: "Electric motors" }],
   ]),
   sources: new Set(["unimate", "capek-robot"]),
+  terms: new Map([
+    ["encoder", { term: "Encoder", def: "A sensor that measures turning." }],
+  ]),
   base: "/dof/",
   lang: "en",
   file: "content/nodes/en/F0-test.md",
@@ -73,6 +76,34 @@ describe("node links", () => {
   });
 });
 
+describe("term links", () => {
+  it("link to the glossary entry, with the term or given text and the definition as a title", () => {
+    const tree = para("An [[~encoder|encoder]] counts. [[~encoder]].");
+    transformAtlasRefs(tree, refs);
+    const links = (tree.children[0]?.children ?? []).filter(
+      (n) => n.type === "link",
+    );
+    expect(links.map((l) => [l.url, l.title, l.children?.[0]?.value])).toEqual([
+      [
+        "/dof/en/glossary/#encoder",
+        "A sensor that measures turning.",
+        "encoder",
+      ],
+      [
+        "/dof/en/glossary/#encoder",
+        "A sensor that measures turning.",
+        "Encoder",
+      ],
+    ]);
+  });
+
+  it("fail the build on an unknown term", () => {
+    expect(() => transformAtlasRefs(para("[[~nope]]"), refs)).toThrow(
+      "content/nodes/en/F0-test.md: [[~nope]] is not a term in content/glossary/terms.yaml",
+    );
+  });
+});
+
 describe("heading anchors", () => {
   it("take a fixed id from {#id} and drop it from the text", () => {
     const tree: MdNode & { children: MdNode[] } = {
@@ -112,7 +143,7 @@ describe("the real content", () => {
 
   it("every citation and node link in every page resolves, and both languages cite the same sources", () => {
     const citedBy: Record<string, Record<string, string[]>> = {};
-    for (const dir of ["nodes", "compare", "robots"]) {
+    for (const dir of ["nodes", "compare", "robots", "roadmaps", "builds"]) {
       for (const lang of ["en", "mn"]) {
         const loaded = loadRefs(root, lang);
         for (const f of readdirSync(`${root}content/${dir}/${lang}`)) {

@@ -2,12 +2,19 @@
 // (src/lib/tree.ts) and fails the build with every problem listed.
 import { getCollection, type CollectionEntry } from "astro:content";
 import { languages, localePath, type Lang } from "./i18n";
-import { readFileSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "yaml";
 import { checkBuild, type Build } from "./builds";
 import { checkChain, type Stage } from "./chain";
 import { checkCompare, type CompareTable } from "./compare";
+import {
+  checkGlossary,
+  groupByTier,
+  termLinks,
+  type Term,
+  type TierGroup,
+} from "./glossary";
 import { checkRoadmap, type Roadmap } from "./roadmaps";
 import { checkRobot, type RobotData } from "./robots";
 import { checkTree, compareIds, usedBy, type TreeNode } from "./tree";
@@ -369,5 +376,53 @@ export async function getChain(lang: Lang) {
     stages,
     entry,
     url: localePath(import.meta.env.BASE_URL, lang, "signal-chain/"),
+  };
+}
+
+/** Every term linked from the Markdown under content/, by language. */
+function linkedTerms(): Map<string, Set<string>> {
+  const linked = new Map<string, Set<string>>();
+  const root = join(process.cwd(), "content");
+  for (const file of readdirSync(root, { recursive: true })) {
+    const path = String(file);
+    // The language is a folder (nodes/en/…) or the file's name (signal-chain/en.md).
+    const lang = /(?:^|[/\\])(en|mn)(?:[/\\]|\.md$)/.exec(path)?.[1];
+    if (!lang || !path.endsWith(".md")) continue;
+    const set = linked.get(lang) ?? new Set<string>();
+    for (const id of termLinks(readFileSync(join(root, path), "utf8")))
+      set.add(id);
+    linked.set(lang, set);
+  }
+  return linked;
+}
+
+let glossaryChecked: Promise<Term[]> | undefined;
+
+/** The glossary, grouped by tier (T0 first) and sorted in `lang`. */
+export async function getGlossary(
+  lang: Lang,
+): Promise<{ groups: TierGroup[]; terms: Map<string, Term>; url: string }> {
+  glossaryChecked ??= (async () => {
+    const { nodes } = await load();
+    const terms = (await getCollection("glossary")).map((e) => e.data as Term);
+    const errors = checkGlossary(
+      terms,
+      new Set(nodes.map((n) => n.id)),
+      languages,
+      linkedTerms(),
+    );
+    if (errors.length > 0) {
+      throw new Error(
+        `The glossary has ${errors.length} problem(s):\n- ${errors.join("\n- ")}`,
+      );
+    }
+    return terms;
+  })();
+  const terms = await glossaryChecked;
+  const { nodes } = await load();
+  return {
+    groups: groupByTier(terms, new Map(nodes.map((n) => [n.id, n.tier])), lang),
+    terms: new Map(terms.map((t) => [t.id, t])),
+    url: localePath(import.meta.env.BASE_URL, lang, "glossary/"),
   };
 }

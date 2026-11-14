@@ -138,6 +138,10 @@ const nav = [
     </main>
     <footer class="site-footer">
       <div class="wrap">
+        <a href={localePath(base, lang, "glossary/")}>
+          {t(lang, "footer.glossary")}
+        </a>
+        <span aria-hidden="true"> · </span>
         <span>{t(lang, "footer.license")}</span>
         <span aria-hidden="true"> · </span>
         <a href="https://github.com/PQ-007/degrees-of-freedom">

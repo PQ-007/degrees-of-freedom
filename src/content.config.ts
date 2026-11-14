@@ -225,6 +225,19 @@ const chainPages = defineCollection({
   schema: z.object({ title: z.string().min(1), summary: z.string().min(1) }),
 });
 
+// The glossary: every term in one YAML, every language inside. Pages link a
+// term with [[~id]]; src/lib/glossary.ts checks it.
+const glossary = defineCollection({
+  loader: file("content/glossary/terms.yaml"),
+  schema: z.object({
+    id: z.string(),
+    node: z.string(),
+    term: localized,
+    def: localized,
+    see: z.array(z.string()).optional(),
+  }),
+});
+
 export const collections = {
   tree,
   nodes,
@@ -239,4 +252,5 @@ export const collections = {
   buildPages,
   chainStages,
   chainPages,
+  glossary,
 };

@@ -128,6 +128,19 @@ export const en = {
     "Search isn't available here: its index is built with the site (npm run build).",
   "search.noscript":
     "Search needs JavaScript. You can browse the tech tree instead.",
+  "glossary.title": "Glossary",
+  "glossary.lead":
+    "The words this atlas uses, each with a short definition and the topic that teaches it. Terms are grouped by that topic's tier, T0 first.",
+  "glossary.filter": "Filter terms",
+  "glossary.tiers": "Tiers",
+  "glossary.one": "1 term",
+  "glossary.many": "{n} terms",
+  "glossary.none": "No term matches “{q}”.",
+  "glossary.topic": "Taught in",
+  "glossary.see": "See also",
+  "glossary.english": "In English",
+  "node.terms": "Terms",
+  "footer.glossary": "Glossary",
   "footer.license": "Code: MIT. Text: CC BY-SA 4.0.",
   "footer.source": "Source on GitHub",
 } as const;

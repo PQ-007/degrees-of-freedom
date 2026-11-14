@@ -17,6 +17,8 @@ const pages = [
   { name: "roadmap", path: "{lang}/roadmaps/mars-rover/" },
   { name: "builds-index", path: "{lang}/builds/" },
   { name: "build", path: "{lang}/builds/rocker-bogie-rover/" },
+  { name: "glossary", path: "{lang}/glossary/" },
+  { name: "glossary-term", path: "{lang}/glossary/#encoder" },
   { name: "search", path: "{lang}/search/?q=control" },
   { name: "404", path: "404.html" },
 ];

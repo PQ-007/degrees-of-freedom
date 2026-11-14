@@ -1,0 +1,310 @@
+---
+// The glossary (chosen by the user, 2026-11-14: grouped by tier). Each term sits
+// under the tier of the topic that teaches it, T0 first, sorted in the page's
+// language; the Mongolian page also shows the English term, for matching it
+// to English books and datasheets. A filter box narrows the list as you type;
+// without JS every term shows.
+import Base from "../../layouts/Base.astro";
+import { getAtlas, getGlossary } from "../../lib/atlas";
+import { searchText } from "../../lib/glossary";
+import { format, languages, t, type Lang } from "../../lib/i18n";
+import type { MessageKey } from "../../i18n/en";
+
+export function getStaticPaths() {
+  return languages.map((lang) => ({ params: { lang } }));
+}
+
+const lang = Astro.params.lang as Lang;
+const { groups, terms } = await getGlossary(lang);
+const byId = new Map((await getAtlas(lang)).map((n) => [n.id, n]));
+const total = groups.reduce((n, g) => n + g.terms.length, 0);
+const tierName = (tier: number) => t(lang, `tier.${tier}` as MessageKey);
+---
+
+<Base
+  lang={lang}
+  title={t(lang, "glossary.title")}
+  description={t(lang, "glossary.lead")}
+>
+  <div class="wrap page" data-glossary>
+    <h1>{t(lang, "glossary.title")}</h1>
+    <p class="lead">{t(lang, "glossary.lead")}</p>
+
+    <div class="tools js-only">
+      <label for="glossary-filter">{t(lang, "glossary.filter")}</label>
+      <input
+        id="glossary-filter"
+        type="search"
+        autocomplete="off"
+        spellcheck="false"
+        data-filter
+      />
+      <p
+        class="count muted"
+        aria-live="polite"
+        data-count
+        data-one={t(lang, "glossary.one")}
+        data-many={t(lang, "glossary.many")}
+        data-none={t(lang, "glossary.none")}
+      >
+        {format(t(lang, "glossary.many"), { n: total })}
+      </p>
+    </div>
+
+    <nav class="jump" aria-label={t(lang, "glossary.tiers")}>
+      {groups.map((g) => (
+        <a
+          class={`chip t${g.tier}`}
+          href={`#tier-${g.tier}`}
+          data-jump={g.tier}
+        >
+          <span class="sq" aria-hidden="true" />T{g.tier} {tierName(g.tier)}
+          <span class="n muted">{g.terms.length}</span>
+        </a>
+      ))}
+    </nav>
+
+    <div data-pagefind-body>
+      {groups.map((g) => (
+        <section
+          class={`tier bar t${g.tier}`}
+          aria-labelledby={`tier-${g.tier}`}
+          data-tier={g.tier}
+        >
+          <h2 id={`tier-${g.tier}`}>
+            <span class="id">T{g.tier}</span>
+            {tierName(g.tier)}
+          </h2>
+          <dl>
+            {g.terms.map((term) => {
+              const topic = byId.get(term.node);
+              const english = term.term["en"] ?? "";
+              const see = (term.see ?? [])
+                .map((id) => terms.get(id))
+                .filter((x) => x !== undefined);
+              return (
+                <div
+                  class="entry"
+                  id={term.id}
+                  data-term={searchText(term, lang)}
+                >
+                  <dt>
+                    <dfn>{term.term[lang]}</dfn>
+                    {lang !== "en" && english !== term.term[lang] && (
+                      <span class="english" lang="en">
+                        <span class="visually-hidden">
+                          {t(lang, "glossary.english")}:{" "}
+                        </span>
+                        {english}
+                      </span>
+                    )}
+                  </dt>
+                  <dd>
+                    <p class="def">{term.def[lang]}</p>
+                    {topic && (
+                      <p class="meta">
+                        <span class="muted">{t(lang, "glossary.topic")}:</span>{" "}
+                        <a class={`chip t${topic.tier}`} href={topic.url}>
+                          <span class="sq" aria-hidden="true" />
+                          {topic.id} {topic.title}
+                        </a>
+                      </p>
+                    )}
+                    {see.length > 0 && (
+                      <p class="meta">
+                        <span class="muted">{t(lang, "glossary.see")}:</span>{" "}
+                        {see.map((s, i) => (
+                          <>
+                            {i > 0 && <span aria-hidden="true"> · </span>}
+                            <a href={`#${s.id}`}>{s.term[lang]}</a>
+                          </>
+                        ))}
+                      </p>
+                    )}
+                  </dd>
+                </div>
+              );
+            })}
+          </dl>
+        </section>
+      ))}
+    </div>
+  </div>
+</Base>
+
+<style>
+  .page {
+    max-width: 860px;
+    padding-top: 40px;
+    padding-bottom: 64px;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 3rem);
+  }
+  .lead {
+    font-size: 1.15rem;
+    margin: 0 0 24px;
+    max-width: 68ch;
+  }
+  :global(html:not(.js)) .js-only {
+    display: none;
+  }
+
+  .tools {
+    display: grid;
+    gap: 6px;
+    margin-bottom: 16px;
+  }
+  .tools label {
+    font-weight: 700;
+  }
+  .tools input {
+    font: inherit;
+    color: var(--ink);
+    background: var(--surface);
+    border: 2px solid var(--line);
+    padding: 10px 12px;
+    width: 100%;
+    max-width: 420px;
+  }
+  .count {
+    margin: 0;
+    font-size: 14px;
+  }
+
+  .jump {
+    display: flex;
+    flex-wrap: wrap;
+    margin-bottom: 18px;
+  }
+  .jump .n {
+    font: 500 12px var(--mono);
+  }
+  .jump [hidden] {
+    display: none;
+  }
+
+  /* One block per tier, with its tier bar on top. */
+  .tier {
+    border: 2px solid var(--line);
+    background: var(--surface);
+    padding: 22px 20px 6px;
+    margin: 0 0 24px;
+    scroll-margin-top: 84px;
+  }
+  .tier h2 {
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+    font-size: 1.3rem;
+    margin: 0 0 6px;
+    scroll-margin-top: 84px;
+  }
+  .tier dl {
+    margin: 0;
+  }
+  .entry {
+    padding: 14px 0;
+    border-top: 1px solid var(--rule);
+    scroll-margin-top: 84px;
+  }
+  .entry:first-child {
+    border-top: 0;
+  }
+  /* The term a link pointed to: framed in ink (no colour). */
+  .entry:target {
+    outline: 2px solid var(--line);
+    outline-offset: 0;
+    box-shadow: var(--shadow-sm);
+    padding-left: 12px;
+    padding-right: 12px;
+    margin: 0 -12px;
+  }
+  .entry dt {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 12px;
+  }
+  dfn {
+    font-style: normal;
+    font-weight: 700;
+    font-size: 1.1rem;
+  }
+  .english {
+    font: 500 13px var(--mono);
+    color: var(--muted);
+  }
+  .entry dd {
+    margin: 6px 0 0;
+  }
+  .def {
+    margin: 0 0 8px;
+    max-width: 68ch;
+  }
+  .meta {
+    margin: 0 0 4px;
+    font-size: 14px;
+  }
+  .meta .chip {
+    margin-bottom: 0;
+  }
+
+  @media (max-width: 600px) {
+    .tier {
+      padding: 20px 14px 4px;
+    }
+    .entry:target {
+      padding-left: 8px;
+      padding-right: 8px;
+      margin: 0 -8px;
+    }
+  }
+</style>
+
+<script>
+  // The filter: hides the terms that don't match (the term in every language,
+  // or the definition), the tiers left empty and their jump links.
+  const root = document.querySelector<HTMLElement>("[data-glossary]");
+  const input = root?.querySelector<HTMLInputElement>("[data-filter]");
+  const count = root?.querySelector<HTMLElement>("[data-count]");
+  if (root && input && count) {
+    const entries = [...root.querySelectorAll<HTMLElement>("[data-term]")];
+    const tiers = [...root.querySelectorAll<HTMLElement>("[data-tier]")];
+    const jumps = [...root.querySelectorAll<HTMLElement>("[data-jump]")];
+    const apply = () => {
+      const q = input.value.trim().toLowerCase();
+      let shown = 0;
+      for (const e of entries) {
+        const hit = !q || (e.dataset["term"] ?? "").includes(q);
+        e.hidden = !hit;
+        if (hit) shown++;
+      }
+      for (const tier of tiers) {
+        const empty = !tier.querySelector("[data-term]:not([hidden])");
+        tier.hidden = empty;
+        const jump = jumps.find(
+          (j) => j.dataset["jump"] === tier.dataset["tier"],
+        );
+        if (jump) jump.hidden = empty;
+      }
+      const text =
+        shown === 0
+          ? (count.dataset["none"] ?? "").replace("{q}", input.value.trim())
+          : shown === 1
+            ? (count.dataset["one"] ?? "")
+            : (count.dataset["many"] ?? "").replace("{n}", String(shown));
+      count.textContent = text;
+    };
+    input.addEventListener("input", apply);
+    // A link to a term (#encoder) always shows it, even mid-filter.
+    window.addEventListener("hashchange", () => {
+      const target = document.getElementById(location.hash.slice(1));
+      if (target?.hidden) {
+        input.value = "";
+        apply();
+        target.scrollIntoView();
+      }
+    });
+  }
+</script>

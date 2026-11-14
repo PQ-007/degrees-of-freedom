@@ -5,7 +5,12 @@
 import { render } from "astro:content";
 import SourceList from "../../../components/SourceList.astro";
 import Base from "../../../layouts/Base.astro";
-import { getAtlas, getCompares, getRoadmaps } from "../../../lib/atlas";
+import {
+  getAtlas,
+  getCompares,
+  getGlossary,
+  getRoadmaps,
+} from "../../../lib/atlas";
 import { pathNodes } from "../../../lib/roadmaps";
 import { format, languages, localePath, t, type Lang } from "../../../lib/i18n";
 import { tiers } from "../../../lib/tiers";
@@ -53,6 +58,10 @@ const compares = (await getCompares(lang)).filter((c) =>
 const roadmaps = (await getRoadmaps(lang)).filter((r) =>
   pathNodes(r.roadmap).includes(id),
 );
+const glossary = await getGlossary(lang);
+const terms = [...glossary.terms.values()]
+  .filter((g) => g.node === id)
+  .sort((a, b) => (a.term[lang] ?? "").localeCompare(b.term[lang] ?? "", lang));
 const tierUrl = localePath(base, lang, `tree/#${tier?.id ?? ""}`);
 const chips = (list: string[]) =>
   list.map((x) => byId.get(x)).filter((x) => x !== undefined);
@@ -145,6 +154,19 @@ const chips = (list: string[]) =>
                   <a class="chip" href={c.url}>
                     {c.table.id} {c.title}
                   </a>
+                ))}
+              </dd>
+            </>
+          )}
+          {terms.length > 0 && (
+            <>
+              <dt>{t(lang, "node.terms")}</dt>
+              <dd>
+                {terms.map((g, i) => (
+                  <>
+                    {i > 0 && <span aria-hidden="true"> · </span>}
+                    <a href={`${glossary.url}#${g.id}`}>{g.term[lang]}</a>
+                  </>
                 ))}
               </dd>
             </>

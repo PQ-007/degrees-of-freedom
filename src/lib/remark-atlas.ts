@@ -4,10 +4,12 @@
 //                       the page's Sources list (numbered by first use)
 //   [[C4]]              a link to node C4's page, showing its title in the
 //   [[C4|motors]]       page's language, or the given text
+//   [[~encoder]]        a link to a glossary term (content/glossary/terms.yaml),
+//   [[~encoder|text]]   showing the term in the page's language, or the text
 //   ## Body {#body}     a heading with a fixed anchor, the same in every
 //                       language (robot teardowns use the template's anchors)
 //
-// An unknown source or node fails the build with the file and the fix.
+// An unknown source, node or term fails the build with the file and the fix.
 // The cited IDs, in order, go to the page as remarkPluginFrontmatter.citations.
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
@@ -18,6 +20,7 @@ export interface MdNode {
   type: string;
   value?: string;
   url?: string;
+  title?: string;
   children?: MdNode[];
   data?: { hProperties?: Record<string, unknown> };
 }
@@ -26,6 +29,8 @@ export interface AtlasRefs {
   /** Node ID → its slug and its title in this page's language. */
   nodes: Map<string, { slug: string; title: string }>;
   sources: Set<string>;
+  /** Term ID → the term and its definition in this page's language. */
+  terms: Map<string, { term: string; def: string }>;
   /** Site base, e.g. "/degrees-of-freedom/". */
   base: string;
   lang: string;
@@ -33,7 +38,8 @@ export interface AtlasRefs {
   file: string;
 }
 
-const PATTERN = /\[@([a-z0-9-]+)\]|\[\[([A-Z]\d+)(?:\|([^\]]+))?\]\]/g;
+const PATTERN =
+  /\[@([a-z0-9-]+)\]|\[\[([A-Z]\d+)(?:\|([^\]]+))?\]\]|\[\[~([a-z0-9-]+)(?:\|([^\]]+))?\]\]/g;
 const SKIP = new Set(["link", "linkReference", "code", "inlineCode", "html"]);
 
 const HEADING_ID = /\s*\{#([a-z0-9-]+)\}\s*$/;
@@ -63,7 +69,7 @@ export function transformAtlasRefs(tree: MdNode, refs: AtlasRefs): string[] {
       const at = m.index;
       if (at > last) out.push({ type: "text", value: text.slice(last, at) });
       last = at + m[0].length;
-      const [, sourceId, nodeId, label] = m;
+      const [, sourceId, nodeId, label, termId, termLabel] = m;
       if (sourceId) {
         if (!refs.sources.has(sourceId)) {
           throw new Error(
@@ -89,6 +95,21 @@ export function transformAtlasRefs(tree: MdNode, refs: AtlasRefs): string[] {
           url: `${refs.base}${refs.lang}/node/${node.slug}/`,
           children: [{ type: "text", value: label ?? node.title }],
           data: { hProperties: { className: ["node-ref"] } },
+        });
+      } else if (termId) {
+        const term = refs.terms.get(termId);
+        if (!term)
+          throw new Error(
+            `${refs.file}: [[~${termId}]] is not a term in content/glossary/terms.yaml`,
+          );
+        out.push({
+          type: "link",
+          url: `${refs.base}${refs.lang}/glossary/#${termId}`,
+          // The definition as a tooltip: a bonus for mouse users; the link
+          // itself leads to the full entry.
+          title: term.def,
+          children: [{ type: "text", value: termLabel ?? term.term }],
+          data: { hProperties: { className: ["term-ref"] } },
         });
       }
     }
@@ -129,6 +150,13 @@ export function loadRefs(
   root: string,
   lang: string,
 ): Omit<AtlasRefs, "base" | "lang" | "file"> {
+  const glossary = parse(
+    readFileSync(join(root, "content/glossary/terms.yaml"), "utf8"),
+  ) as {
+    id: string;
+    term: Record<string, string>;
+    def: Record<string, string>;
+  }[];
   const tree = parse(
     readFileSync(join(root, "content/tree/nodes.yaml"), "utf8"),
   ) as {
@@ -154,6 +182,12 @@ export function loadRefs(
       ]),
     ),
     sources: new Set(sources.map((s) => s.id)),
+    terms: new Map(
+      glossary.map((g) => [
+        g.id,
+        { term: g.term[lang] ?? g.id, def: g.def[lang] ?? "" },
+      ]),
+    ),
   };
 }
 
