@@ -54,6 +54,43 @@
     mn: Хэлхээний бүх хүчдэлийг хэмждэг нийтлэг жишиг цэг. Хоорондоо дохио дамжуулдаг хэсгүүдийн газардуулгыг холбох ёстой.
   see: [ground-loop, voltage-regulator]
 
+- id: radian
+  node: F1
+  term:
+    en: Radian
+    mn: Радиан
+  def:
+    en: The SI unit of angle. One radian is the angle at which the arc of a circle is as long as its radius, so a full turn is 2π radians, about 6.28.
+    mn: Өнцгийн SI нэгж. Нэг радиан бол тойргийн нумын урт радиустайгаа тэнцэх өнцөг тул бүтэн эргэлт 2π, ойролцоогоор 6.28 радиан.
+  see: [rotation-matrix]
+- id: vector
+  node: F1
+  term:
+    en: Vector
+    mn: Вектор
+  def:
+    en: A quantity with a size and a direction, drawn as an arrow and written as one number along each axis. Positions, velocities and forces are vectors.
+    mn: Хэмжээ ба чиглэлтэй хэмжигдэхүүн; сумаар зурж, тэнхлэг бүрийн дагуух нэг тоогоор бичдэг. Байрлал, хурд, хүч бол вектор.
+  see: [coordinate-frame]
+- id: coordinate-frame
+  node: F1
+  term:
+    en: Coordinate frame
+    mn: Координатын систем
+  def:
+    en: An origin and a set of axes to measure positions from. The same point has different coordinates in different frames; a robot has many, such as the world, its body, each joint and each sensor.
+    mn: Байрлалыг хэмжих эх цэг ба тэнхлэгүүд. Нэг цэг өөр өөр системд өөр координаттай; роботод ертөнц, бие, үе бүр, мэдрэгч бүрийн гэх мэт олон систем бий.
+  see: [rotation-matrix, vector]
+- id: rotation-matrix
+  node: F1
+  term:
+    en: Rotation matrix
+    mn: Эргэлтийн матриц
+  def:
+    en: A grid of numbers built from the cosine and sine of an angle; multiplying a vector by it turns the vector by that angle. Its inverse is its transpose.
+    mn: Өнцгийн косинус, синусаас бүтсэн тоон хүснэгт; векторыг үүгээр үржүүлэхэд тэр өнцгөөр эргэнэ. Урвуу нь транспонирласан матриц нь.
+  see: [radian, coordinate-frame]
+
 # T1 Components
 - id: gear-ratio
   node: C2

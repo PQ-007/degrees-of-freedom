@@ -282,3 +282,46 @@
     - title: "MuJoCo documentation: Overview"
       url: https://mujoco.readthedocs.io/en/stable/overview.html
   checked: web, 2026-11-14
+
+- id: si-radian
+  claim: >-
+    The radian is the SI's coherent unit for plane angle: one radian is the
+    angle subtended at the centre of a circle by an arc equal in length to the
+    radius; a right angle is π/2 rad.
+  sources:
+    - title: "The International System of Units (SI Brochure), 9th edition, BIPM, Table 4 note (b)"
+      url: https://www.bipm.org/en/publications/si-brochure
+  checked: web (the English PDF), 2026-11-14
+
+- id: mco-units
+  claim: >-
+    NASA's Mars Climate Orbiter, launched on 11 December 1998, was lost on
+    23 September 1999 because of a navigation error caused by a failure to
+    translate English units to metric: ground software used English units
+    while the spacecraft's software used metric, which sent it too close to
+    Mars.
+  sources:
+    - title: "Mars Climate Orbiter (NASA Science)"
+      url: https://science.nasa.gov/mission/mars-climate-orbiter/
+  checked: web, 2026-11-14
+
+- id: ros-rep103
+  claim: >-
+    ROS's convention (REP 103, "Standard Units of Measure and Coordinate
+    Conventions") uses SI units (metres, kilograms, seconds, radians), right-
+    handed frames, and for a body: x forward, y left, z up.
+  sources:
+    - title: "REP 103: Standard Units of Measure and Coordinate Conventions (ROS, active)"
+      url: https://github.com/ros-infrastructure/rep/blob/master/rep-0103.rst
+  checked: web (the REP's source text), 2026-11-14
+
+- id: mr-rotations
+  claim: >-
+    A rotation matrix's inverse is its transpose; multiplying rotation matrices
+    combines rotations, and the order generally matters (not commutative); a
+    homogeneous transformation matrix packs a rotation and a position into one
+    4 × 4 matrix.
+  sources:
+    - title: "Modern Robotics: Mechanics, Planning, and Control, chapter 3 (K. M. Lynch and F. C. Park, Cambridge University Press, 2017; free preprint from the authors)"
+      url: https://hades.mech.northwestern.edu/index.php/Modern_Robotics
+  checked: web (the preprint PDF, sections 3.2 and 3.3), 2026-11-14
