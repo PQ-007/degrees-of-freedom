@@ -12,6 +12,8 @@ const pages = [
   { name: "compare", path: "{lang}/compare/actuators/" },
   { name: "robots-index", path: "{lang}/robots/" },
   { name: "robot", path: "{lang}/robots/planetary-rover/" },
+  { name: "roadmaps-index", path: "{lang}/roadmaps/" },
+  { name: "roadmap", path: "{lang}/roadmaps/mars-rover/" },
   { name: "search", path: "{lang}/search/?q=control" },
   { name: "404", path: "404.html" },
 ];

@@ -5,7 +5,8 @@
 import { render } from "astro:content";
 import SourceList from "../../../components/SourceList.astro";
 import Base from "../../../layouts/Base.astro";
-import { getAtlas, getCompares } from "../../../lib/atlas";
+import { getAtlas, getCompares, getRoadmaps } from "../../../lib/atlas";
+import { pathNodes } from "../../../lib/roadmaps";
 import { format, languages, localePath, t, type Lang } from "../../../lib/i18n";
 import { tiers } from "../../../lib/tiers";
 
@@ -48,6 +49,9 @@ const toc = [
 const base = import.meta.env.BASE_URL;
 const compares = (await getCompares(lang)).filter((c) =>
   c.table.nodes.includes(id),
+);
+const roadmaps = (await getRoadmaps(lang)).filter((r) =>
+  pathNodes(r.roadmap).includes(id),
 );
 const tierUrl = localePath(base, lang, `tree/#${tier?.id ?? ""}`);
 const chips = (list: string[]) =>
@@ -145,7 +149,24 @@ const chips = (list: string[]) =>
               </dd>
             </>
           )}
+          {roadmaps.length > 0 && (
+            <>
+              <dt>{t(lang, "node.roadmaps")}</dt>
+              <dd>
+                {roadmaps.map((r) => (
+                  <a class="chip" href={r.url}>
+                    {r.title}
+                  </a>
+                ))}
+              </dd>
+            </>
+          )}
         </dl>
+
+        <label class="learn js-only">
+          <input type="checkbox" data-learn={id} />
+          <span>{t(lang, "node.learned")}</span>
+        </label>
 
         {toc.length > 0 && (
           <details class="fold toc-bar" data-pagefind-ignore>
@@ -315,6 +336,31 @@ const chips = (list: string[]) =>
     margin: 0;
   }
 
+  .learn {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 28px;
+    padding: 8px 12px;
+    border: 2px solid var(--line);
+    background: var(--surface);
+    font-weight: 600;
+    font-size: 15px;
+    cursor: pointer;
+  }
+  .learn:hover {
+    border-color: var(--hover-line);
+  }
+  .learn input {
+    width: 20px;
+    height: 20px;
+    margin: 0;
+    accent-color: var(--ink);
+  }
+  :global(html:not(.js)) .js-only {
+    display: none;
+  }
+
   .pager {
     display: flex;
     justify-content: space-between;
@@ -358,6 +404,16 @@ const chips = (list: string[]) =>
 </style>
 
 <script>
+  import { onLearnedChange, setLearned } from "../../../lib/progress";
+
+  // "Learned": shared with the roadmap checklists (src/lib/progress.ts).
+  const learn = document.querySelector<HTMLInputElement>("[data-learn]");
+  if (learn) {
+    const id = learn.dataset["learn"] ?? "";
+    learn.addEventListener("change", () => setLearned(id, learn.checked));
+    onLearnedChange((all) => (learn.checked = all.has(id)));
+  }
+
   // "On this page": mark the section being read.
   const toc = document.querySelector<HTMLElement>("[data-toc]");
   if (toc) {

@@ -5,6 +5,7 @@ import { languages, localePath, type Lang } from "./i18n";
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { checkCompare, type CompareTable } from "./compare";
+import { checkRoadmap, type Roadmap } from "./roadmaps";
 import { checkRobot, type RobotData } from "./robots";
 import { checkTree, compareIds, usedBy, type TreeNode } from "./tree";
 
@@ -193,6 +194,66 @@ export async function getRobots(lang: Lang): Promise<RobotPage[]> {
       glance: entry.data.glance,
       svg: svgs.get(data.slug) ?? "",
       url: localePath(base, lang, `robots/${data.slug}/`),
+      entry,
+    };
+  });
+}
+
+export interface RoadmapPage {
+  roadmap: Roadmap;
+  title: string;
+  summary: string;
+  url: string;
+  entry: CollectionEntry<"roadmapPages">;
+}
+
+let roadmapsChecked:
+  | Promise<{ roadmaps: Roadmap[]; pages: CollectionEntry<"roadmapPages">[] }>
+  | undefined;
+
+function loadRoadmaps() {
+  roadmapsChecked ??= (async () => {
+    const { nodes } = await load();
+    const { robots } = await loadRobots();
+    const roadmaps = (await getCollection("roadmapData")).map(
+      (e) => e.data as Roadmap,
+    );
+    const pages = await getCollection("roadmapPages");
+    const needsOf = new Map(nodes.map((n) => [n.id, n.needs]));
+    const robotIds = new Set(robots.map((r) => r.id));
+    const errors = roadmaps.flatMap((r) =>
+      checkRoadmap(
+        r,
+        needsOf,
+        robotIds,
+        languages,
+        pages
+          .filter((p) => p.id.endsWith(`/${r.slug}`))
+          .map((p) => p.id.split("/")[0] ?? ""),
+      ),
+    );
+    if (errors.length > 0) {
+      throw new Error(
+        `The roadmaps have ${errors.length} problem(s):\n- ${errors.join("\n- ")}`,
+      );
+    }
+    return { roadmaps, pages };
+  })();
+  return roadmapsChecked;
+}
+
+/** Every roadmap with its text in `lang`. */
+export async function getRoadmaps(lang: Lang): Promise<RoadmapPage[]> {
+  const { roadmaps, pages } = await loadRoadmaps();
+  const base = import.meta.env.BASE_URL;
+  return roadmaps.map((roadmap) => {
+    const entry = pages.find((p) => p.id === `${lang}/${roadmap.slug}`);
+    if (!entry) throw new Error(`roadmap ${roadmap.slug} has no ${lang} page`); // checkRoadmap rules this out
+    return {
+      roadmap,
+      title: entry.data.title,
+      summary: entry.data.summary,
+      url: localePath(base, lang, `roadmaps/${roadmap.slug}/`),
       entry,
     };
   });

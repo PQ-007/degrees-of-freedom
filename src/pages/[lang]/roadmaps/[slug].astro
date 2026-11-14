@@ -1,0 +1,398 @@
+---
+// A roadmap (chosen by the user, 2026-11-14: ordered path + checklist). One
+// numbered path in stages; each step a topic with why this goal needs it, a
+// must/helpful tag and a "learned" checkbox; progress on top; later topics
+// folded at the end; then the text (how to use it, then build it).
+import { render } from "astro:content";
+import Base from "../../../layouts/Base.astro";
+import { getAtlas, getRoadmaps, getRobots } from "../../../lib/atlas";
+import { format, languages, localePath, t, type Lang } from "../../../lib/i18n";
+
+export async function getStaticPaths() {
+  const paths = [];
+  for (const lang of languages) {
+    for (const r of await getRoadmaps(lang)) {
+      paths.push({ params: { lang, slug: r.roadmap.slug } });
+    }
+  }
+  return paths;
+}
+
+const lang = Astro.params.lang as Lang;
+const page = (await getRoadmaps(lang)).find(
+  (r) => r.roadmap.slug === Astro.params.slug,
+);
+if (!page) throw new Error(`no roadmap ${Astro.params.slug}`);
+const { roadmap } = page;
+const atlas = await getAtlas(lang);
+const byId = new Map(atlas.map((n) => [n.id, n]));
+const robot = (await getRobots(lang)).find((r) => r.data.id === roadmap.robot);
+const { Content } = await render(page.entry);
+
+// Number the steps through all stages.
+let n = 0;
+const stages = roadmap.stages.map((s, i) => ({
+  ...s,
+  number: i + 1,
+  steps: s.steps.map((st) => ({ ...st, n: ++n, node: byId.get(st.node) })),
+}));
+const total = n;
+const later = roadmap.later.map((l) => ({ ...l, node: byId.get(l.node) }));
+const base = import.meta.env.BASE_URL;
+---
+
+<Base lang={lang} title={page.title} description={page.summary}>
+  <div
+    class="wrap page"
+    data-roadmap
+    data-total={total}
+    data-progress={t(lang, "roadmap.progress")}
+  >
+    <nav class="crumbs" aria-label="Breadcrumb">
+      <a href={localePath(base, lang, "roadmaps/")}>
+        {t(lang, "roadmaps.title")}
+      </a>
+    </nav>
+    <h1>{page.title}</h1>
+    <p class="summary">{page.summary}</p>
+    {robot && (
+      <dl class="meta">
+        <dt>{t(lang, "roadmap.robot")}</dt>
+        <dd>
+          <a class="chip" href={robot.url}>
+            {robot.data.id} {robot.title}
+          </a>
+        </dd>
+      </dl>
+    )}
+
+    <div class="progress js-only" aria-live="polite">
+      <div class="bar-track" aria-hidden="true">
+        <div class="bar-fill" data-fill></div>
+      </div>
+      <p class="count" data-count>
+        {format(t(lang, "roadmap.progress"), { n: 0, total })}
+      </p>
+      <p class="muted saved">{t(lang, "roadmap.saved")}</p>
+    </div>
+
+    {stages.map((stage) => (
+      <section class="stage" aria-labelledby={`stage-${stage.key}`}>
+        <h2 id={`stage-${stage.key}`}>
+          <span class="label">
+            {format(t(lang, "roadmap.stage"), { n: stage.number })}
+          </span>
+          {stage.title[lang]}
+        </h2>
+        <ol class="steps" start={stage.steps[0]?.n}>
+          {stage.steps.map(
+            (st) =>
+              st.node && (
+                <li class={`step ${st.level} t${st.node.tier}`}>
+                  <span class="num" aria-hidden="true">
+                    {st.n}
+                  </span>
+                  <div class="body">
+                    <div class="head">
+                      <a class="title" href={st.node.url}>
+                        <span class="sq" aria-hidden="true" />
+                        <span class="nid">{st.node.id}</span> {st.node.title}
+                      </a>
+                      <span class={`tag ${st.level}`}>
+                        {t(lang, `roadmap.${st.level}`)}
+                      </span>
+                    </div>
+                    <p class="why">{st.why[lang]}</p>
+                  </div>
+                  <label class="tick js-only">
+                    <input
+                      type="checkbox"
+                      data-node={st.node.id}
+                      aria-label={format(t(lang, "roadmap.learnedLabel"), {
+                        node: `${st.node.id} ${st.node.title}`,
+                      })}
+                    />
+                    <span aria-hidden="true">{t(lang, "node.learned")}</span>
+                  </label>
+                </li>
+              ),
+          )}
+        </ol>
+      </section>
+    ))}
+
+    {later.length > 0 && (
+      <details class="later">
+        <summary>
+          {format(t(lang, "roadmap.later"), { n: later.length })}
+        </summary>
+        <ul class="steps">
+          {later.map(
+            (l) =>
+              l.node && (
+                <li class={`step t${l.node.tier}`}>
+                  <div class="body">
+                    <div class="head">
+                      <a class="title" href={l.node.url}>
+                        <span class="sq" aria-hidden="true" />
+                        <span class="nid">{l.node.id}</span> {l.node.title}
+                      </a>
+                    </div>
+                    <p class="why">{l.why[lang]}</p>
+                  </div>
+                  <label class="tick js-only">
+                    <input
+                      type="checkbox"
+                      data-node={l.node.id}
+                      data-later
+                      aria-label={format(t(lang, "roadmap.learnedLabel"), {
+                        node: `${l.node.id} ${l.node.title}`,
+                      })}
+                    />
+                    <span aria-hidden="true">{t(lang, "node.learned")}</span>
+                  </label>
+                </li>
+              ),
+          )}
+        </ul>
+      </details>
+    )}
+
+    <div class="prose">
+      <Content />
+    </div>
+  </div>
+</Base>
+
+<style>
+  .page {
+    max-width: 52rem;
+    padding-top: 40px;
+    padding-bottom: 64px;
+  }
+  .crumbs {
+    font-size: 14px;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 2.8rem);
+    letter-spacing: -0.035em;
+    margin: 16px 0 12px;
+  }
+  .summary {
+    font-size: 1.15rem;
+    margin: 0 0 20px;
+  }
+  .meta {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 8px 16px;
+    align-items: baseline;
+    margin: 0 0 24px;
+    font-size: 14px;
+  }
+  .meta dt {
+    color: var(--muted);
+    font-weight: 500;
+  }
+  .meta dd {
+    margin: 0;
+  }
+
+  /* Without JS there is nothing to tick or count. */
+  :global(html:not(.js)) .js-only {
+    display: none;
+  }
+
+  .progress {
+    border: 2px solid var(--line);
+    background: var(--surface);
+    padding: 14px 16px;
+    margin: 0 0 32px;
+  }
+  .bar-track {
+    height: 14px;
+    border: 2px solid var(--line);
+    background: var(--bg);
+  }
+  .bar-fill {
+    height: 100%;
+    width: 0;
+    background: var(--ink);
+    transition: width 0.2s;
+  }
+  .count {
+    margin: 10px 0 2px;
+    font-weight: 700;
+  }
+  .saved {
+    margin: 0;
+    font-size: 13.5px;
+  }
+
+  .stage {
+    border-top: 2px solid var(--line);
+    padding: 24px 0 8px;
+  }
+  .stage h2 {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 4px 14px;
+    font-size: 1.35rem;
+    margin: 0 0 14px;
+  }
+  .steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    gap: 10px;
+  }
+  .step {
+    display: grid;
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    gap: 14px;
+    align-items: start;
+    border: 2px solid var(--line);
+    background: var(--surface);
+    padding: 12px 14px;
+  }
+  .step.done {
+    background: var(--bg);
+  }
+  .num {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border: 2px solid var(--line);
+    font: 700 13px var(--mono);
+  }
+  .step.done .num {
+    background: var(--ink);
+    color: var(--bg);
+  }
+  .later .step {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
+  }
+  .title {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 700;
+    text-decoration: none;
+  }
+  .title:hover {
+    text-decoration: underline;
+  }
+  .nid {
+    font: 700 11.5px var(--mono);
+    letter-spacing: 0.04em;
+    color: var(--muted);
+  }
+  .tag {
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 2px 8px;
+    border: 2px solid var(--line);
+  }
+  .tag.must {
+    background: var(--primary-bg);
+    color: var(--primary-fg);
+    border-color: var(--primary-bg);
+  }
+  .tag.helpful {
+    border-style: dashed;
+  }
+  .why {
+    margin: 6px 0 0;
+    font-size: 15px;
+    color: var(--muted);
+  }
+  .tick {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    cursor: pointer;
+    padding-top: 4px;
+  }
+  .tick input {
+    width: 20px;
+    height: 20px;
+    accent-color: var(--ink);
+    margin: 0;
+  }
+
+  .later {
+    border: 2px dashed var(--line);
+    padding: 12px 16px;
+    margin: 24px 0 8px;
+  }
+  .later summary {
+    cursor: pointer;
+    font-weight: 600;
+  }
+  .later .steps {
+    margin-top: 14px;
+  }
+
+  @media (max-width: 560px) {
+    .step {
+      grid-template-columns: 34px minmax(0, 1fr);
+    }
+    .step .tick {
+      grid-column: 2;
+      padding-top: 0;
+    }
+    .later .step .tick {
+      grid-column: 1;
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .bar-fill {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  import { format } from "../../../lib/i18n";
+  import { onLearnedChange, setLearned } from "../../../lib/progress";
+
+  const root = document.querySelector<HTMLElement>("[data-roadmap]");
+  if (root) {
+    const boxes = [
+      ...root.querySelectorAll<HTMLInputElement>("input[data-node]"),
+    ];
+    const total = Number(root.dataset["total"]);
+    const fill = root.querySelector<HTMLElement>("[data-fill]");
+    const count = root.querySelector<HTMLElement>("[data-count]");
+    for (const box of boxes) {
+      box.addEventListener("change", () =>
+        setLearned(box.dataset["node"] ?? "", box.checked),
+      );
+    }
+    onLearnedChange((all) => {
+      let done = 0;
+      for (const box of boxes) {
+        const on = all.has(box.dataset["node"] ?? "");
+        box.checked = on;
+        box.closest(".step")?.classList.toggle("done", on);
+        if (on && !("later" in box.dataset)) done++;
+      }
+      if (fill) fill.style.width = `${(100 * done) / total}%`;
+      if (count)
+        count.textContent = format(root.dataset["progress"] ?? "", {
+          n: done,
+          total,
+        });
+    });
+  }
+</script>

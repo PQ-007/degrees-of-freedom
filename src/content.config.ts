@@ -125,6 +125,38 @@ const robotPages = defineCollection({
   }),
 });
 
+// Roadmaps: the ordered path (one YAML, every language inside) and the text
+// per language (content/roadmaps/<lang>/<slug>.md).
+const roadmapData = defineCollection({
+  loader: glob({ pattern: "*.yaml", base: "content/roadmaps" }),
+  schema: z.object({
+    slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/),
+    robot: z.string().optional(),
+    stages: z.array(
+      z.object({
+        key: z.string(),
+        title: localized,
+        steps: z.array(
+          z.object({
+            node: z.string(),
+            level: z.enum(["must", "helpful"]),
+            why: localized,
+          }),
+        ),
+      }),
+    ),
+    later: z.array(z.object({ node: z.string(), why: localized })),
+  }),
+});
+const roadmapPages = defineCollection({
+  loader: glob({
+    pattern: "*/*.md",
+    base: "content/roadmaps",
+    generateId: ({ entry }) => entry.replace(/\.md$/, ""),
+  }),
+  schema: z.object({ title: z.string().min(1), summary: z.string().min(1) }),
+});
+
 export const collections = {
   tree,
   nodes,
@@ -133,4 +165,6 @@ export const collections = {
   comparePages,
   robotData,
   robotPages,
+  roadmapData,
+  roadmapPages,
 };

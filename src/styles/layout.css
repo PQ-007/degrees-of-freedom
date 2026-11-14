@@ -101,9 +101,10 @@
   display: none;
 }
 
-/* Phones: the nav and the language link fold into a menu below the header row.
+/* Below 960px (five nav links no longer fit): the nav and the language link
+   fold into a menu below the header row.
    Without JS (no .js on <html>) they stay visible and wrap instead. */
-@media (max-width: 640px) {
+@media (max-width: 960px) {
   .header-panel {
     order: 3;
     flex-basis: 100%;
