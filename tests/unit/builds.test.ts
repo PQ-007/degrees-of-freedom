@@ -15,7 +15,15 @@ const idsIn = (dir: string) =>
   );
 const ids = {
   nodes: new Set(read<{ id: string }[]>("tree/nodes.yaml").map((n) => n.id)),
-  compares: idsIn("compare"),
+  hardware: new Set(
+    readdirSync(new URL("hardware/", root))
+      .filter((f) => f.endsWith(".yaml"))
+      .flatMap((f) =>
+        read<{ types: { key: string }[] }>(`hardware/${f}`).types.map(
+          (t) => t.key,
+        ),
+      ),
+  ),
   robots: idsIn("robots"),
 };
 const t = { en: "x", mn: "х" };
@@ -25,7 +33,7 @@ const build = (): Build => ({
   difficulty: 2,
   time: t,
   nodes: ["C4"],
-  parts: [{ node: "C4", compare: "X1", name: t }],
+  parts: [{ node: "C4", hardware: "gearmotor", name: t }],
   diagram: { sense: [t], think: [t], act: [t], power: [t] },
   stages: [{ key: "a", title: t, steps: [{ node: "L1", text: t }] }],
 });
@@ -41,7 +49,7 @@ describe("checkBuild", () => {
     const b = build();
     b.difficulty = 7;
     b.robot = "R99";
-    b.parts = [{ node: "Z1", compare: "X99", name: { en: "x" } }];
+    b.parts = [{ node: "Z1", hardware: "warp-drive", name: { en: "x" } }];
     b.diagram.think = [];
     b.stages[0]?.steps.push({ node: "Q1", text: { en: "y" } });
     expect(check(b, ["en"])).toEqual([
@@ -49,7 +57,7 @@ describe("checkBuild", () => {
       "builds/demo.yaml: difficulty must be 1 to 5",
       "builds/demo.yaml links robot R99, which has no teardown",
       "builds/demo.yaml: part 1 links node Z1, which is not in nodes.yaml",
-      "builds/demo.yaml: part 1 links compare page X99, which doesn't exist yet",
+      'builds/demo.yaml: part 1 links Hardware entry "warp-drive", which doesn\'t exist yet',
       "builds/demo.yaml: part 1 has no mn name",
       "builds/demo.yaml: the diagram's think column is empty",
       "builds/demo.yaml: step 2 links node Q1, which is not in nodes.yaml",

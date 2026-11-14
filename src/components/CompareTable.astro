@@ -1,0 +1,264 @@
+---
+// A compare table: options as rows, fixed columns, ratings as dots with a
+// word; a Sort by select; on phones one card per option. Shown folded at the
+// end of a Hardware category (the user, 2026-11-14: comparison is a side
+// feature, not the main content).
+import { dots, type CompareTable, type Localized } from "../lib/compare";
+import { format, t, type Lang } from "../lib/i18n";
+import type { MessageKey } from "../i18n/en";
+
+interface Props {
+  table: CompareTable;
+  lang: Lang;
+  label: string;
+  /** Row key → the anchor of that option's entry on the page. */
+  rowLinks?: Record<string, string>;
+}
+
+const { table, lang, label, rowLinks = {} } = Astro.props;
+const L = (v: Localized) => v[lang] ?? "";
+const ratingWord = (n: number) => t(lang, `rating.${n}` as MessageKey);
+const ratingCols = table.columns.filter((c) => c.type === "rating");
+const ratingData = (values: Record<string, number | Localized>) =>
+  Object.fromEntries(
+    ratingCols.map((c) => [`data-r-${c.key}`, String(values[c.key])]),
+  );
+const sortId = `sort-${table.id}`;
+---
+
+<div class="compare-block" data-compare>
+  <div class="tools">
+    <label for={sortId}>{t(lang, "compare.sortBy")}</label>
+    <select id={sortId} data-sort>
+      <option value="">{t(lang, "compare.authored")}</option>
+      {ratingCols.map((c) => (
+        <>
+          <option value={`${c.key}:desc`}>
+            {format(t(lang, "compare.highFirst"), { column: L(c.label) })}
+          </option>
+          <option value={`${c.key}:asc`}>
+            {format(t(lang, "compare.lowFirst"), { column: L(c.label) })}
+          </option>
+        </>
+      ))}
+    </select>
+  </div>
+  <p class="note muted">{t(lang, "compare.ratingsNote")}</p>
+
+  <div class="table-frame" tabindex="0" role="region" aria-label={label}>
+    <table class="compare">
+      <thead>
+        <tr>
+          <th scope="col">{t(lang, "compare.option")}</th>
+          {table.columns.map((c) => (
+            <th scope="col">{L(c.label)}</th>
+          ))}
+        </tr>
+      </thead>
+      <tbody data-sortable>
+        {table.rows.map((row, i) => (
+          <tr data-order={i} {...ratingData(row.values)}>
+            <th scope="row">
+              {rowLinks[row.key] ? (
+                <a href={rowLinks[row.key]}>{L(row.name)}</a>
+              ) : (
+                L(row.name)
+              )}
+            </th>
+            {table.columns.map((c) => {
+              const v = row.values[c.key];
+              return typeof v === "number" ? (
+                <td class="rating">
+                  <span class="dots" aria-hidden="true">
+                    {dots(v)}
+                  </span>{" "}
+                  {ratingWord(v)}
+                  <span class="visually-hidden">
+                    {" "}
+                    ({format(t(lang, "compare.outOf"), { n: v })})
+                  </span>
+                </td>
+              ) : (
+                <td>{v ? L(v) : ""}</td>
+              );
+            })}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </div>
+
+  <ul class="option-cards" data-sortable>
+    {table.rows.map((row, i) => (
+      <li class="card" data-order={i} {...ratingData(row.values)}>
+        <h3>
+          {rowLinks[row.key] ? (
+            <a href={rowLinks[row.key]}>{L(row.name)}</a>
+          ) : (
+            L(row.name)
+          )}
+        </h3>
+        <dl>
+          {table.columns.map((c) => {
+            const v = row.values[c.key];
+            return (
+              <>
+                <dt>{L(c.label)}</dt>
+                <dd class={typeof v === "number" ? "rating" : undefined}>
+                  {typeof v === "number" ? (
+                    <>
+                      <span class="dots" aria-hidden="true">
+                        {dots(v)}
+                      </span>{" "}
+                      {ratingWord(v)}
+                      <span class="visually-hidden">
+                        {" "}
+                        ({format(t(lang, "compare.outOf"), { n: v })})
+                      </span>
+                    </>
+                  ) : v ? (
+                    L(v)
+                  ) : (
+                    ""
+                  )}
+                </dd>
+              </>
+            );
+          })}
+        </dl>
+      </li>
+    ))}
+  </ul>
+</div>
+
+<style>
+  .tools {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  select {
+    font: 500 14px var(--font);
+    color: var(--ink);
+    background: var(--surface);
+    border: 2px solid var(--line);
+    padding: 7px 10px;
+    border-radius: 0;
+    max-width: 100%;
+  }
+  select:hover {
+    border-color: var(--hover-line);
+  }
+  .note {
+    font-size: 13.5px;
+    margin: 10px 0 14px;
+  }
+
+  /* Bordered, inverted header row; the first column stays put while the rest
+     scrolls sideways. Positioned, so the visually hidden "n of 5" texts are
+     clipped by the frame instead of widening the page. */
+  .table-frame {
+    position: relative;
+    overflow-x: auto;
+    border: 2px solid var(--line);
+    background: var(--surface);
+  }
+  table.compare {
+    display: table;
+    width: 100%;
+    min-width: 1100px;
+    margin: 0;
+    border: 0;
+    font-size: 14px;
+  }
+  .compare th[scope="row"] {
+    position: sticky;
+    left: 0;
+    background: var(--surface);
+    border-right: 2px solid var(--line);
+    font-weight: 700;
+    min-width: 170px;
+  }
+  .compare thead th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    border-right: 2px solid var(--line);
+  }
+  .compare td,
+  .compare th {
+    padding: 10px 12px;
+  }
+  .rating {
+    white-space: nowrap;
+  }
+  .dots {
+    font-family: var(--mono);
+    letter-spacing: 1px;
+  }
+
+  .option-cards {
+    display: none;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    gap: 16px;
+  }
+  .option-cards h3 {
+    font-size: 1.1rem;
+    margin: 0 0 10px;
+  }
+  .option-cards dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: minmax(0, 40%) minmax(0, 1fr);
+    gap: 6px 12px;
+    font-size: 14px;
+  }
+  .option-cards dt {
+    color: var(--muted);
+    font-weight: 600;
+  }
+  .option-cards dd {
+    margin: 0;
+  }
+  .option-cards .rating {
+    white-space: normal;
+  }
+
+  @media (max-width: 760px) {
+    .table-frame {
+      display: none;
+    }
+    .option-cards {
+      display: grid;
+    }
+  }
+</style>
+
+<script>
+  // Sort the table rows and the phone cards together, per table.
+  for (const block of document.querySelectorAll<HTMLElement>(
+    "[data-compare]",
+  )) {
+    const select = block.querySelector<HTMLSelectElement>("[data-sort]");
+    const lists = block.querySelectorAll<HTMLElement>("[data-sortable]");
+    select?.addEventListener("change", () => {
+      const [key, dir] = select.value.split(":");
+      for (const list of lists) {
+        const items = [...list.children] as HTMLElement[];
+        const order = (el: HTMLElement) => Number(el.dataset["order"]);
+        items.sort((a, b) => {
+          if (!key) return order(a) - order(b);
+          const va = Number(a.getAttribute(`data-r-${key}`));
+          const vb = Number(b.getAttribute(`data-r-${key}`));
+          return (dir === "asc" ? va - vb : vb - va) || order(a) - order(b);
+        });
+        list.append(...items);
+      }
+    });
+  }
+</script>

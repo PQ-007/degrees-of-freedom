@@ -9,7 +9,7 @@ import SourceList from "../../../components/SourceList.astro";
 import {
   getAtlas,
   getBuilds,
-  getCompares,
+  getHardwareTypes,
   getRoadmaps,
   getRobots,
 } from "../../../lib/atlas";
@@ -38,7 +38,7 @@ const byId = new Map(atlas.map((n) => [n.id, n]));
 const topics = build.nodes
   .map((id) => byId.get(id))
   .filter((n) => n !== undefined);
-const compares = new Map((await getCompares(lang)).map((c) => [c.table.id, c]));
+const hardware = await getHardwareTypes(lang);
 const robot = (await getRobots(lang)).find((r) => r.data.id === build.robot);
 const roadmaps = (await getRoadmaps(lang)).filter(
   (r) => r.roadmap.build === build.id,
@@ -141,7 +141,7 @@ const base = import.meta.env.BASE_URL;
       <ul class="parts">
         {build.parts.map((p) => {
           const node = byId.get(p.node);
-          const cmp = p.compare ? compares.get(p.compare) : undefined;
+          const hw = p.hardware ? hardware.get(p.hardware) : undefined;
           return (
             <li>
               <span class="part-name">{p.name[lang]}</span>
@@ -152,9 +152,9 @@ const base = import.meta.env.BASE_URL;
                     {node.id} {node.title}
                   </a>
                 )}
-                {cmp && (
-                  <a class="chip" href={cmp.url}>
-                    {t(lang, "node.compare")}: {cmp.table.id} {cmp.title}
+                {hw && (
+                  <a class="chip" href={hw.url}>
+                    {t(lang, "node.hardware")}: {hw.name}
                   </a>
                 )}
               </span>

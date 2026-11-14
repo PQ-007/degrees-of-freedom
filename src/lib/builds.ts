@@ -14,7 +14,7 @@ export interface Build {
   time: Localized;
   nodes: string[];
   robot?: string | undefined;
-  parts: { node: string; compare?: string | undefined; name: Localized }[];
+  parts: { node: string; hardware?: string | undefined; name: Localized }[];
   diagram: {
     sense: Localized[];
     think: Localized[];
@@ -35,7 +35,8 @@ export function checkBuild(
   build: Build,
   ids: {
     nodes: ReadonlySet<string>;
-    compares: ReadonlySet<string>;
+    /** Hardware type keys (src/lib/hardware.ts). */
+    hardware: ReadonlySet<string>;
     robots: ReadonlySet<string>;
   },
   languages: readonly string[],
@@ -72,9 +73,9 @@ export function checkBuild(
 
   build.parts.forEach((p, i) => {
     node(p.node, `part ${i + 1}`);
-    if (p.compare && !ids.compares.has(p.compare)) {
+    if (p.hardware && !ids.hardware.has(p.hardware)) {
       errors.push(
-        `${at}: part ${i + 1} links compare page ${p.compare}, which doesn't exist yet`,
+        `${at}: part ${i + 1} links Hardware entry "${p.hardware}", which doesn't exist yet`,
       );
     }
     for (const l of missing(p.name))

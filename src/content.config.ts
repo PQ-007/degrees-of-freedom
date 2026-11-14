@@ -55,8 +55,8 @@ const sources = defineCollection({
   }),
 });
 
-// Compare pages: the table (one YAML per page, every language inside) and the
-// prose per language (content/compare/<lang>/<slug>.md).
+// Compare tables (one YAML each, every language inside), shown folded at the
+// end of a Hardware category page.
 const localized = z.record(z.string(), z.string());
 const compareTables = defineCollection({
   loader: glob({ pattern: "*.yaml", base: "content/compare" }),
@@ -80,10 +80,26 @@ const compareTables = defineCollection({
     ),
   }),
 });
-const comparePages = defineCollection({
+// Hardware (chosen by the user, 2026-11-14, in place of Compare pages): each
+// category's types (one YAML, every language inside) and its page per
+// language (content/hardware/<lang>/<slug>.md). A category can fold a compare
+// table in at the end.
+const hardwareData = defineCollection({
+  loader: glob({ pattern: "*.yaml", base: "content/hardware" }),
+  schema: z.object({
+    id: z.string(),
+    slug: z.string().regex(/^[a-z0-9]+(-[a-z0-9]+)*$/),
+    nodes: z.array(z.string()),
+    compare: z.string().optional(),
+    types: z.array(
+      z.object({ key: z.string(), node: z.string(), name: localized }),
+    ),
+  }),
+});
+const hardwarePages = defineCollection({
   loader: glob({
     pattern: "*/*.md",
-    base: "content/compare",
+    base: "content/hardware",
     generateId: ({ entry }) => entry.replace(/\.md$/, ""),
   }),
   schema: z.object({ title: z.string().min(1), summary: z.string().min(1) }),
@@ -172,7 +188,7 @@ const buildData = defineCollection({
     parts: z.array(
       z.object({
         node: z.string(),
-        compare: z.string().optional(),
+        hardware: z.string().optional(),
         name: localized,
       }),
     ),
@@ -243,7 +259,8 @@ export const collections = {
   nodes,
   sources,
   compareTables,
-  comparePages,
+  hardwareData,
+  hardwarePages,
   robotData,
   robotPages,
   roadmapData,

@@ -1,7 +1,8 @@
 ---
-// All compare pages. More arrive as they are written (CONTENT_PLAN.md §4).
+// Hardware (the user, 2026-11-14: in place of the Compare tab): an
+// encyclopedia of the parts robots are built from, one page per category.
 import Base from "../../../layouts/Base.astro";
-import { getCompares } from "../../../lib/atlas";
+import { getHardware } from "../../../lib/atlas";
 import { languages, t, type Lang } from "../../../lib/i18n";
 
 export function getStaticPaths() {
@@ -9,24 +10,28 @@ export function getStaticPaths() {
 }
 
 const lang = Astro.params.lang as Lang;
-const compares = await getCompares(lang);
+const categories = await getHardware(lang);
 ---
 
-<Base lang={lang} title={t(lang, "compare.title")}>
+<Base lang={lang} title={t(lang, "hardware.title")}>
   <div class="wrap page">
-    <h1>{t(lang, "compare.title")}</h1>
-    <p class="lead">{t(lang, "compare.lead")}</p>
+    <h1>{t(lang, "hardware.title")}</h1>
+    <p class="lead">{t(lang, "hardware.lead")}</p>
     <ul class="list">
-      {compares.map((c) => (
+      {categories.map((c) => (
         <li>
           <a class="card" href={c.url}>
-            <span class="id">{c.table.id}</span>
+            <span class="id">{c.data.id}</span>
             <h2>{c.title}</h2>
             <p>{c.summary}</p>
+            <p class="types">
+              {c.data.types.map((ty) => ty.name[lang]).join(" · ")}
+            </p>
           </a>
         </li>
       ))}
     </ul>
+    <p class="next muted">{t(lang, "hardware.next")}</p>
   </div>
 </Base>
 
@@ -41,13 +46,14 @@ const compares = await getCompares(lang);
   .lead {
     font-size: 1.1rem;
     margin: 0 0 28px;
+    max-width: 46rem;
   }
   .list {
     list-style: none;
     margin: 0;
     padding: 0;
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
     gap: 20px;
   }
   .card h2 {
@@ -58,5 +64,14 @@ const compares = await getCompares(lang);
     margin: 0;
     color: var(--muted);
     font-size: 15px;
+  }
+  .card .types {
+    margin-top: 12px;
+    font-size: 13.5px;
+    color: var(--ink);
+  }
+  .next {
+    margin: 24px 0 0;
+    font-size: 14px;
   }
 </style>

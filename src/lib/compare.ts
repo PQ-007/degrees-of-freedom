@@ -1,7 +1,8 @@
 // Compare pages as data: pure functions, no Astro, no DOM (tests/unit/compare.test.ts).
 //
-// The table of each compare page lives in content/compare/<slug>.yaml, with
-// every text cell in every language; the prose is content/compare/<lang>/<slug>.md.
+// Each compare table lives in content/compare/<slug>.yaml, with every text
+// cell in every language. It is shown folded at the end of the Hardware
+// category whose types are its rows (src/lib/hardware.ts).
 
 export type Localized = Record<string, string>;
 
@@ -38,22 +39,14 @@ const missingLangs = (value: Localized, languages: readonly string[]) =>
     (l) => !(typeof value[l] === "string" && value[l].trim() !== ""),
   );
 
-/** Every problem with a compare table, as messages naming the page, row and column. */
+/** Every problem with a compare table, as messages naming the file, row and column. */
 export function checkCompare(
   table: CompareTable,
   nodeIds: ReadonlySet<string>,
   languages: readonly string[],
-  pageLangs: readonly string[],
 ): string[] {
   const errors: string[] = [];
   const at = `compare/${table.slug}.yaml`;
-
-  for (const lang of languages) {
-    if (!pageLangs.includes(lang))
-      errors.push(
-        `${at} has no ${lang} text: add content/compare/${lang}/${table.slug}.md`,
-      );
-  }
   for (const id of table.nodes) {
     if (!nodeIds.has(id))
       errors.push(`${at} links node ${id}, which is not in nodes.yaml`);

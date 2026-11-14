@@ -8,7 +8,9 @@ test.describe("Build page", () => {
     await expect(spec).toContainText("●●●○○ medium");
     await expect(spec).toContainText("(3 of 5)");
     await expect(page.locator(".parts li")).toHaveCount(8);
-    await expect(page.locator(".parts")).toContainText("Compare: X1 Actuators");
+    await expect(page.locator(".parts")).toContainText(
+      "Hardware: Brushed DC gearmotor",
+    );
     const diagram = page.locator(".diagram");
     for (const col of ["Sense", "Think", "Act", "Power"])
       await expect(diagram).toContainText(col);

@@ -10,7 +10,7 @@ export const en = {
   "nav.menu": "Menu",
   "nav.tree": "Roadmap",
   "nav.chain": "Signal chain",
-  "nav.compare": "Compare",
+  "nav.hardware": "Hardware",
   "nav.robots": "Robots",
   "nav.builds": "Builds",
   "nav.search": "Search",
@@ -52,9 +52,14 @@ export const en = {
   "node.backToText": "Back to the text",
   "node.prev": "Previous",
   "node.next": "Next",
-  "compare.title": "Compare",
-  "compare.lead":
-    "The options for each part of a robot side by side, with a guide for choosing.",
+  "hardware.title": "Hardware",
+  "hardware.lead":
+    "The parts robots are built from: how each kind works, what it's good and bad for, and common models. Each category ends with a table to compare its types side by side.",
+  "hardware.next": "Coming next: microcontrollers, then sensors.",
+  "hardware.types": "Types",
+  "hardware.compare": "Compare side by side",
+  "hardware.compareLead":
+    "Every type in this category in one table. The ratings compare them with each other, as rough guides.",
   "compare.option": "Option",
   "compare.sortBy": "Sort by",
   "compare.authored": "The usual order",
@@ -69,7 +74,7 @@ export const en = {
   "rating.3": "medium",
   "rating.4": "high",
   "rating.5": "very high",
-  "node.compare": "Compare",
+  "node.hardware": "Hardware",
   "robots.title": "Robots",
   "robots.lead":
     "Kinds of robots taken apart: what each one is made of, and why.",

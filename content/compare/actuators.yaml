@@ -1,5 +1,5 @@
-# X1 Actuators: the table. The prose (how to choose, each option) is in
-# content/compare/<lang>/actuators.md.
+# X1 Actuators: the compare table, folded in at the end of Hardware H1
+# Motors and actuators (content/hardware/motors.yaml): rows = its types.
 #
 # Ratings are 1–5 and compare these options with each other for typical small
 # and medium robot joints: rough guides, not measurements. The page says so.

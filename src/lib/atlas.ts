@@ -8,6 +8,7 @@ import { parse } from "yaml";
 import { checkBuild, type Build } from "./builds";
 import { checkChain, type Stage } from "./chain";
 import { checkCompare, type CompareTable } from "./compare";
+import { checkHardware, type HardwareCategory } from "./hardware";
 import {
   checkGlossary,
   groupByTier,
@@ -70,64 +71,118 @@ export async function getAtlas(lang: Lang): Promise<AtlasNode[]> {
   });
 }
 
-export interface ComparePage {
-  table: CompareTable;
-  title: string;
-  summary: string;
-  url: string;
-  entry: CollectionEntry<"comparePages">;
-}
+let comparesChecked: Promise<CompareTable[]> | undefined;
 
-let comparesChecked:
-  | Promise<{
-      tables: CompareTable[];
-      pages: CollectionEntry<"comparePages">[];
-    }>
-  | undefined;
-
+/** Every compare table, checked, in ID order. */
 function loadCompares() {
   comparesChecked ??= (async () => {
     const { nodes } = await load();
     const tables = (await getCollection("compareTables"))
       .map((e) => e.data as CompareTable)
       .sort((a, b) => Number(a.id.slice(1)) - Number(b.id.slice(1)));
-    const pages = await getCollection("comparePages");
     const nodeIds = new Set(nodes.map((n) => n.id));
     const errors = tables.flatMap((table) =>
-      checkCompare(
-        table,
-        nodeIds,
-        languages,
-        pages
-          .filter((p) => p.id.endsWith(`/${table.slug}`))
-          .map((p) => p.id.split("/")[0] ?? ""),
-      ),
+      checkCompare(table, nodeIds, languages),
     );
     if (errors.length > 0) {
       throw new Error(
-        `The compare pages have ${errors.length} problem(s):\n- ${errors.join("\n- ")}`,
+        `The compare tables have ${errors.length} problem(s):\n- ${errors.join("\n- ")}`,
       );
     }
-    return { tables, pages };
+    return tables;
   })();
   return comparesChecked;
 }
 
-/** Every compare page, in ID order, with its text in `lang`. */
-export async function getCompares(lang: Lang): Promise<ComparePage[]> {
-  const { tables, pages } = await loadCompares();
+export interface HardwarePage {
+  data: HardwareCategory;
+  /** The compare table folded in at the end, if any. */
+  table: CompareTable | undefined;
+  title: string;
+  summary: string;
+  url: string;
+  entry: CollectionEntry<"hardwarePages">;
+}
+
+let hardwareChecked:
+  | Promise<{
+      categories: HardwareCategory[];
+      tables: Map<string, CompareTable>;
+      pages: CollectionEntry<"hardwarePages">[];
+    }>
+  | undefined;
+
+function loadHardware() {
+  hardwareChecked ??= (async () => {
+    const { nodes } = await load();
+    const tables = new Map((await loadCompares()).map((t) => [t.id, t]));
+    const categories = (await getCollection("hardwareData"))
+      .map((e) => e.data as HardwareCategory)
+      .sort((a, b) => Number(a.id.slice(1)) - Number(b.id.slice(1)));
+    const pages = await getCollection("hardwarePages");
+    const nodeIds = new Set(nodes.map((n) => n.id));
+    const errors = categories.flatMap((cat) =>
+      checkHardware(
+        cat,
+        nodeIds,
+        tables,
+        languages,
+        pages
+          .filter((p) => p.id.endsWith(`/${cat.slug}`))
+          .map((p) => ({ lang: p.id.split("/")[0] ?? "", body: p.body ?? "" })),
+      ),
+    );
+    for (const id of tables.keys()) {
+      if (!categories.some((c) => c.compare === id))
+        errors.push(
+          `compare table ${id} isn't shown on any Hardware page: add compare: ${id} to a category`,
+        );
+    }
+    if (errors.length > 0) {
+      throw new Error(
+        `The Hardware pages have ${errors.length} problem(s):\n- ${errors.join("\n- ")}`,
+      );
+    }
+    return { categories, tables, pages };
+  })();
+  return hardwareChecked;
+}
+
+/** Every Hardware category, in ID order, with its text in `lang`. */
+export async function getHardware(lang: Lang): Promise<HardwarePage[]> {
+  const { categories, tables, pages } = await loadHardware();
   const base = import.meta.env.BASE_URL;
-  return tables.map((table) => {
-    const entry = pages.find((p) => p.id === `${lang}/${table.slug}`);
-    if (!entry) throw new Error(`${table.id} has no ${lang} page`); // checkCompare already rules this out
+  return categories.map((data) => {
+    const entry = pages.find((p) => p.id === `${lang}/${data.slug}`);
+    if (!entry) throw new Error(`${data.id} has no ${lang} page`); // checkHardware rules this out
     return {
-      table,
+      data,
+      table: data.compare ? tables.get(data.compare) : undefined,
       title: entry.data.title,
       summary: entry.data.summary,
-      url: localePath(base, lang, `compare/${table.slug}/`),
+      url: localePath(base, lang, `hardware/${data.slug}/`),
       entry,
     };
   });
+}
+
+/** Each Hardware type by key: its name in `lang`, its link and its category. */
+export async function getHardwareTypes(lang: Lang) {
+  const types = new Map<
+    string,
+    { name: string; url: string; node: string; category: HardwarePage }
+  >();
+  for (const page of await getHardware(lang)) {
+    for (const t of page.data.types) {
+      types.set(t.key, {
+        name: t.name[lang] ?? t.key,
+        url: `${page.url}#${t.key}`,
+        node: t.node,
+        category: page,
+      });
+    }
+  }
+  return types;
 }
 
 export interface RobotPage {
@@ -288,14 +343,14 @@ function loadBuilds() {
   buildsChecked ??= (async () => {
     const { nodes } = await load();
     const { robots } = await loadRobots();
-    const { tables } = await loadCompares();
+    const { categories } = await loadHardware();
     const builds = (await getCollection("buildData"))
       .map((e) => e.data as Build)
       .sort((a, b) => a.id.localeCompare(b.id));
     const pages = await getCollection("buildPages");
     const ids = {
       nodes: new Set(nodes.map((n) => n.id)),
-      compares: new Set(tables.map((t) => t.id)),
+      hardware: new Set(categories.flatMap((c) => c.types.map((t) => t.key))),
       robots: new Set(robots.map((r) => r.id)),
     };
     const errors = builds.flatMap((b) =>

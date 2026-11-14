@@ -12,7 +12,7 @@ export const mn: Record<MessageKey, string> = {
   "nav.menu": "Цэс",
   "nav.tree": "Roadmap",
   "nav.chain": "Дохионы гинж",
-  "nav.compare": "Харьцуулалт",
+  "nav.hardware": "Техник хангамж",
   "nav.robots": "Роботууд",
   "nav.builds": "Build-ууд",
   "nav.search": "Хайх",
@@ -54,9 +54,14 @@ export const mn: Record<MessageKey, string> = {
   "node.backToText": "Бичвэр рүү буцах",
   "node.prev": "Өмнөх",
   "node.next": "Дараах",
-  "compare.title": "Харьцуулалт",
-  "compare.lead":
-    "Роботын хэсэг бүрийн сонголтууд зэрэгцээд, сонгох заавартай.",
+  "hardware.title": "Техник хангамж",
+  "hardware.lead":
+    "Роботыг бүтээдэг эд ангиуд: төрөл бүр хэрхэн ажилладаг, юунд тохирох, тохирохгүй, түгээмэл загварууд. Ангилал бүр төрлүүдээ зэрэгцүүлэн харьцуулах хүснэгтээр төгсдөг.",
+  "hardware.next": "Дараа нь: микроконтроллер, дараа нь мэдрэгч.",
+  "hardware.types": "Төрлүүд",
+  "hardware.compare": "Зэрэгцүүлэн харьцуулах",
+  "hardware.compareLead":
+    "Энэ ангиллын бүх төрөл нэг хүснэгтэд. Үнэлгээ нь тэдгээрийг бие биетэй нь харьцуулсан барагцаа.",
   "compare.option": "Сонголт",
   "compare.sortBy": "Эрэмбэлэх",
   "compare.authored": "Ердийн дараалал",
@@ -71,7 +76,7 @@ export const mn: Record<MessageKey, string> = {
   "rating.3": "дунд",
   "rating.4": "өндөр",
   "rating.5": "маш өндөр",
-  "node.compare": "Харьцуулалт",
+  "node.hardware": "Техник хангамж",
   "robots.title": "Роботууд",
   "robots.lead":
     "Роботын төрлүүдийг задалж үзэх нь: тус бүр юунаас бүтдэг, яагаад.",

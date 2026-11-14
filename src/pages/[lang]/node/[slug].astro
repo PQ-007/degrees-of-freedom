@@ -7,7 +7,7 @@ import SourceList from "../../../components/SourceList.astro";
 import Base from "../../../layouts/Base.astro";
 import {
   getAtlas,
-  getCompares,
+  getHardware,
   getGlossary,
   getRoadmaps,
 } from "../../../lib/atlas";
@@ -52,9 +52,19 @@ const toc = [
     : []),
 ];
 const base = import.meta.env.BASE_URL;
-const compares = (await getCompares(lang)).filter((c) =>
-  c.table.nodes.includes(id),
+// Hardware: the entries for the kinds of part this topic teaches, or else the
+// categories that list it.
+const hardware = await getHardware(lang);
+const hwTypes = hardware.flatMap((c) =>
+  c.data.types
+    .filter((ty) => ty.node === id)
+    .map((ty) => ({
+      name: ty.name[lang] ?? ty.key,
+      url: `${c.url}#${ty.key}`,
+    })),
 );
+const hwCategories =
+  hwTypes.length > 0 ? [] : hardware.filter((c) => c.data.nodes.includes(id));
 const roadmaps = (await getRoadmaps(lang)).filter((r) =>
   pathNodes(r.roadmap).includes(id),
 );
@@ -146,13 +156,19 @@ const chips = (list: string[]) =>
                   </a>
                 ))}
           </dd>
-          {compares.length > 0 && (
+          {(hwTypes.length > 0 || hwCategories.length > 0) && (
             <>
-              <dt>{t(lang, "node.compare")}</dt>
+              <dt>{t(lang, "node.hardware")}</dt>
               <dd>
-                {compares.map((c) => (
+                {hwTypes.map((h, i) => (
+                  <>
+                    {i > 0 && <span aria-hidden="true"> · </span>}
+                    <a href={h.url}>{h.name}</a>
+                  </>
+                ))}
+                {hwCategories.map((c) => (
                   <a class="chip" href={c.url}>
-                    {c.table.id} {c.title}
+                    {c.data.id} {c.title}
                   </a>
                 ))}
               </dd>

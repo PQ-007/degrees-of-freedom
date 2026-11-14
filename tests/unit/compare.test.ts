@@ -29,8 +29,7 @@ const table = (): CompareTable => ({
     },
   ],
 });
-const check = (t: CompareTable) =>
-  checkCompare(t, nodeIds, languages, languages);
+const check = (t: CompareTable) => checkCompare(t, nodeIds, languages);
 
 describe("checkCompare", () => {
   it("accepts a complete table", () => {
@@ -47,13 +46,12 @@ describe("checkCompare", () => {
     ]);
   });
 
-  it("rejects unknown nodes and columns, and a missing language page", () => {
+  it("rejects unknown nodes and columns", () => {
     const t = table();
     t.nodes = ["Z1"];
     const row = t.rows[0];
     if (row) row.values["size"] = 2;
-    expect(checkCompare(t, nodeIds, languages, ["en"])).toEqual([
-      "compare/demo.yaml has no mn text: add content/compare/mn/demo.md",
+    expect(checkCompare(t, nodeIds, languages)).toEqual([
       "compare/demo.yaml links node Z1, which is not in nodes.yaml",
       'compare/demo.yaml: row "a" has a value for unknown column "size"',
     ]);
@@ -65,7 +63,7 @@ describe("checkCompare", () => {
   });
 });
 
-describe("the real compare pages", () => {
+describe("the real compare tables", () => {
   for (const f of readdirSync(root.pathname + "compare").filter((f) =>
     f.endsWith(".yaml"),
   )) {
@@ -73,10 +71,7 @@ describe("the real compare pages", () => {
       const t = parse(
         readFileSync(new URL(`compare/${f}`, root), "utf8"),
       ) as CompareTable;
-      const pageLangs = languages.filter((l) =>
-        readdirSync(new URL(`compare/${l}/`, root)).includes(`${t.slug}.md`),
-      );
-      expect(checkCompare(t, nodeIds, languages, pageLangs)).toEqual([]);
+      expect(checkCompare(t, nodeIds, languages)).toEqual([]);
     });
   }
 });

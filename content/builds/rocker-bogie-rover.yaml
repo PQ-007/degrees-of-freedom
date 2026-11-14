@@ -15,7 +15,7 @@ robot: R5
 
 parts:
   - node: C4
-    compare: X1
+    hardware: gearmotor
     name:
       en: "Six small DC gearmotors, all the same model"
       mn: "Зургаан ижил загварын жижиг араатай DC хөдөлгүүр"
