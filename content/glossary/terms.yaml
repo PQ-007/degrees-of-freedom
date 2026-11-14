@@ -91,6 +91,43 @@
     mn: Өнцгийн косинус, синусаас бүтсэн тоон хүснэгт; векторыг үүгээр үржүүлэхэд тэр өнцгөөр эргэнэ. Урвуу нь транспонирласан матриц нь.
   see: [radian, coordinate-frame]
 
+- id: derivative
+  node: F2
+  term:
+    en: Derivative
+    mn: Уламжлал
+  def:
+    en: How fast a quantity is changing at a moment, the slope of its graph. Velocity is the derivative of position.
+    mn: Хэмжигдэхүүн тухайн агшинд хэр хурдан өөрчлөгдөж буй нь, түүний графикийн налуу. Хурд бол байрлалын уламжлал.
+  see: [integral, differential-equation]
+- id: integral
+  node: F2
+  term:
+    en: Integral
+    mn: Интеграл
+  def:
+    en: The sum of many small pieces, the area under a graph. The distance covered is the integral of velocity over time.
+    mn: Олон жижиг хэсгийн нийлбэр, графикийн доорх талбай. Туулсан зам бол хурдны хугацааны интеграл.
+  see: [derivative, odometry]
+- id: differential-equation
+  node: F2
+  term:
+    en: Differential equation
+    mn: Дифференциал тэгшитгэл
+  def:
+    en: A rule for how fast something changes, given how it is now. Solving it tells you how it evolves over time.
+    mn: Ямар нэг зүйл одоогийн байдлаасаа хамаарч хэр хурдан өөрчлөгдөхийг заах дүрэм. Түүнийг бодвол цаг хугацааны туршид хэрхэн өөрчлөгдөхийг мэднэ.
+  see: [derivative, time-step]
+- id: time-step
+  node: F2
+  term:
+    en: Time step
+    mn: Хугацааны алхам
+  def:
+    en: The small slice of time a simulation or a controller moves forward by at each update. Smaller steps are more accurate but need more computing.
+    mn: Симуляц эсвэл удирдлага шинэчлэл бүрт урагшлах жижиг хугацаа. Жижиг алхам илүү нарийвчлалтай ч илүү их тооцоолол шаарддаг.
+  see: [differential-equation, real-time]
+
 # T1 Components
 - id: gear-ratio
   node: C2

@@ -325,3 +325,25 @@
     - title: "Modern Robotics: Mechanics, Planning, and Control, chapter 3 (K. M. Lynch and F. C. Park, Cambridge University Press, 2017; free preprint from the authors)"
       url: https://hades.mech.northwestern.edu/index.php/Modern_Robotics
   checked: web (the preprint PDF, sections 3.2 and 3.3), 2026-11-14
+
+- id: euler-method
+  claim: >-
+    Euler's method approximates a solution of y' = F(x, y) by short steps
+    along the tangent ("Euler struts"), each of width h; for small h its error
+    is at most a constant times h, which makes it a first-order method.
+  sources:
+    - title: "18.03 Differential Equations, class notes 2: Euler's method (MIT OpenCourseWare, Spring 2010)"
+      url: https://ocw.mit.edu/courses/18-03-differential-equations-spring-2010/e3df34d59f3f16db89d2043b7125c7aa_MIT18_03S10_c02.pdf
+  checked: web (the notes' PDF), 2026-11-14
+
+- id: mujoco-timestep
+  claim: >-
+    MuJoCo's simulation time step defaults to 0.002 s; its documentation calls
+    it the single most important parameter in the speed-accuracy trade-off,
+    with smaller values giving better accuracy and stability. MuJoCo offers
+    several integrators, among them a semi-implicit Euler method (the default)
+    and a fixed-step fourth-order Runge-Kutta method.
+  sources:
+    - title: "MuJoCo XML reference: option, timestep and integrator"
+      url: https://mujoco.readthedocs.io/en/stable/XMLreference.html#option-timestep
+  checked: web (the documentation's source text on GitHub), 2026-11-14
