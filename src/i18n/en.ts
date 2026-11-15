@@ -362,6 +362,23 @@ export const en = {
   "demo.gears.torque": "Output torque",
   "demo.gears.angle": "Output angle",
   "demo.gears.ideal": "without play",
+  "demo.unit.mps": "m/s",
+  "demo.unit.degs": "°/s",
+  "demo.drive.title": "Steering with two wheels",
+  "demo.drive.view":
+    "Top view of a small robot with two driven wheels and a caster: its start, its path over two seconds as a coloured line, the tracks of its two wheels, and a cross at the point it turns around",
+  "demo.drive.legend":
+    "Dashed outline: where the robot starts, facing up. Coloured line: the path of the point between its wheels over 2 s. Thin lines: the wheels' tracks. ×: the point it turns around. Wheels 30 cm apart; grid every 20 cm.",
+  "demo.drive.vL": "Left wheel speed",
+  "demo.drive.vR": "Right wheel speed",
+  "demo.drive.v": "Forward speed",
+  "demo.drive.omega": "Turn rate (+ to the left)",
+  "demo.drive.r": "Turning radius",
+  "demo.drive.turned": "Turned after 2 s",
+  "demo.drive.left": "to the left",
+  "demo.drive.right": "to the right",
+  "demo.drive.straight": "none: straight on",
+  "demo.drive.inPlace": "0: spins in place",
   "footer.license": "Code: MIT. Text: CC BY-SA 4.0.",
   "footer.source": "Source on GitHub",
 } as const;

@@ -619,3 +619,45 @@
 .demo-gears .hub {
   fill: var(--ink);
 }
+
+/* Differential drive (C3): the path in the data colour, wheel tracks thin,
+   the start as a dashed ghost. */
+.demo-drive polyline {
+  fill: none;
+  vector-effect: non-scaling-stroke;
+  stroke-linejoin: round;
+}
+.demo-drive .drive-path {
+  stroke: var(--d, var(--ink));
+  stroke-width: 4;
+}
+.demo-drive .wheel-track {
+  stroke: var(--muted);
+  stroke-width: 1.5;
+}
+.demo-drive .chassis {
+  fill: var(--surface);
+  stroke: var(--ink);
+  stroke-width: 2;
+  vector-effect: non-scaling-stroke;
+}
+.demo-drive .wheel,
+.demo-drive .nose {
+  fill: var(--ink);
+  stroke: none;
+}
+.demo-drive .caster {
+  fill: var(--surface);
+  stroke-width: 1.5;
+}
+.demo-drive .ghost * {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.5;
+  stroke-dasharray: 4 3;
+  vector-effect: non-scaling-stroke;
+}
+.demo-drive .icr line {
+  stroke: var(--ink);
+  stroke-width: 2.5;
+}
