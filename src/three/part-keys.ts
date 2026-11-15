@@ -11,4 +11,10 @@ export const PART_MODEL_KEYS: ReadonlySet<string> = new Set([
   "sea",
   "hydraulic",
   "pneumatic",
+  "mcu-8bit",
+  "mcu-32bit",
+  "mcu-wireless",
+  "flight-controller",
+  "sbc",
+  "ai-computer",
 ]);

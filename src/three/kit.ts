@@ -44,6 +44,9 @@ export interface PartModel {
   root: Group;
   /** Moves the moving part to where it is t seconds into the motion. */
   pose: (t: number) => void;
+  /** Where the camera starts, as a direction from the model's centre
+   * (default: in front, a little above and to the right). */
+  view?: [number, number, number];
 }
 
 /** A model's recipe: builds it from the shared materials. */

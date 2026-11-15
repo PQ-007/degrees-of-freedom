@@ -38,18 +38,20 @@ function accentPlaces(root: Object3D): number[] {
 }
 
 describe("the parts' 3D models", () => {
-  it("the key list matches the models, and every motor type has one", () => {
+  it("the key list matches the models, and every motor and computer type has one", () => {
     expect([...PART_MODEL_KEYS].sort()).toEqual(
       Object.keys(PART_MODELS).sort(),
     );
-    const motors = parse(
-      readFileSync(
-        new URL("../../content/hardware/motors.yaml", import.meta.url),
-        "utf8",
-      ),
-    ) as { types: { key: string }[] };
-    for (const { key } of motors.types)
-      expect(PART_MODEL_KEYS.has(key), key).toBe(true);
+    for (const category of ["motors", "computers"]) {
+      const data = parse(
+        readFileSync(
+          new URL(`../../content/hardware/${category}.yaml`, import.meta.url),
+          "utf8",
+        ),
+      ) as { types: { key: string }[] };
+      for (const { key } of data.types)
+        expect(PART_MODEL_KEYS.has(key), key).toBe(true);
+    }
   });
 
   for (const [key, recipe] of Object.entries(PART_MODELS)) {
@@ -57,10 +59,9 @@ describe("the parts' 3D models", () => {
       const model = recipe(materials());
       model.pose(0);
       const size = new Box3().setFromObject(model.root).getSize(new Vector3());
-      for (const d of [size.x, size.y, size.z]) {
-        expect(d).toBeGreaterThan(0.3);
-        expect(d).toBeLessThan(3.2);
-      }
+      // Big enough to see (boards may be thin), small enough to frame.
+      expect(Math.max(size.x, size.y, size.z)).toBeGreaterThan(1);
+      for (const d of [size.x, size.y, size.z]) expect(d).toBeLessThan(3.2);
       const before = accentPlaces(model.root);
       expect(before.length).toBeGreaterThan(0);
       // Somewhere in its cycle the moving part is somewhere else.

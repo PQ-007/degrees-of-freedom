@@ -77,7 +77,7 @@ export class PartViewer {
     const distance =
       sphere.radius / Math.sin((this.camera.fov * Math.PI) / 360);
     this.home
-      .set(0.55, 0.42, 1)
+      .set(...(this.model.view ?? [0.55, 0.42, 1]))
       .normalize()
       .multiplyScalar(distance * 0.82)
       .add(sphere.center);
