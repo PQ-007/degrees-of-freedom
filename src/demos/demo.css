@@ -473,3 +473,60 @@
     font-size: 15px;
   }
 }
+
+/* The lever: ink stand and motor, the arm in the data colour, the lever arm
+   dashed, the weight's force as an arrow. */
+.demo-plot .stand {
+  fill: var(--surface);
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.demo-plot .motor {
+  fill: var(--surface);
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+.demo-plot .hub {
+  fill: var(--ink);
+  stroke: none;
+}
+.demo-plot .arm {
+  stroke: var(--d, var(--ink));
+  stroke-width: 10;
+  stroke-linecap: round;
+}
+.demo-plot .lever-arm {
+  stroke: var(--ink);
+  stroke-width: 2;
+  stroke-dasharray: 7 5;
+}
+.demo-plot .plumb {
+  stroke: var(--muted);
+  stroke-width: 1.25;
+  stroke-dasharray: 3 4;
+}
+.demo-plot .string {
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.demo-plot .weight {
+  fill: var(--surface);
+  stroke: var(--ink);
+  stroke-width: 2.5;
+}
+.demo-plot .force {
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+.demo-plot .force-head {
+  fill: var(--ink);
+  stroke: none;
+}
+.demo-plot .math {
+  font-style: italic;
+  font-weight: 600;
+  fill: var(--ink);
+}
+.demo-plot.is-sagging .arm {
+  stroke-dasharray: 14 8;
+}

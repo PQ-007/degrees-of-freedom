@@ -12,6 +12,7 @@ const pages = [
   { name: "node-f2", path: "{lang}/node/calculus-and-differential-equations/" },
   { name: "node-f3", path: "{lang}/node/probability-and-statistics/" },
   { name: "node-f4", path: "{lang}/node/optimization/" },
+  { name: "node-f5", path: "{lang}/node/mechanics/" },
   { name: "node-sim", path: "{lang}/node/classical-control/" },
   { name: "signal-chain", path: "{lang}/signal-chain/" },
   { name: "hardware-index", path: "{lang}/hardware/" },

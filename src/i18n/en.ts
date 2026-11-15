@@ -271,6 +271,23 @@ export const en = {
   "hardware.chain": "How these parts pass a signal from one to the next",
   "hardware.chainLink": "The signal chain",
   "node.chain": "Signal chain",
+  "demo.unit.kg": "kg",
+  "demo.unit.nm": "N·m",
+  "demo.lever.title": "Can this motor hold it?",
+  "demo.lever.view":
+    "Side view: a motor at the shoulder, an arm reaching out at an angle, a weight hanging from its end with an arrow for its weight, and a dashed line for the horizontal distance that sets the torque",
+  "demo.lever.legend":
+    "The dashed line is the lever arm: the horizontal distance from the joint to the weight. Torque = weight × lever arm. The motor is a DYNAMIXEL XL430-W250-T (stall torque 1.4 N·m at 11.1 V); the arm itself is taken as weightless.",
+  "demo.lever.mass": "Mass",
+  "demo.lever.length": "Arm length",
+  "demo.lever.angle": "Angle above level",
+  "demo.lever.torque": "Torque needed",
+  "demo.lever.share": "Of the motor's stall torque",
+  "demo.lever.max": "Heaviest it can hold here",
+  "demo.lever.verdict": "Can it hold it?",
+  "demo.lever.holds": "Holds it",
+  "demo.lever.sags": "Too heavy: the arm sags",
+  "demo.lever.any": "Any weight (straight up)",
   "footer.license": "Code: MIT. Text: CC BY-SA 4.0.",
   "footer.source": "Source on GitHub",
 } as const;

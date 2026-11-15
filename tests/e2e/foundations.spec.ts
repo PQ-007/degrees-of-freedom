@@ -187,3 +187,42 @@ test.describe("F4 Optimization", () => {
     expect(axe.violations.map((v) => v.id)).toEqual([]);
   });
 });
+
+test.describe("F5 Mechanics", () => {
+  test("the motor holds a light load, not a heavy one, and nothing straight up", async ({
+    page,
+  }) => {
+    await page.goto("en/node/mechanics/#try");
+    const demo = page.locator("lever-demo");
+    const out = demo.locator(".sim-readouts");
+    await expect(out).toContainText("Torque needed0.98 N·m");
+    await expect(out).toContainText("Holds it");
+    await demo.getByLabel("Mass").fill("1");
+    await expect(out).toContainText("Too heavy: the arm sags");
+    await demo.getByLabel("Angle above level").fill("90");
+    await expect(out).toContainText("Torque needed0.00 N·m");
+    await expect(out).toContainText("Any weight (straight up)");
+  });
+
+  test("the free-body figure is described, and the page passes axe on a phone", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto("mn/node/mechanics/#try");
+    await page.locator("lever-demo .demo-plot").waitFor();
+    await expect(page.locator(".fig svg")).toHaveAttribute(
+      "aria-label",
+      /блок/,
+    );
+    await page.locator("details.deeper summary").click();
+    await expect(page.locator("details.deeper .katex-display")).toHaveCount(5);
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+    const axe = await new AxeBuilder({ page }).analyze();
+    expect(axe.violations.map((v) => v.id)).toEqual([]);
+  });
+});
