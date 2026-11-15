@@ -318,6 +318,20 @@ export const en = {
   "demo.pwm.axisT": "t (ms)",
   "demo.pwm.axisV": "voltage (V)",
   "demo.pwm.axisS": "speed (%)",
+  "demo.unit.mv": "mV",
+  "demo.adc.title": "From a voltage to a number",
+  "demo.adc.view":
+    "Plot over one second: a sensor's voltage as a smooth curve between 0 and 5 V, and the converter's readings as a staircase that follows it in steps; a dashed line marks one reading",
+  "demo.adc.legend":
+    "Thin curve: the sensor's true voltage. Thick staircase: what the converter reports, each reading the bottom of its step. Dashed line and dot: the reading at 0.3 s.",
+  "demo.adc.bits": "Bits",
+  "demo.adc.values": "Possible readings",
+  "demo.adc.step": "Step size",
+  "demo.adc.reading": "Reading at the marker",
+  "demo.adc.of": "true voltage",
+  "demo.adc.binary": "In binary",
+  "demo.adc.axisV": "voltage (V)",
+  "demo.adc.axisT": "t (0–1 s)",
   "footer.license": "Code: MIT. Text: CC BY-SA 4.0.",
   "footer.source": "Source on GitHub",
 } as const;

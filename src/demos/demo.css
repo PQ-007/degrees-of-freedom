@@ -573,3 +573,9 @@
 .demo-view-pwm {
   aspect-ratio: 660 / 330;
 }
+
+/* ADC: the reading at the marker, digit by digit. */
+.sim-readouts dd.mono {
+  letter-spacing: 0.06em;
+  overflow-wrap: anywhere;
+}
