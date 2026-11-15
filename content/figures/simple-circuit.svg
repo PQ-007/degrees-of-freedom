@@ -1,0 +1,21 @@
+<!-- F7: a simple circuit. A battery (long plate +, short plate −) drives
+     a current I through a resistor R and an LED and back. Schematic symbols
+     and maths-only labels; the caption is in the page's text. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="520" viewBox="0 0 520 270" class="fig-circuit">
+  <path d="M100,124 L100,60 L220,60" class="thick"/>
+  <path d="M220,60 L232,46 L248,74 L264,46 L280,74 L296,46 L312,74 L328,46 L340,60" class="accent"/>
+  <path d="M340,60 L440,60 L440,112" class="thick"/>
+  <path d="M424,112 L456,112 L440,140 Z" class="soft thick"/>
+  <line x1="424" y1="140" x2="456" y2="140" class="thick"/>
+  <line x1="464" y1="118" x2="476.7" y2="109.9" class="thin"/><path d="M486,104 L480.0,115.0 L473.5,104.8 Z" class="ink-fill"/>
+  <line x1="464" y1="132" x2="476.7" y2="123.9" class="thin"/><path d="M486,118 L480.0,129.0 L473.5,118.8 Z" class="ink-fill"/>
+  <path d="M440,140 L440,220 L100,220 L100,150" class="thick"/>
+  <line x1="78" y1="124" x2="122" y2="124" class="thick"/>
+  <line x1="88" y1="150" x2="112" y2="150" class="thick"/>
+  <text x="128" y="120">+</text>
+  <text x="120" y="160">−</text>
+  <text x="48" y="142">V</text>
+  <text x="274" y="30">R</text>
+  <line x1="150" y1="40" x2="185.0" y2="40.0" class="thick"/><path d="M196,40 L185.0,46.0 L185.0,34.0 Z" class="ink-fill"/>
+  <text x="166" y="30">I</text>
+</svg>

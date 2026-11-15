@@ -80,6 +80,24 @@
     en: The voltage a spinning motor makes against its own supply. It is zero at rest and grows with speed, so a motor draws the most current when it starts or stalls.
     mn: Эргэж буй хөдөлгүүрийн өөрийн тэжээлийн эсрэг үүсгэх хүчдэл. Зогсож байхад тэг, хурдтай хамт өсдөг тул хөдөлгүүр асах эсвэл зогсох үедээ хамгийн их гүйдэл татдаг.
   see: [induction, motor-driver]
+- id: voltage
+  node: F7
+  term:
+    en: Voltage
+    mn: Хүчдэл
+  def:
+    en: The electrical push between two points, measured in volts. It drives current through a circuit, and Ohm's law links the two, V = IR.
+    mn: Хоёр цэгийн хоорондох цахилгаан түлхэлт, вольтоор хэмжигдэнэ. Хэлхээгээр гүйдэл гүйлгэдэг бөгөөд Омын хууль V = IR хоёуланг нь холбодог.
+  see: [ground, pwm]
+- id: pwm
+  node: F7
+  term:
+    en: PWM (pulse width modulation)
+    mn: PWM (импульсийн өргөний модуляц)
+  def:
+    en: Switching a voltage fully on and off many times a second; the share of time it is on, the duty cycle, sets the average voltage a motor or LED feels.
+    mn: Хүчдэлийг секундэд олон удаа бүрэн асааж унтраах; асаалттай байх хувь буюу ажлын мөчлөг нь хөдөлгүүр эсвэл LED-ийн мэдрэх дундаж хүчдэлийг тодорхойлно.
+  see: [voltage, motor-driver]
 - id: ground
   node: F7
   term:

@@ -772,3 +772,84 @@
     - title: "University Physics Volume 2, section 11.6: The Hall Effect (OpenStax)"
       url: https://openstax.org/books/university-physics-volume-2/pages/11-6-the-hall-effect
   checked: web, 2026-11-15
+
+- id: ohms-law
+  claim: >-
+    Ohm's law: V = IR, with the resistance the voltage divided by the current;
+    components that do not follow it, such as the diode, are nonohmic.
+  sources:
+    - title: "University Physics Volume 2, section 9.4: Ohm's Law (OpenStax)"
+      url: https://openstax.org/books/university-physics-volume-2/pages/9-4-ohms-law
+  checked: web, 2026-11-15
+
+- id: electric-power
+  claim: >-
+    The electric power gained or lost by a device is P = IV; for a resistor
+    P = I²R = V²/R, and the energy is dissipated as heat.
+  sources:
+    - title: "University Physics Volume 2, section 9.5: Electrical Energy and Power (OpenStax)"
+      url: https://openstax.org/books/university-physics-volume-2/pages/9-5-electrical-energy-and-power
+  checked: web, 2026-11-15
+
+- id: capacitor-def
+  claim: >-
+    A capacitor stores electrical charge and energy in two conductors separated
+    by a distance; its capacitance is C = Q/V, measured in farads.
+  sources:
+    - title: "University Physics Volume 2, section 8.1: Capacitors and Capacitance (OpenStax)"
+      url: https://openstax.org/books/university-physics-volume-2/pages/8-1-capacitors-and-capacitance
+  checked: web, 2026-11-15
+
+- id: sparkfun-diodes
+  claim: >-
+    Current through a diode can only go one way, the forward direction; a
+    silicon diode's forward voltage is around 0.6-1 V and an LED's usually
+    larger (1.2-3 V); flyback diodes protect against the voltage spikes an
+    inductive component such as a motor makes.
+  sources:
+    - title: "Diodes (SparkFun)"
+      url: https://learn.sparkfun.com/tutorials/diodes/all
+  checked: web, 2026-11-15
+
+- id: sparkfun-transistors
+  claim: >-
+    A transistor can be used as a switch or an amplifier: a small current or
+    voltage at its control pin controls a larger current through it; an
+    H-bridge of transistors can drive a motor both clockwise and
+    counter-clockwise.
+  sources:
+    - title: "Transistors (SparkFun)"
+      url: https://learn.sparkfun.com/tutorials/transistors/all
+  checked: web, 2026-11-15
+
+- id: arduino-pwm
+  claim: >-
+    Pulse width modulation switches a signal on and off in a square wave;
+    changing the share of time it is on simulates voltages between the
+    supply and 0 V. Arduino's PWM runs at about 500 Hz, and analogWrite(127)
+    is a 50% duty cycle (on half the time). Repeated fast enough with an LED,
+    it is as if the voltage were steady.
+  sources:
+    - title: "Basics of PWM (Pulse Width Modulation) (Arduino documentation)"
+      url: https://docs.arduino.cc/learn/microcontrollers/analog-output/
+  checked: web (the page's source text on GitHub), 2026-11-15
+
+- id: sparkfun-capacitors
+  claim: >-
+    Decoupling capacitors suppress high-frequency noise in power supplies:
+    they take tiny voltage ripples out of a chip's supply and can briefly
+    supply power at the correct voltage when it sags; they should sit as close
+    as possible to the chip.
+  sources:
+    - title: "Capacitors (SparkFun)"
+      url: https://learn.sparkfun.com/tutorials/capacitors/all
+  checked: web, 2026-11-15
+
+- id: sparkfun-leds
+  claim: >-
+    An LED connected directly to a source tries to draw as much current as it
+    can and destroys itself; a resistor limits the current and protects it.
+  sources:
+    - title: "Light-Emitting Diodes (LEDs) (SparkFun)"
+      url: https://learn.sparkfun.com/tutorials/light-emitting-diodes-leds/all
+  checked: web, 2026-11-15
