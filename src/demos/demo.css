@@ -677,10 +677,14 @@ part-3d .part-canvas {
 part-3d .part-canvas:active {
   cursor: grabbing;
 }
+part-3d .part-canvas:focus-visible {
+  outline: 3px solid var(--line);
+  outline-offset: 3px;
+}
 part-3d .part-controls {
   display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
+  align-items: center;
+  gap: 12px;
   margin-top: 10px;
 }
 part-3d .part-controls .btn[aria-pressed="true"] {
@@ -688,6 +692,6 @@ part-3d .part-controls .btn[aria-pressed="true"] {
   transform: translate(2px, 2px);
 }
 part-3d .part-hint {
-  margin: 8px 0 0;
+  margin: 0;
   font-size: 13px;
 }

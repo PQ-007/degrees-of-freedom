@@ -19,17 +19,22 @@ export const DEMOS: Record<string, () => Promise<unknown>> = {
 
 export function upgradeDemos(root: ParentNode = document): void {
   for (const [tag, load] of Object.entries(DEMOS)) {
-    const found = [...root.querySelectorAll(tag)];
+    const found = [...root.querySelectorAll<HTMLElement>(tag)];
     if (found.length === 0) continue;
+    // If the code can't be fetched, the element shows its no-JS content.
+    const run = () =>
+      load().catch(() => {
+        for (const el of found) el.dataset["mode"] ??= "drawing";
+      });
     if (!("IntersectionObserver" in window)) {
-      void load();
+      void run();
       continue;
     }
     const io = new IntersectionObserver(
       (entries) => {
         if (entries.some((e) => e.isIntersecting)) {
           io.disconnect();
-          void load();
+          void run();
         }
       },
       { rootMargin: "400px" },

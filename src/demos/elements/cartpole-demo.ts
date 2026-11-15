@@ -24,6 +24,7 @@ import type {
   FrameDetail,
   MujocoScene,
 } from "../../sim/mujoco-scene";
+import { loader } from "../kit";
 import "../../sim/mujoco-scene";
 import "uplot/dist/uPlot.min.css";
 import "../demo.css";
@@ -400,7 +401,7 @@ class CartpoleDemo extends HTMLElement {
     const note = this.start.querySelector("p");
     if (mode === "loading" && runButton && note) {
       runButton.disabled = true;
-      note.textContent = this.t("demo.loading");
+      note.replaceChildren(loader(), " ", this.t("demo.loading"));
     } else if (mode === "error" && runButton && note) {
       runButton.disabled = false;
       runButton.textContent = `↻ ${this.t("demo.retry")}`;

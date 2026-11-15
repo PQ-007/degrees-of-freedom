@@ -53,6 +53,16 @@ export interface Slider {
 }
 
 /** A labelled range input with its value shown beside it. */
+/** The site's loading animation (a turning wireframe cube, look.css):
+ * decorative, so put words beside it. */
+export function loader(): HTMLElement {
+  return el(
+    "span",
+    { class: "loader", "aria-hidden": "true" },
+    el("span", { class: "cube" }, ...Array.from({ length: 6 }, () => el("i"))),
+  );
+}
+
 export function slider(opts: {
   label: string;
   min: number;

@@ -2,8 +2,9 @@
 // page (the user, 2026-11-16: 3D models on the dedicated pages only; the
 // cards keep their drawings). The element's own content is the line drawing:
 // it stays when JavaScript or WebGL is missing. With WebGL, the drawing gives
-// way to the model: drag to turn it, or use the buttons; the moving part
-// moves until paused, and starts paused under reduced motion.
+// way to the model: drag it to turn it, or focus it and use the arrow keys
+// (Home: front view); the moving part moves until paused with the Motion
+// button, and starts paused under reduced motion.
 import { el, pageLang, translator } from "../kit";
 import { hasWebGL } from "../../sim/load";
 import { PART_MODELS } from "../../three/parts";
@@ -47,18 +48,26 @@ class Part3D extends HTMLElement {
       viewer.play(on);
       play.setAttribute("aria-pressed", String(on));
     };
-    const step = Math.PI / 6;
+    // No turn buttons (the user, 2026-11-16): the model takes keyboard
+    // focus instead, so it still turns without a mouse. Arrow keys turn it,
+    // Home brings back the front view.
+    const step = Math.PI / 12;
+    canvas.tabIndex = 0;
+    canvas.addEventListener("keydown", (e) => {
+      if (e.key === "ArrowLeft") viewer.turn(-step);
+      else if (e.key === "ArrowRight") viewer.turn(step);
+      else if (e.key === "Home") viewer.reset();
+      else return;
+      e.preventDefault();
+    });
     this.replaceChildren(
       canvas,
       el(
         "div",
         { class: "part-controls" },
-        button(`← ${tr("part3d.left")}`, () => viewer.turn(-step)),
-        button(`${tr("part3d.right")} →`, () => viewer.turn(step)),
-        button(tr("part3d.reset"), () => viewer.reset()),
         play,
+        el("p", { class: "part-hint muted" }, tr("part3d.hint")),
       ),
-      el("p", { class: "part-hint muted" }, tr("part3d.hint")),
     );
     setPlaying(!reduced.matches);
     this.dataset["mode"] = "3d";

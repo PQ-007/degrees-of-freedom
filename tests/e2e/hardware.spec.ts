@@ -212,8 +212,13 @@ test.describe("3D models on part pages", () => {
       await expect(motion).toHaveAttribute("aria-pressed", "true");
       await motion.press("Enter");
       await expect(motion).toHaveAttribute("aria-pressed", "false");
-      await part.getByRole("button", { name: "Turn right →" }).click();
-      await part.getByRole("button", { name: "Front view" }).click();
+      // No turn buttons: the model itself takes focus and the arrow keys.
+      await expect(part.getByRole("button")).toHaveCount(1);
+      const canvas = part.locator("canvas");
+      await canvas.focus();
+      await expect(canvas).toBeFocused();
+      await page.keyboard.press("ArrowRight");
+      await page.keyboard.press("Home");
     } else {
       // Without WebGL the drawing stays.
       await expect(part.locator("svg")).toHaveCount(1);
@@ -243,5 +248,44 @@ test.describe("3D models on part pages", () => {
     await expect(page.locator("#more .tile svg").first()).toBeVisible();
     await expect(page.locator("#more part-3d")).toHaveCount(0);
     await context.close();
+  });
+});
+
+test.describe("3D model loading", () => {
+  test("while the 3D code loads, the page shows a note, not the drawing", async ({
+    page,
+  }) => {
+    let release: () => void = () => {};
+    const held = new Promise<void>((r) => (release = r));
+    await page.route(/part-3d.*\.js$/, async (route) => {
+      await held;
+      await route.continue();
+    });
+    await page.goto("en/hardware/motors/gearmotor/");
+    const part = page.locator("part-3d");
+    await expect(part.getByText("Loading the 3D model…")).toBeVisible();
+    await expect(part.getByRole("status")).toBeVisible();
+    // The loading animation turns (here, with motion allowed).
+    await expect(part.locator(".loader .cube")).toHaveCSS(
+      "animation-name",
+      "loader-turn",
+    );
+    await expect(part.locator("svg")).toBeHidden();
+    release();
+    await expect(part).toHaveAttribute("data-mode", /^(3d|drawing)$/, {
+      timeout: 15_000,
+    });
+    await expect(part.getByText("Loading the 3D model…")).toBeHidden();
+  });
+
+  test("if the 3D code can't load, the drawing comes back", async ({
+    page,
+  }) => {
+    await page.route(/part-3d.*\.js$/, (route) => route.abort());
+    await page.goto("en/hardware/motors/gearmotor/");
+    const part = page.locator("part-3d");
+    await expect(part).toHaveAttribute("data-mode", "drawing");
+    await expect(part.locator("svg")).toBeVisible();
+    await expect(part.getByText("Loading the 3D model…")).toBeHidden();
   });
 });

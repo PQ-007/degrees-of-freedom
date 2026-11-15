@@ -7,6 +7,7 @@ import { render } from "astro:content";
 import Base from "../../../../layouts/Base.astro";
 import Carousel from "../../../../components/Carousel.astro";
 import CompareTable from "../../../../components/CompareTable.astro";
+import Loader from "../../../../components/Loader.astro";
 import SourceList from "../../../../components/SourceList.astro";
 import { getHardware } from "../../../../lib/atlas";
 import { PART_MODEL_KEYS } from "../../../../three/part-keys";
@@ -69,7 +70,13 @@ const rowLinks = Object.fromEntries(
       <header class="hero">
         {has3d ? (
           <figure class="art line-art grid-bg three">
-            <part-3d model={key} label={type.figureAlt} set:html={figure} />
+            <part-3d model={key} label={type.figureAlt}>
+              <p class="part-loading" role="status">
+                <Loader />
+                {t(lang, "part3d.loading")}
+              </p>
+              <Fragment set:html={figure} />
+            </part-3d>
           </figure>
         ) : (
           <figure class="art line-art grid-bg" set:html={figure} />
@@ -156,6 +163,29 @@ const rowLinks = Object.fromEntries(
   }
   .art.three {
     padding: 12px;
+  }
+  /* With JavaScript, the drawing inside <part-3d> waits unseen while the 3D
+     code loads (the user, 2026-11-16: show the 3D only); it shows only if 3D
+     can't run (data-mode="drawing") or without JavaScript. Meanwhile a note
+     holds the model's place. These rules live here, not in demo.css, so they
+     apply before that code arrives. */
+  :global(html.js) part-3d:not([data-mode]) {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 3;
+  }
+  :global(html.js) part-3d:not([data-mode]) > :global(svg),
+  .part-loading {
+    display: none;
+  }
+  :global(html.js) part-3d:not([data-mode]) > .part-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    margin: 0;
+    font-size: 14px;
+    color: var(--muted);
   }
   h1 {
     font-size: clamp(2rem, 5vw, 2.8rem);
