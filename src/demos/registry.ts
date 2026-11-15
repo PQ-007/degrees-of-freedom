@@ -12,6 +12,7 @@ export const DEMOS: Record<string, () => Promise<unknown>> = {
   "pwm-demo": () => import("./elements/pwm-demo"),
   "adc-demo": () => import("./elements/adc-demo"),
   "reach-demo": () => import("./elements/reach-demo"),
+  "gears-demo": () => import("./elements/gears-demo"),
 };
 
 export function upgradeDemos(root: ParentNode = document): void {

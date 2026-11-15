@@ -58,6 +58,7 @@
     pwm-demo,
     adc-demo,
     reach-demo,
+    gears-demo,
     induction-demo
   ) {
   display: block;

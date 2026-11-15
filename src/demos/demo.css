@@ -598,3 +598,24 @@
     font-size: 0.15px;
   }
 }
+
+/* Gears (C2): the motor's gear in ink, the output's turning line in the
+   data colour. */
+.demo-gears .gear-body {
+  fill: var(--surface);
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.demo-gears .gear-out .gear-body {
+  stroke-width: 2.5;
+}
+.demo-gears .spoke {
+  stroke-width: 3;
+}
+.demo-gears .gear-out .spoke {
+  stroke: var(--d, var(--ink));
+  stroke-width: 5;
+}
+.demo-gears .hub {
+  fill: var(--ink);
+}

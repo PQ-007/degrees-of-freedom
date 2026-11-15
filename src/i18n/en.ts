@@ -348,6 +348,20 @@ export const en = {
   "demo.reach.area": "Workspace area",
   "demo.reach.dof": "Degrees of freedom",
   "demo.reach.dofValue": "2 (two joints)",
+  "demo.unit.rpm": "rpm",
+  "demo.gears.title": "Gears: trading speed for torque",
+  "demo.gears.view":
+    "Two spur gears in mesh: a small 12-tooth gear on the motor on the left drives a bigger gear on the right; a line on each gear shows how far it has turned",
+  "demo.gears.legend":
+    "Left: a 12-tooth gear on a small motor (6,000 rpm, 0.05 N·m). Right: the output gear, its line in colour. Speed and torque are ideal, with no losses.",
+  "demo.gears.motor": "Turn the motor",
+  "demo.gears.teeth": "Output gear teeth",
+  "demo.gears.backlash": "Backlash (at the output)",
+  "demo.gears.ratio": "Gear ratio",
+  "demo.gears.speed": "Output speed",
+  "demo.gears.torque": "Output torque",
+  "demo.gears.angle": "Output angle",
+  "demo.gears.ideal": "without play",
   "footer.license": "Code: MIT. Text: CC BY-SA 4.0.",
   "footer.source": "Source on GitHub",
 } as const;
