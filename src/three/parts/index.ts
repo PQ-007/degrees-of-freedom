@@ -3,8 +3,10 @@
 import type { PartRecipe } from "../kit";
 import { COMPUTER_MODELS } from "./computers";
 import { MOTOR_MODELS } from "./motors";
+import { SENSOR_MODELS } from "./sensors";
 
 export const PART_MODELS: Record<string, PartRecipe> = {
   ...MOTOR_MODELS,
   ...COMPUTER_MODELS,
+  ...SENSOR_MODELS,
 };

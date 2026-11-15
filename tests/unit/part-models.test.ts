@@ -38,11 +38,11 @@ function accentPlaces(root: Object3D): number[] {
 }
 
 describe("the parts' 3D models", () => {
-  it("the key list matches the models, and every motor and computer type has one", () => {
+  it("the key list matches the models, and every Hardware type has one", () => {
     expect([...PART_MODEL_KEYS].sort()).toEqual(
       Object.keys(PART_MODELS).sort(),
     );
-    for (const category of ["motors", "computers"]) {
+    for (const category of ["motors", "computers", "sensors"]) {
       const data = parse(
         readFileSync(
           new URL(`../../content/hardware/${category}.yaml`, import.meta.url),

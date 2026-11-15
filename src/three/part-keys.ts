@@ -17,4 +17,12 @@ export const PART_MODEL_KEYS: ReadonlySet<string> = new Set([
   "flight-controller",
   "sbc",
   "ai-computer",
+  "encoder",
+  "imu",
+  "ultrasonic",
+  "tof",
+  "lidar",
+  "camera",
+  "depth-camera",
+  "force-torque",
 ]);
