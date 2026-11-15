@@ -44,6 +44,24 @@
     en: The turning effect of a force, how hard something is twisted about an axis. It is the force times its distance from the axis, measured in newton-metres.
     mn: Хүчний эргүүлэх үйлчлэл, ямар нэг зүйлийг тэнхлэгийг тойруулан хэр хүчтэй мушгиж буй нь. Хүчийг тэнхлэг хүртэлх зайгаар нь үржүүлсэнтэй тэнцүү бөгөөд ньютон-метрээр хэмждэг.
   see: [gear-ratio]
+- id: inertia
+  node: F5
+  term:
+    en: Inertia
+    mn: Инерц
+  def:
+    en: A body's resistance to a change in its motion. Its mass measures it, so a heavier body needs more force for the same acceleration.
+    mn: Биеийн хөдөлгөөний өөрчлөлтийг эсэргүүцэх чанар. Түүнийг масс хэмждэг тул хүнд бие ижил хурдатгалд илүү их хүч шаарддаг.
+  see: [torque]
+- id: friction
+  node: F5
+  term:
+    en: Friction
+    mn: Үрэлт
+  def:
+    en: The force between touching surfaces that resists sliding. It usually takes more force to start something sliding than to keep it sliding.
+    mn: Шүргэлцэж буй гадаргуунуудын хоорондох, гулсалтыг эсэргүүцэх хүч. Ихэвчлэн гулсуулж эхлэхэд гулсуулсаар байхаас илүү их хүч хэрэгтэй.
+  see: [inertia]
 - id: ground
   node: F7
   term:

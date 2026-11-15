@@ -638,3 +638,64 @@
     - title: "F/T Sensor Mini45 (ATI Industrial Automation)"
       url: https://www.ati-ia.com/products/ft/ft_models.aspx?id=Mini45
   checked: web, 2026-11-15
+
+- id: newton-laws
+  claim: >-
+    Newton's first law: a body at rest remains at rest, or if in motion remains
+    in motion at constant velocity, unless acted on by a net external force;
+    inertia is an object's resistance to changes in its motion, measured by
+    its mass. Second law: the net force equals mass times acceleration,
+    F = ma. Third law: when one body exerts a force on a second, it feels a
+    force equal in magnitude and opposite in direction; the two act on
+    different bodies (walking pushes the floor backward; rockets move forward
+    by expelling gas backward).
+  sources:
+    - title: "University Physics Volume 1, section 5.2: Newton's First Law (OpenStax)"
+      url: https://openstax.org/books/university-physics-volume-1/pages/5-2-newtons-first-law
+    - title: "University Physics Volume 1, section 5.3: Newton's Second Law (OpenStax)"
+      url: https://openstax.org/books/university-physics-volume-1/pages/5-3-newtons-second-law
+    - title: "University Physics Volume 1, section 5.5: Newton's Third Law (OpenStax)"
+      url: https://openstax.org/books/university-physics-volume-1/pages/5-5-newtons-third-law
+  checked: web, 2026-11-15
+
+- id: torque-def
+  claim: >-
+    Torque is the cross product of the position vector and the force,
+    magnitude rF sin θ; the lever arm is the perpendicular distance from the
+    axis to the line of the force; the SI unit is the newton-metre (N·m); if
+    the angle is zero, the torque is zero.
+  sources:
+    - title: "University Physics Volume 1, section 10.6: Torque (OpenStax)"
+      url: https://openstax.org/books/university-physics-volume-1/pages/10-6-torque
+  checked: web, 2026-11-15
+
+- id: friction-coef
+  claim: >-
+    Static friction can be up to μs times the normal force (fs ≤ μs N);
+    kinetic friction is μk times the normal force (fk = μk N); the
+    coefficients of kinetic friction are less than their static counterparts.
+  sources:
+    - title: "University Physics Volume 1, section 6.2: Friction (OpenStax)"
+      url: https://openstax.org/books/university-physics-volume-1/pages/6-2-friction
+  checked: web, 2026-11-15
+
+- id: power-def
+  claim: >-
+    Power is the rate of doing work, P = dW/dt, measured in watts
+    (1 W = 1 J/s); for a force on a moving body P = F·v, and for rotation
+    P = τω.
+  sources:
+    - title: "University Physics Volume 1, section 7.4: Power (OpenStax)"
+      url: https://openstax.org/books/university-physics-volume-1/pages/7-4-power
+    - title: "University Physics Volume 1, section 10.8: Work and Power for Rotational Motion (OpenStax)"
+      url: https://openstax.org/books/university-physics-volume-1/pages/10-8-work-and-power-for-rotational-motion
+  checked: web, 2026-11-15
+
+- id: standard-gravity
+  claim: >-
+    The standard acceleration of gravity, g_n, is 9.806 65 m/s², an exact
+    value.
+  sources:
+    - title: "CODATA value: standard acceleration of gravity (NIST)"
+      url: https://physics.nist.gov/cgi-bin/cuu/Value?gn
+  checked: web, 2026-11-15

@@ -1,0 +1,17 @@
+<!-- F5: a free-body diagram. A block on a floor is pushed to the right
+     (F, the force the page is about); friction from the floor pushes back
+     along the floor (f); gravity pulls it down (mg); the floor pushes up (N).
+     Maths-only labels; the caption is in the page's text. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="520" viewBox="0 0 520 260" class="fig-free-body">
+  <line x1="40" y1="180" x2="480" y2="180" class="thick"/>
+  <line x1="58" y1="182" x2="46" y2="196" class="thin"/><line x1="76" y1="182" x2="64" y2="196" class="thin"/><line x1="94" y1="182" x2="82" y2="196" class="thin"/><line x1="112" y1="182" x2="100" y2="196" class="thin"/><line x1="130" y1="182" x2="118" y2="196" class="thin"/><line x1="148" y1="182" x2="136" y2="196" class="thin"/><line x1="166" y1="182" x2="154" y2="196" class="thin"/><line x1="184" y1="182" x2="172" y2="196" class="thin"/><line x1="202" y1="182" x2="190" y2="196" class="thin"/><line x1="220" y1="182" x2="208" y2="196" class="thin"/><line x1="238" y1="182" x2="226" y2="196" class="thin"/><line x1="256" y1="182" x2="244" y2="196" class="thin"/><line x1="274" y1="182" x2="262" y2="196" class="thin"/><line x1="292" y1="182" x2="280" y2="196" class="thin"/><line x1="310" y1="182" x2="298" y2="196" class="thin"/><line x1="328" y1="182" x2="316" y2="196" class="thin"/><line x1="346" y1="182" x2="334" y2="196" class="thin"/><line x1="364" y1="182" x2="352" y2="196" class="thin"/><line x1="382" y1="182" x2="370" y2="196" class="thin"/><line x1="400" y1="182" x2="388" y2="196" class="thin"/><line x1="418" y1="182" x2="406" y2="196" class="thin"/><line x1="436" y1="182" x2="424" y2="196" class="thin"/><line x1="454" y1="182" x2="442" y2="196" class="thin"/><line x1="472" y1="182" x2="460" y2="196" class="thin"/>
+  <rect x="200" y="100" width="120" height="80" rx="3" class="soft thick"/>
+  <line x1="320" y1="140" x2="418.0" y2="140.0" class="accent"/><path d="M430,140 L418.0,146.6 L418.0,133.4 Z" class="accent-fill"/>
+  <text x="436" y="146">F</text>
+  <line x1="200" y1="172" x2="132.0" y2="172.0" class="thick"/><path d="M120,172 L132.0,165.4 L132.0,178.6 Z" class="ink-fill"/>
+  <text x="104" y="166">f</text>
+  <line x1="260" y1="100" x2="260.0" y2="38.0" class="thick"/><path d="M260,26 L266.6,38.0 L253.4,38.0 Z" class="ink-fill"/>
+  <text x="270" y="40">N</text>
+  <line x1="260" y1="180" x2="260.0" y2="238.0" class="thick"/><path d="M260,250 L253.4,238.0 L266.6,238.0 Z" class="ink-fill"/>
+  <text x="270" y="246">mg</text>
+</svg>
