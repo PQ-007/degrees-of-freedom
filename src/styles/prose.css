@@ -57,6 +57,7 @@
     lever-demo,
     pwm-demo,
     adc-demo,
+    reach-demo,
     induction-demo
   ) {
   display: block;

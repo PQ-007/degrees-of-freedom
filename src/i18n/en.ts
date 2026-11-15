@@ -332,6 +332,22 @@ export const en = {
   "demo.adc.binary": "In binary",
   "demo.adc.axisV": "voltage (V)",
   "demo.adc.axisT": "t (0–1 s)",
+  "demo.unit.cm": "cm",
+  "demo.unit.m2": "m²",
+  "demo.reach.title": "Where can the arm reach?",
+  "demo.reach.view":
+    "Drawing from above of an arm with two links and two turning joints, fixed at a shoulder in the middle; the shaded area around it is every place its tip can reach, and dashed lines mark the joints' limits",
+  "demo.reach.legend":
+    "Shaded: the workspace, every place the tip can reach. Dashed lines: how far each joint can turn. Rings every 25 cm round the shoulder.",
+  "demo.reach.l1": "Link 1 (shoulder to elbow)",
+  "demo.reach.l2": "Link 2 (elbow to tip)",
+  "demo.reach.shoulder": "Shoulder can turn",
+  "demo.reach.elbow": "Elbow can turn",
+  "demo.reach.far": "Farthest reach",
+  "demo.reach.near": "Nearest reach",
+  "demo.reach.area": "Workspace area",
+  "demo.reach.dof": "Degrees of freedom",
+  "demo.reach.dofValue": "2 (two joints)",
   "footer.license": "Code: MIT. Text: CC BY-SA 4.0.",
   "footer.source": "Source on GitHub",
 } as const;
