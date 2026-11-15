@@ -1,0 +1,49 @@
+<!-- C1: four common joints, each with its letter and its degrees of
+     freedom. R revolute (a hinge: one turn), P prismatic (a slide: one
+     move), U universal (two turns about crossed axes), S spherical (a ball
+     in a socket: three turns). Accent arrows show the motions each allows.
+     Two by two, so it stays legible on a phone. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="400" viewBox="0 0 400 400" class="fig-joints">
+  <defs>
+    <marker id="jt-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" class="accent-fill" style="stroke:none"/>
+    </marker>
+  </defs>
+  <line x1="200" y1="14" x2="200" y2="386" class="dash"/>
+  <line x1="14" y1="200" x2="386" y2="200" class="dash"/>
+
+  <!-- R: a hinge -->
+  <text x="18" y="34" style="font-style:normal">R · 1</text>
+  <line x1="24" y1="140" x2="92" y2="140" class="thick"/>
+  <line x1="92" y1="140" x2="150" y2="84" class="thick"/>
+  <circle cx="92" cy="140" r="9" class="soft thick"/>
+  <path d="M139.3,131.7 A48,48 0 0 0 100.3,92.7" class="accent" marker-start="url(#jt-arrow)" marker-end="url(#jt-arrow)"/>
+
+  <!-- P: a slide -->
+  <text x="218" y="34" style="font-style:normal">P · 1</text>
+  <rect x="222" y="122" width="76" height="36" class="soft thick"/>
+  <rect x="262" y="132" width="110" height="16" class="soft thick"/>
+  <line x1="300" y1="100" x2="368" y2="100" class="accent" marker-start="url(#jt-arrow)" marker-end="url(#jt-arrow)"/>
+
+  <!-- U: two crossed hinges -->
+  <text x="18" y="234" style="font-style:normal">U · 2</text>
+  <line x1="22" y1="320" x2="74" y2="320" class="thick"/>
+  <path d="M74,296 L74,344 M74,296 L96,296 M74,344 L96,344" class="thick"/>
+  <line x1="96" y1="294" x2="96" y2="346" class="thin"/>
+  <line x1="84" y1="320" x2="132" y2="320" class="thin"/>
+  <circle cx="96" cy="320" r="5" class="ink-fill"/>
+  <path d="M120,296 L120,344 M120,296 L132,296 M120,344 L132,344" class="thick"/>
+  <line x1="132" y1="320" x2="180" y2="290" class="thick"/>
+  <path d="M60,282 A36,14 0 0 0 132,282" class="accent" marker-end="url(#jt-arrow)"/>
+  <path d="M146,300 A12,30 0 0 1 146,356" class="accent" marker-end="url(#jt-arrow)"/>
+
+  <!-- S: a ball in a socket -->
+  <text x="218" y="234" style="font-style:normal">S · 3</text>
+  <path d="M262,322 A34,34 0 0 0 330,322" class="thick"/>
+  <line x1="296" y1="356" x2="296" y2="384" class="thick"/>
+  <circle cx="296" cy="318" r="22" class="soft thick"/>
+  <line x1="306" y1="298" x2="350" y2="252" class="thick"/>
+  <path d="M244,300 A52,18 0 0 0 348,300" class="accent" marker-end="url(#jt-arrow)"/>
+  <path d="M362,330 A14,44 0 0 1 362,250" class="accent" marker-end="url(#jt-arrow)"/>
+  <path d="M318,272 A16,6 0 1 0 350,272" transform="rotate(-46 334 272)" class="accent" marker-end="url(#jt-arrow)"/>
+</svg>

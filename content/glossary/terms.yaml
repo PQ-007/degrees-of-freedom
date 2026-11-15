@@ -171,6 +171,43 @@
     mn: Компьютерын бусад програмыг ажиллуулж, процессор, санах ой, төхөөрөмжүүдийг тэдний хооронд хуваарилдаг програм хангамж. Linux бол нэг жишээ; бодит хугацааны үйлдлийн систем хугацааны хязгаарыг хангахаар бүтээгдсэн.
   see: [real-time, interrupt]
 
+- id: link
+  node: C1
+  term:
+    en: Link
+    mn: Холбоос
+  def:
+    en: One of the rigid parts of a robot's body, such as the upper arm. Joints connect the links to each other.
+    mn: Роботын биеийн хатуу хэсгүүдийн нэг, жишээ нь гарын дээд хэсэг. Үеүд холбоосуудыг хооронд нь холбоно.
+  see: [joint]
+- id: joint
+  node: C1
+  term:
+    en: Joint
+    mn: Үе
+  def:
+    en: A connection between two links that lets them move relative to each other in some ways and not others, such as a hinge (turns) or a slide (moves in a line).
+    mn: Хоёр холбоосыг тодорхой байдлаар харьцангуй хөдөлгөж, бусад байдлаар хөдлөхийг хориглодог холболт, жишээ нь нугас (эргэнэ) эсвэл гулсуур (шулуун шилжинэ).
+  see: [link, degree-of-freedom]
+- id: workspace
+  node: C1
+  term:
+    en: Workspace
+    mn: Ажлын орон зай
+  def:
+    en: Every place a robot's tool or tip can reach. Its shape comes from the robot's links, joints and joint limits.
+    mn: Роботын багаж эсвэл үзүүрийн хүрч чадах бүх газар. Хэлбэр нь роботын холбоос, үе, үеийн хязгаараас хамаарна.
+  see: [joint]
+- id: stiffness
+  node: C1
+  term:
+    en: Stiffness
+    mn: Хатуулаг
+  def:
+    en: How much force it takes to bend or stretch a part by a given amount. A stiffer arm sags less under a load, so its tip stays closer to where it should be.
+    mn: Эд ангийг тодорхой хэмжээгээр нугалах эсвэл сунгахад шаардагдах хүч. Илүү хатуу гар ачаалал дор бага унжих тул үзүүр нь байх ёстой газартаа ойр байна.
+  see: [link]
+
 - id: radian
   node: F1
   term:

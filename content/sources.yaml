@@ -1026,3 +1026,87 @@
     - title: "FreeRTOS kernel fundamentals (FreeRTOS user guide, AWS)"
       url: https://docs.aws.amazon.com/freertos/latest/userguide/dev-guide-freertos-kernel.html
   checked: web, 2026-11-15
+
+- id: mr-joints
+  claim: >-
+    Every joint connects exactly two links. A revolute joint (R, a hinge)
+    allows rotation about its axis; a prismatic joint (P, a slider) allows
+    translation along it; both have one degree of freedom. A universal joint
+    (U), two revolute joints with orthogonal axes, has two; a spherical joint
+    (S, a ball and socket, much like a shoulder) has three.
+  sources:
+    - title: "Modern Robotics: Mechanics, Planning, and Control, section 2.2.1 and table 2.1 (K. M. Lynch and F. C. Park, Cambridge University Press, 2017; free preprint from the authors)"
+      url: https://hades.mech.northwestern.edu/index.php/Modern_Robotics
+  checked: web (the preprint PDF), 2026-11-15
+
+- id: mr-rigid-body-dof
+  claim: >-
+    A rigid body moving in three-dimensional space has six degrees of
+    freedom; a rigid body moving in a plane has three.
+  sources:
+    - title: "Modern Robotics: Mechanics, Planning, and Control, section 2.1 (K. M. Lynch and F. C. Park, Cambridge University Press, 2017; free preprint from the authors)"
+      url: https://hades.mech.northwestern.edu/index.php/Modern_Robotics
+  checked: web (the preprint PDF), 2026-11-15
+
+- id: mr-grubler
+  claim: >-
+    Grübler's formula gives the degrees of freedom of a mechanism of N links
+    (counting the ground as a link) and J joints, where joint i provides f_i
+    freedoms and m is a rigid body's degrees of freedom (3 in a plane, 6 in
+    space) — dof = m(N − 1 − J) + Σ f_i.
+  sources:
+    - title: "Modern Robotics: Mechanics, Planning, and Control, section 2.2.2 (K. M. Lynch and F. C. Park, Cambridge University Press, 2017; free preprint from the authors)"
+      url: https://hades.mech.northwestern.edu/index.php/Modern_Robotics
+  checked: web (the preprint PDF), 2026-11-15
+
+- id: mr-workspace
+  claim: >-
+    A robot's workspace is a specification of the configurations its
+    end-effector can reach; it is driven by the robot's structure,
+    independently of the task.
+  sources:
+    - title: "Modern Robotics: Mechanics, Planning, and Control, section 2.5 (K. M. Lynch and F. C. Park, Cambridge University Press, 2017; free preprint from the authors)"
+      url: https://hades.mech.northwestern.edu/index.php/Modern_Robotics
+  checked: web (the preprint PDF), 2026-11-15
+
+- id: cantilever-deflection
+  claim: >-
+    A cantilever (a beam fixed at one end) with a load P at its free end
+    deflects most at that end, by PL³/(3EI), where L is its length, E the
+    material's elastic modulus and I the second moment of area of its cross
+    section.
+  sources:
+    - title: "Deflections due to bending, chapter 10 of the 1.050 Solid Mechanics notes (MIT OpenCourseWare, fall 2004)"
+      url: https://ocw.mit.edu/courses/1-050-solid-mechanics-fall-2004/f9a4d5764b9b0f51ffaacbdf69f7aed8_emech10_04.pdf
+  checked: web (the PDF), 2026-11-15
+
+- id: metal-properties
+  claim: >-
+    Densities and elastic moduli — structural steel (A992) 7,850 kg/m³ and
+    200 GPa; aluminium 6061-T6 2,710 kg/m³ and 68.9 GPa; titanium alloy
+    4,430 kg/m³ and 120 GPa.
+  sources:
+    - title: "Strength of Materials, appendix C: material properties (J. K. Lord, A. Richardson, S. Davison and D. A. Dillard, LibreTexts)"
+      url: https://eng.libretexts.org/Bookshelves/Mechanical_Engineering/Strength_of_Materials/16%3A_Appendices/16.03%3A_Material_Properties
+  checked: web, 2026-11-15
+
+- id: pla-datasheet
+  claim: >-
+    A common 3D-printing PLA, printed solid, has a density of 1.24 g/cm³ and
+    a Young's modulus of 2,680 MPa along its layers (X-Y) but 2,160 MPa
+    across them (Z); its tensile strength is 39 MPa along the layers and
+    35 MPa across them.
+  sources:
+    - title: "Bambu PLA Basic technical data sheet (Bambu Lab)"
+      url: https://cdn.shopify.com/s/files/1/0380/5149/files/Bambu_PLA_Basic_Technical_Data_Sheet.pdf
+  checked: web (the PDF), 2026-11-15
+
+- id: prusa-orientation
+  claim: >-
+    FFF (filament) prints are stronger in one direction than another, so
+    structural parts should be printed in the orientation that gives them
+    the most strength.
+  sources:
+    - title: "Modeling with 3D printing in mind (Prusa knowledge base)"
+      url: https://help.prusa3d.com/article/modeling-with-3d-printing-in-mind_164135
+  checked: web, 2026-11-15
