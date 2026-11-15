@@ -360,3 +360,41 @@ test.describe("F8 Programming for robots", () => {
     expect(axe.violations.map((v) => v.id)).toEqual([]);
   });
 });
+
+test.describe("F9 How computers work", () => {
+  test("each extra bit doubles the readings; the marker shows one in binary", async ({
+    page,
+  }) => {
+    await page.goto("en/node/how-computers-work/#try");
+    const demo = page.locator("adc-demo");
+    const out = demo.locator(".sim-readouts");
+    await expect(out).toContainText("Possible readings8 (0–7)");
+    await expect(out.locator("dd").nth(3)).toHaveText(/^[01]{3}$/);
+    await demo.getByLabel("Bits").fill("10");
+    await expect(out).toContainText("Possible readings1,024 (0–1,023)");
+    await expect(out).toContainText("Step size4.88 mV");
+    await expect(out.locator("dd").nth(3)).toHaveText(/^[01]{10}$/);
+  });
+
+  test("the blocks are described, and the page passes axe on a phone", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto("mn/node/how-computers-work/#try");
+    await page.locator("adc-demo .demo-plot").waitFor();
+    await expect(page.locator(".fig svg")).toHaveAttribute(
+      "aria-label",
+      /тасалдал/,
+    );
+    await page.locator("details.deeper summary").click();
+    await expect(page.locator("details.deeper .katex-display")).toHaveCount(5);
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+    const axe = await new AxeBuilder({ page }).analyze();
+    expect(axe.violations.map((v) => v.id)).toEqual([]);
+  });
+});

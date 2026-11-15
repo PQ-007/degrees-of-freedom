@@ -134,6 +134,42 @@
   def:
     en: Keeping every saved version of a project's files, with who changed what and why, so changes can be compared, undone or combined. Git is one such tool.
     mn: Төслийн файлуудын хадгалсан хувилбар бүрийг хэн юуг яагаад өөрчилснийх нь хамт хадгалж, өөрчлөлтийг харьцуулах, буцаах, нэгтгэх боломж олгох. Git бол ийм хэрэгслийн нэг.
+- id: bit
+  node: F9
+  term:
+    en: Bit
+    mn: Бит
+  def:
+    en: The smallest piece of information a computer stores, a 0 or a 1. Eight bits make a byte, and n bits can hold 2^n different numbers.
+    mn: Компьютерын хадгалдаг хамгийн жижиг мэдээлэл, 0 эсвэл 1. Найман бит нэг байт болдог бөгөөд n бит 2^n өөр тоо хадгалж чадна.
+  see: [adc]
+- id: adc
+  node: F9
+  term:
+    en: ADC (analog-to-digital converter)
+    mn: ADC (аналог-тоон хувиргагч)
+  def:
+    en: The part of a microcontroller that turns a voltage on a pin into a number. With n bits it splits its range into 2^n steps.
+    mn: Микроконтроллерын хөл дээрх хүчдэлийг тоо болгон хувиргадаг хэсэг. n биттэй бол хүрээгээ 2^n алхамд хуваана.
+  see: [bit, voltage]
+- id: interrupt
+  node: F9
+  term:
+    en: Interrupt
+    mn: Тасалдал
+  def:
+    en: A signal that makes the processor pause what it is doing, run a short handler, then carry on. It lets a program react to a pin at once instead of checking it over and over.
+    mn: Процессорыг хийж буй ажлаа түр зогсоож, богино зохицуулагч ажиллуулаад, дараа нь үргэлжлүүлэхэд хүргэдэг дохио. Програм хөлийг дахин дахин шалгахын оронд түүнд шууд хариу үйлдэл үзүүлэх боломжтой болно.
+  see: [real-time, operating-system]
+- id: operating-system
+  node: F9
+  term:
+    en: Operating system
+    mn: Үйлдлийн систем
+  def:
+    en: The software that runs a computer's other programs, sharing out the processor, memory and devices between them. Linux is one; a real-time operating system is built to meet deadlines.
+    mn: Компьютерын бусад програмыг ажиллуулж, процессор, санах ой, төхөөрөмжүүдийг тэдний хооронд хуваарилдаг програм хангамж. Linux бол нэг жишээ; бодит хугацааны үйлдлийн систем хугацааны хязгаарыг хангахаар бүтээгдсэн.
+  see: [real-time, interrupt]
 
 - id: radian
   node: F1

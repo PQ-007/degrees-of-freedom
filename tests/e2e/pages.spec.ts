@@ -16,6 +16,7 @@ const pages = [
   { name: "node-f6", path: "{lang}/node/electromagnetism/" },
   { name: "node-f7", path: "{lang}/node/electronics-basics/" },
   { name: "node-f8", path: "{lang}/node/programming-for-robots/" },
+  { name: "node-f9", path: "{lang}/node/how-computers-work/" },
   { name: "node-sim", path: "{lang}/node/classical-control/" },
   { name: "signal-chain", path: "{lang}/signal-chain/" },
   { name: "hardware-index", path: "{lang}/hardware/" },

@@ -945,3 +945,84 @@
     - title: "Simulink (MathWorks)"
       url: https://www.mathworks.com/products/simulink.html
   checked: web, 2026-11-15
+
+- id: cpp-overflow
+  claim: >-
+    Unsigned integer arithmetic in C++ is performed modulo 2^n, where n is
+    the number of bits in the integer: adding one to the largest value gives
+    0. When signed integer arithmetic overflows, the behaviour is undefined;
+    it may wrap around, trap, saturate or be optimised away.
+  sources:
+    - title: "Arithmetic operators: overflows (cppreference)"
+      url: https://en.cppreference.com/w/cpp/language/operator_arithmetic.html
+  checked: web, 2026-11-15
+
+- id: python-float
+  claim: >-
+    Most decimal fractions cannot be represented exactly as binary fractions:
+    0.1 is stored as a close approximation, so 0.1 + 0.1 + 0.1 == 0.3 is
+    False.
+  sources:
+    - title: "Floating-point arithmetic: issues and limitations (Python tutorial)"
+      url: https://docs.python.org/3/tutorial/floatingpoint.html
+  checked: web, 2026-11-15
+
+- id: cortex-m3-pipeline
+  claim: >-
+    The Arm Cortex-M3 processor has a three-stage pipeline: the Fetch stage,
+    the Decode stage and the Execute stage.
+  sources:
+    - title: "Cortex-M3 technical reference manual, revision r1p1 (Arm, ARM DDI 0337E), §1.4 Execution pipeline stages"
+      url: https://documentation-service.arm.com/static/6036810d5319e554d4ba108e
+  checked: web (the PDF), 2026-11-15
+
+- id: arduino-memory
+  claim: >-
+    Volatile memory keeps its data only while the system runs and loses it
+    when turned off; non-volatile memory keeps it. In a microcontroller, RAM
+    is volatile and holds temporary data such as the firmware's variables;
+    the compiled firmware is stored in flash, which is non-volatile, and runs
+    from there when the board is powered on. Reading from RAM is faster than
+    from flash.
+  sources:
+    - title: "Arduino memory guide (Arduino documentation)"
+      url: https://docs.arduino.cc/learn/programming/memory-guide/
+  checked: web (the page's source text on GitHub), 2026-11-15
+
+- id: arduino-analogread
+  claim: >-
+    Arduino boards contain a multichannel 10-bit analog-to-digital converter
+    that maps input voltages between 0 and the operating voltage (5 V or
+    3.3 V) to integers from 0 to 1023; on an UNO that is 5 V / 1024 units. On
+    ATmega boards such as the UNO a reading takes about 100 microseconds.
+  sources:
+    - title: "analogRead() (Arduino language reference)"
+      url: https://docs.arduino.cc/language-reference/en/functions/analog-io/analogRead/
+  checked: web (the reference's source text on GitHub), 2026-11-15
+
+- id: arduino-interrupts
+  claim: >-
+    Interrupts suit tasks such as reading a rotary encoder or monitoring user
+    input. The interrupt service routine should be as short and fast as
+    possible; inside it delay() won't work and millis() won't increment, and
+    variables it changes should be declared volatile.
+  sources:
+    - title: "attachInterrupt() (Arduino language reference)"
+      url: https://docs.arduino.cc/language-reference/en/functions/external-interrupts/attachInterrupt/
+  checked: web (the reference's source text on GitHub), 2026-11-15
+
+- id: freertos-scheduler
+  claim: >-
+    In an application built on a real-time operating system, only one task
+    runs at any moment and the scheduler decides when each task runs, saving
+    a task's context when it is swapped out and restoring it later. To give
+    deterministic real-time behaviour, FreeRTOS gives tasks strict priorities
+    and always runs the highest-priority task that is ready. The FreeRTOS
+    kernel is a real-time operating system suited to embedded
+    microcontroller applications.
+  sources:
+    - title: "The FreeRTOS kernel scheduler (FreeRTOS user guide, AWS)"
+      url: https://docs.aws.amazon.com/freertos/latest/userguide/freertos-kernel-scheduler.html
+    - title: "FreeRTOS kernel fundamentals (FreeRTOS user guide, AWS)"
+      url: https://docs.aws.amazon.com/freertos/latest/userguide/dev-guide-freertos-kernel.html
+  checked: web, 2026-11-15

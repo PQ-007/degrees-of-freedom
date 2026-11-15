@@ -1,0 +1,40 @@
+<!-- F9: a computer as blocks. A clock (a square wave) paces the CPU; a bus
+     joins the CPU to RAM, flash and the input/output pins, which lead to a
+     sensor. The accent line is an interrupt: the I/O block signalling the
+     CPU directly. Labels are the blocks' usual short names; the caption is
+     in the page's text. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="360" viewBox="0 0 360 320" class="fig-computer">
+  <!-- the clock -->
+  <path d="M18,58 L32,58 L32,36 L46,36 L46,58 L60,58 L60,36 L74,36 L74,58 L88,58" class="thick"/>
+  <line x1="92" y1="47" x2="125" y2="47" class="thin"/>
+
+  <!-- the CPU -->
+  <rect x="125" y="15" width="110" height="64" class="soft thick"/>
+  <text x="180" y="53" text-anchor="middle" style="font-style:normal">CPU</text>
+
+  <!-- the bus -->
+  <line x1="180" y1="79" x2="180" y2="130" class="thick"/>
+  <line x1="24" y1="130" x2="336" y2="130" class="thick"/>
+  <line x1="65" y1="130" x2="65" y2="180" class="thick"/>
+  <line x1="180" y1="130" x2="180" y2="180" class="thick"/>
+  <line x1="295" y1="130" x2="295" y2="180" class="thick"/>
+
+  <!-- memory and input/output -->
+  <rect x="20" y="180" width="90" height="56" class="soft thick"/>
+  <text x="65" y="213" text-anchor="middle" style="font-style:normal">RAM</text>
+  <rect x="135" y="180" width="90" height="56" class="soft thick"/>
+  <text x="180" y="213" text-anchor="middle" style="font-style:normal">Flash</text>
+  <rect x="250" y="180" width="90" height="56" class="soft thick"/>
+  <text x="295" y="213" text-anchor="middle" style="font-style:normal">I/O</text>
+
+  <!-- a sensor on the pins -->
+  <line x1="280" y1="236" x2="280" y2="254" class="thin"/>
+  <line x1="295" y1="236" x2="295" y2="272" class="thin"/>
+  <line x1="310" y1="236" x2="310" y2="254" class="thin"/>
+  <circle cx="295" cy="290" r="18" class="thin"/>
+  <circle cx="295" cy="290" r="4" class="ink-fill"/>
+
+  <!-- an interrupt: straight from the pins to the CPU -->
+  <path d="M340,208 L352,208 L352,32 L249,32" class="accent" style="stroke-dasharray:8 6"/>
+  <path d="M237,32 L251,24 L251,40 Z" class="accent-fill"/>
+</svg>
