@@ -1110,3 +1110,95 @@
     - title: "Modeling with 3D printing in mind (Prusa knowledge base)"
       url: https://help.prusa3d.com/article/modeling-with-3d-printing-in-mind_164135
   checked: web, 2026-11-15
+
+- id: mr-gearing
+  claim: >-
+    Robot joints want low speeds and large torques, while most motors give
+    low torques at up to thousands of rpm, so a transmission reduces speed
+    and amplifies torque: gears, cable drives, belts and pulleys, chains and
+    sprockets. It should have little slippage and backlash, the rotation
+    available at the output with no motion at the input. A gearhead of ratio
+    G divides the speed by G and, ideally, multiplies the torque by G; with
+    losses the torque is ηG times, η ≤ 1 the efficiency. Since many DC motors
+    run at 10,000 rpm or more with no load, robot joints often have gear
+    ratios of 100 or more.
+  sources:
+    - title: "Modern Robotics: Mechanics, Planning, and Control, chapter 1 and section 8.9.1 (K. M. Lynch and F. C. Park, Cambridge University Press, 2017; free preprint from the authors)"
+      url: https://hades.mech.northwestern.edu/index.php/Modern_Robotics
+  checked: web (the preprint PDF), 2026-11-15
+
+- id: mr-apparent-inertia
+  claim: >-
+    Through a gearhead of ratio G the rotor spins G times faster than the
+    joint, so its inertia felt at the joint is G² times its own (the apparent
+    or reflected inertia), and can be as large as the rest of the link's or
+    larger.
+  sources:
+    - title: "Modern Robotics: Mechanics, Planning, and Control, section 8.9.2 (K. M. Lynch and F. C. Park, Cambridge University Press, 2017; free preprint from the authors)"
+      url: https://hades.mech.northwestern.edu/index.php/Modern_Robotics
+  checked: web (the preprint PDF), 2026-11-15
+
+- id: mr-gear-tradeoffs
+  claim: >-
+    Robots with a motor at each axis and no gearheads (direct drive) have low
+    friction but see limited use, because the motors must be large and heavy.
+    A gearhead lets a smaller motor give the torque, but adds backlash, which
+    makes motion control near zero speed hard, and friction, which reduces
+    the torque available and makes it uncertain. Friction in a gearhead often
+    grows with the gear ratio. Harmonic drive gearing nearly removes backlash
+    by being somewhat flexible.
+  sources:
+    - title: "Modern Robotics: Mechanics, Planning, and Control, sections 8.9.3–8.9.5 and 11.8 (K. M. Lynch and F. C. Park, Cambridge University Press, 2017; free preprint from the authors)"
+      url: https://hades.mech.northwestern.edu/index.php/Modern_Robotics
+  checked: web (the preprint PDF), 2026-11-15
+
+- id: mr-cable-drive
+  claim: >-
+    Some joints of Barrett's WAM arm are driven by motors at the robot's base
+    through cables wound round drums, which reduces the moving mass and so
+    the torque the motors need; the UR5 instead has its motor and harmonic
+    drive at each joint.
+  sources:
+    - title: "Modern Robotics: Mechanics, Planning, and Control, example 4.7 (K. M. Lynch and F. C. Park, Cambridge University Press, 2017; free preprint from the authors)"
+      url: https://hades.mech.northwestern.edu/index.php/Modern_Robotics
+  checked: web (the preprint PDF), 2026-11-15
+
+- id: khk-gear-ratio
+  claim: >-
+    The speed ratio of a gear pair is the number of teeth of the driven gear
+    over that of the driving gear; two external gears in mesh turn opposite
+    ways; the ratios of a two-stage train multiply (10/24/12/30 teeth give 6).
+    A planetary gear system has a sun gear, planet gears, an internal gear and
+    a carrier; sharing the load among several planets makes it compact. With
+    the sun as input, the carrier as output and the internal gear fixed, the
+    ratio is z_internal / z_sun + 1.
+  sources:
+    - title: "The ABC's of Gears, basic guide B (KHK Kohara Gear)"
+      url: https://khkgears.us/media/fqrlut1m/abcs-of-gearing-b.pdf
+  checked: web (the PDF), 2026-11-15
+
+- id: nabtesco-cycloidal
+  claim: >-
+    In a cycloidal (RV) gearbox, a spur stage turns eccentric shafts that
+    drive two cam discs, 180° apart, inside a housing lined with rollers; each
+    disc has one cam fewer than there are rollers, and almost half its cams
+    are in contact at once. The two stages give ratios from about 30:1 to
+    over 300:1, and the maker states the gearbox absorbs up to five times its
+    rated torque in an emergency stop.
+  sources:
+    - title: "Functional principle of cycloidal gears (Nabtesco Precision Europe, FAQ)"
+      url: https://www.nabtesco.de/en/service/faq/technologies/functional-principle-of-cycloidal-gears
+  checked: web, 2026-11-15
+
+- id: thk-ball-screw
+  claim: >-
+    In a ball screw, balls roll between the screw shaft and the nut; its
+    efficiency is over 90% both turning rotation into linear motion and the
+    reverse, and it needs a third or less of the drive torque of a sliding
+    screw. A preload can take the axial clearance below zero.
+  sources:
+    - title: "Ball screw (THK)"
+      url: https://www.thk.com/jp/en/products/ball_screw/
+    - title: "Ball screw efficiency (THK FAQ)"
+      url: https://www.thk.com/eu/en/products/faq/ball_screw/-/0089/modal.html
+  checked: web, 2026-11-15

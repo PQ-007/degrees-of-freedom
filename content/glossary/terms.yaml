@@ -360,6 +360,24 @@
   see: [gradient-descent]
 
 # T1 Components
+- id: transmission
+  node: C2
+  term:
+    en: Transmission
+    mn: Дамжуулга
+  def:
+    en: Whatever passes a motor's motion on to a joint, such as gears, belts, screws or cables, usually slowing it down and raising its torque.
+    mn: Хөдөлгүүрийн хөдөлгөөнийг үе рүү дамжуулдаг араа, оосор, винт, трос зэрэг зүйл; ихэвчлэн хурдыг нь бууруулж, эргүүлэх моментыг нь өсгөдөг.
+  see: [gear-ratio, backlash]
+- id: reflected-inertia
+  node: C2
+  term:
+    en: Reflected inertia
+    mn: Reflected inertia
+  def:
+    en: How heavy a motor's spinning rotor feels at the joint through a gearbox. With a gear ratio G it is G² times the rotor's own inertia, so high ratios make a joint feel heavy to push.
+    mn: Араан хайрцгаар дамжуулан үе дээр хөдөлгүүрийн эргэдэг роторын мэдрэгдэх хүнд байдал. G харьцаатай бол роторын өөрийн инерцээс G² дахин их, тиймээс харьцаа өндөр бол үеийг түлхэхэд хүнд санагдана.
+  see: [gear-ratio, inertia, backdrivable]
 - id: gear-ratio
   node: C2
   term:

@@ -50,3 +50,47 @@ test.describe("C1 Mechanisms and structure", () => {
     expect(axe.violations.map((v) => v.id)).toEqual([]);
   });
 });
+
+test.describe("C2 Transmissions", () => {
+  test("the ratio trades speed for torque; backlash holds the output when the motor reverses", async ({
+    page,
+  }) => {
+    await page.goto("en/node/transmissions/#try");
+    const demo = page.locator("gears-demo");
+    const out = demo.locator(".sim-readouts");
+    await expect(out).toContainText("Gear ratio3.0 : 1");
+    await expect(out).toContainText("Output speed2,000 rpm");
+    await expect(out).toContainText("Output torque0.15 N·m");
+    await demo.getByLabel("Turn the motor").fill("360");
+    await expect(out).toContainText("Output angle-120.0°");
+    await demo.getByLabel("Backlash (at the output)").fill("4");
+    await demo.getByLabel("Turn the motor").fill("400");
+    // Pushed forward: it trails the ideal angle by half the gap.
+    await expect(out).toContainText("(without play -133.3°)");
+    await demo.getByLabel("Turn the motor").fill("390");
+    // Reversed a little: still -131.3°, inside the gap.
+    await expect(out).toContainText("Output angle-131.3°");
+  });
+
+  test("the drawings are described, and the page passes axe on a phone", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto("mn/node/transmissions/#try");
+    await page.locator("gears-demo .demo-gears").waitFor();
+    await expect(page.locator(".fig svg")).toHaveAttribute(
+      "aria-label",
+      /оосор/,
+    );
+    await page.locator("details.deeper summary").click();
+    await expect(page.locator("details.deeper .katex-display")).toHaveCount(5);
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+    const axe = await new AxeBuilder({ page }).analyze();
+    expect(axe.violations.map((v) => v.id)).toEqual([]);
+  });
+});
