@@ -321,3 +321,42 @@ test.describe("F7 Electronics basics", () => {
     expect(axe.violations.map((v) => v.id)).toEqual([]);
   });
 });
+
+test.describe("F8 Programming for robots", () => {
+  test("the code is plain, one colour, and scrolls from the keyboard", async ({
+    page,
+  }) => {
+    await page.goto("en/node/programming-for-robots/");
+    const code = page.locator(".prose pre.code");
+    await expect(code).toHaveCount(4);
+    for (const pre of await code.all())
+      await expect(pre).toHaveAttribute("tabindex", "0");
+    // No syntax highlighting: colour is for tiers and data only.
+    await expect(page.locator(".astro-code, pre [style*='color']")).toHaveCount(
+      0,
+    );
+    await expect(code.first()).toContainText("void loop()");
+  });
+
+  test("the map is described, and the page passes axe on a phone", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto("mn/node/programming-for-robots/");
+    await expect(page.locator(".fig svg")).toHaveAttribute(
+      "aria-label",
+      /микроконтроллер|чип/,
+    );
+    await expect(page.locator(".prose pre.code").first()).toContainText(
+      "мэдрэх",
+    );
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+    const axe = await new AxeBuilder({ page }).analyze();
+    expect(axe.violations.map((v) => v.id)).toEqual([]);
+  });
+});

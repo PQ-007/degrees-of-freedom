@@ -853,3 +853,95 @@
     - title: "Light-Emitting Diodes (LEDs) (SparkFun)"
       url: https://learn.sparkfun.com/tutorials/light-emitting-diodes-leds/all
   checked: web, 2026-11-15
+
+- id: arduino-sketch-cpp
+  claim: >-
+    The Arduino software does some minor pre-processing to turn a sketch into
+    a C++ program (the .ino files are combined into one .cpp file), which is
+    compiled with architecture-specific versions of gcc and g++.
+  sources:
+    - title: "Sketch build process (Arduino CLI documentation)"
+      url: https://docs.arduino.cc/arduino-cli/sketch-build-process/
+  checked: web, 2026-11-15
+
+- id: arduino-setup-loop
+  claim: >-
+    setup() is called when a sketch starts and runs only once, after each
+    power-up or reset of the board; it initialises variables, pin modes and
+    libraries. loop() then loops consecutively, letting the program change
+    and respond.
+  sources:
+    - title: "setup() (Arduino language reference)"
+      url: https://docs.arduino.cc/language-reference/en/structure/sketch/setup/
+    - title: "loop() (Arduino language reference)"
+      url: https://docs.arduino.cc/language-reference/en/structure/sketch/loop/
+  checked: web (the reference's source text on GitHub), 2026-11-15
+
+- id: pico-sdk
+  claim: >-
+    Raspberry Pi's official SDK for its Pico microcontroller boards is a C/C++
+    SDK, open source, used from the command line or from IDEs such as Visual
+    Studio Code.
+  sources:
+    - title: "The C/C++ SDK (Raspberry Pi documentation)"
+      url: https://www.raspberrypi.com/documentation/microcontrollers/c_sdk.html
+  checked: web, 2026-11-15
+
+- id: ros2-client-libraries
+  claim: >-
+    ROS 2's core client libraries are rclcpp (C++) and rclpy (Python), and
+    nodes written in either can talk to each other. Python may be preferred
+    for tools because prototyping is faster; parts of the system concerned
+    with efficiency may be better written in C++.
+  sources:
+    - title: "About ROS 2 client libraries (ROS 2 documentation)"
+      url: https://docs.ros.org/en/rolling/ROS-Framework/About-Client-Libraries.html
+  checked: web (the page's source text on GitHub), 2026-11-15
+
+- id: ros2-jazzy-platforms
+  claim: >-
+    ROS 2 Jazzy Jalisco (supported May 2024 to May 2029) has Ubuntu 24.04
+    (amd64 and arm64) and Windows 10 (amd64) as its Tier 1 platforms.
+  sources:
+    - title: "REP 2000: ROS 2 releases and target platforms"
+      url: https://www.ros.org/reps/rep-2000.html
+  checked: web (the REP's source text on GitHub), 2026-11-15
+
+- id: pytorch
+  claim: >-
+    PyTorch is an open-source machine learning framework for building and
+    training deep learning models, widely adopted across academia and
+    industry; its design is Pythonic, deeply integrated with native Python
+    tools.
+  sources:
+    - title: "PyTorch (PyTorch Foundation)"
+      url: https://pytorch.org/projects/pytorch/
+  checked: web, 2026-11-15
+
+- id: git-vcs
+  claim: >-
+    Git is a free and open-source distributed version control system.
+  sources:
+    - title: "Git"
+      url: https://git-scm.com/
+  checked: web, 2026-11-15
+
+- id: rust-safety
+  claim: >-
+    Rust has no runtime or garbage collector, so it can run on embedded
+    devices; its type system and ownership model guarantee memory safety and
+    thread safety, removing many classes of bugs at compile time.
+  sources:
+    - title: "Rust programming language"
+      url: https://www.rust-lang.org/
+  checked: web, 2026-11-15
+
+- id: simulink
+  claim: >-
+    Simulink is a block diagram environment for Model-Based Design: systems
+    are modelled and simulated before moving to hardware, and the models can
+    be deployed to embedded systems without writing code by hand.
+  sources:
+    - title: "Simulink (MathWorks)"
+      url: https://www.mathworks.com/products/simulink.html
+  checked: web, 2026-11-15

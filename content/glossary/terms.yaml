@@ -108,6 +108,33 @@
     mn: Хэлхээний бүх хүчдэлийг хэмждэг нийтлэг жишиг цэг. Хоорондоо дохио дамжуулдаг хэсгүүдийн газардуулгыг холбох ёстой.
   see: [ground-loop, voltage-regulator]
 
+- id: firmware
+  node: F8
+  term:
+    en: Firmware
+    mn: Firmware
+  def:
+    en: The program built into a device's microcontroller, which starts when the power comes on and works the sensors and motors directly.
+    mn: Төхөөрөмжийн микроконтроллерт суулгасан, тэжээл орж ирэхэд эхэлж, мэдрэгч ба хөдөлгүүрийг шууд ажиллуулдаг програм.
+  see: [microcontroller, compiler]
+- id: compiler
+  node: F8
+  term:
+    en: Compiler
+    mn: Компилятор
+  def:
+    en: A program that translates code a person writes, such as C or C++, into the machine instructions a processor runs.
+    mn: Хүний бичсэн C, C++ зэрэг кодыг процессорын гүйцэтгэдэг машины зааварт хөрвүүлдэг програм.
+  see: [firmware]
+- id: version-control
+  node: F8
+  term:
+    en: Version control
+    mn: Хувилбарын хяналт
+  def:
+    en: Keeping every saved version of a project's files, with who changed what and why, so changes can be compared, undone or combined. Git is one such tool.
+    mn: Төслийн файлуудын хадгалсан хувилбар бүрийг хэн юуг яагаад өөрчилснийх нь хамт хадгалж, өөрчлөлтийг харьцуулах, буцаах, нэгтгэх боломж олгох. Git бол ийм хэрэгслийн нэг.
+
 - id: radian
   node: F1
   term:
