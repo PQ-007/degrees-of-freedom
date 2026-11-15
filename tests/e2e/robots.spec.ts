@@ -28,28 +28,66 @@ test.describe("robot teardown", () => {
     }
   });
 
-  test("the drawing is labelled and its numbers match the list of parts", async ({
+  test("the 3D model is labelled, and its numbers match the list of parts", async ({
     page,
   }) => {
     await page.goto("en/robots/planetary-rover/");
-    const svg = page.locator(".drawing svg");
-    await expect(svg).toHaveAttribute("role", "img");
-    await expect(svg).toHaveAttribute("aria-label", /six-wheeled rover/);
-    await expect(page.locator(".drawing [data-callout]")).toHaveCount(7);
+    const model = page.locator("robot-3d");
+    await expect(model).toHaveAttribute("data-mode", "3d", { timeout: 15_000 });
+    await expect(model.locator("canvas")).toHaveAttribute(
+      "aria-label",
+      /six-wheeled rover/,
+    );
+    // The numbers are decorative: the list says the same in words.
+    await expect(model.locator(".robot-labels")).toHaveAttribute(
+      "aria-hidden",
+      "true",
+    );
+    await expect(model.locator(".robot-label")).toHaveText([
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+    ]);
     await expect(page.locator(".legend li")).toHaveCount(7);
   });
 
-  test("a part links to its section and topic, and lights up its number", async ({
+  test("without 3D, the line drawing and its numbered callouts show", async ({
+    page,
+  }) => {
+    await page.route(/robot-3d.*\.js$/, (route) => route.abort());
+    await page.goto("en/robots/planetary-rover/");
+    await expect(page.locator("robot-3d")).toHaveAttribute(
+      "data-mode",
+      "drawing",
+    );
+    const svg = page.locator(".drawing svg");
+    await expect(svg).toBeVisible();
+    await expect(svg).toHaveAttribute("role", "img");
+    await expect(page.locator(".drawing [data-callout]")).toHaveCount(7);
+    await page.locator('.legend li[data-part="4"]').hover();
+    await expect(page.locator('.drawing [data-callout="4"]')).toHaveClass(
+      /hot/,
+    );
+  });
+
+  test("a part links to its section and topic, and lights up in the model", async ({
     page,
   }) => {
     await page.setViewportSize({ width: 1440, height: 900 });
     await page.goto("en/robots/planetary-rover/");
+    await expect(page.locator("robot-3d")).toHaveAttribute("data-mode", "3d", {
+      timeout: 15_000,
+    });
     const part = page.locator('.legend li[data-part="4"]');
     await expect(part).toContainText("Act");
-    await part.hover();
-    await expect(page.locator('.drawing [data-callout="4"]')).toHaveClass(
-      /hot/,
-    );
+    await part
+      .getByRole("link", { name: "Six wheels on a rocker-bogie suspension" })
+      .focus();
+    await expect(page.locator(".robot-label.hot")).toHaveText("4");
     await part
       .getByRole("link", { name: "Six wheels on a rocker-bogie suspension" })
       .click();

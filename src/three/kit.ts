@@ -47,6 +47,15 @@ export interface PartModel {
   /** Where the camera starts, as a direction from the model's centre
    * (default: in front, a little above and to the right). */
   view?: [number, number, number];
+  /** Numbered parts (a robot teardown's callouts): where its label sits, and
+   * the meshes it names. */
+  callouts?: Callout[];
+}
+
+export interface Callout {
+  n: number;
+  anchor: [number, number, number];
+  parts: Object3D[];
 }
 
 /** A model's recipe: builds it from the shared materials. */
@@ -233,6 +242,23 @@ export function boltCircle(
     );
   }
   return g;
+}
+
+/** A round bar of radius r from point a to point b. */
+export function strut(
+  a: [number, number, number],
+  b: [number, number, number],
+  r: number,
+  role: Role,
+  m: Materials,
+): Mesh {
+  const from = new Vector3(...a);
+  const to = new Vector3(...b);
+  const dir = to.clone().sub(from);
+  const mesh = part(cyl(r, dir.length(), 16), role, m, 60);
+  mesh.position.copy(from.add(to).multiplyScalar(0.5));
+  mesh.quaternion.setFromUnitVectors(new Vector3(0, 1, 0), dir.normalize());
+  return mesh;
 }
 
 /** Smooth back-and-forth between −1 and 1, period p seconds. */

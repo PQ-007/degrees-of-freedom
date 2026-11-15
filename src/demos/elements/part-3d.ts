@@ -5,19 +5,35 @@
 // way to the model: drag it to turn it, or focus it and use the arrow keys
 // (Home: front view); the moving part moves until paused with the Motion
 // button, and starts paused under reduced motion.
+//
+// Model3D is shared with <robot-3d> (robot-3d.ts), which adds numbered
+// labels to a robot's parts.
 import { el, pageLang, translator } from "../kit";
 import { hasWebGL } from "../../sim/load";
 import { PART_MODELS } from "../../three/parts";
+import type { PartRecipe } from "../../three/kit";
 import { PartViewer } from "../../three/viewer";
 import "../demo.css";
 
-class Part3D extends HTMLElement {
-  private viewer: PartViewer | undefined;
+export class Model3D extends HTMLElement {
+  protected viewer: PartViewer | undefined;
   private theme: MutationObserver | undefined;
+
+  /** The recipe for this element's model attribute. */
+  protected recipe(name: string): PartRecipe | undefined {
+    return PART_MODELS[name];
+  }
+
+  /** Called once the model is showing; `stage` holds the canvas. A part has
+   * nothing to add; <robot-3d> adds its labels here. */
+  protected mounted(viewer: PartViewer, stage: HTMLElement): void {
+    void viewer;
+    void stage;
+  }
 
   connectedCallback(): void {
     if (this.viewer) return;
-    const recipe = PART_MODELS[this.getAttribute("model") ?? ""];
+    const recipe = this.recipe(this.getAttribute("model") ?? "");
     if (!recipe || !hasWebGL()) {
       this.dataset["mode"] = "drawing";
       return;
@@ -37,17 +53,17 @@ class Part3D extends HTMLElement {
     }
     this.viewer = viewer;
 
-    const button = (label: string, onClick: () => void) => {
-      const b = el("button", { type: "button", class: "btn small" }, label);
-      b.addEventListener("click", onClick);
-      return b;
-    };
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)");
-    const play = button(tr("part3d.motion"), () => setPlaying(!viewer.playing));
+    const play = el(
+      "button",
+      { type: "button", class: "btn small" },
+      tr("part3d.motion"),
+    );
     const setPlaying = (on: boolean) => {
       viewer.play(on);
       play.setAttribute("aria-pressed", String(on));
     };
+    play.addEventListener("click", () => setPlaying(!viewer.playing));
     // No turn buttons (the user, 2026-11-16): the model takes keyboard
     // focus instead, so it still turns without a mouse. Arrow keys turn it,
     // Home brings back the front view.
@@ -60,8 +76,9 @@ class Part3D extends HTMLElement {
       else return;
       e.preventDefault();
     });
+    const stage = el("div", { class: "part-stage" }, canvas);
     this.replaceChildren(
-      canvas,
+      stage,
       el(
         "div",
         { class: "part-controls" },
@@ -71,6 +88,7 @@ class Part3D extends HTMLElement {
     );
     setPlaying(!reduced.matches);
     this.dataset["mode"] = "3d";
+    this.mounted(viewer, stage);
     this.theme = new MutationObserver(() => viewer.applyTheme());
     this.theme.observe(document.documentElement, {
       attributes: true,
@@ -85,4 +103,4 @@ class Part3D extends HTMLElement {
   }
 }
 
-if (!customElements.get("part-3d")) customElements.define("part-3d", Part3D);
+if (!customElements.get("part-3d")) customElements.define("part-3d", Model3D);

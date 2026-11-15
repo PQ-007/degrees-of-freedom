@@ -662,36 +662,74 @@
   stroke-width: 2.5;
 }
 
-/* A part's 3D model (Hardware pages): the canvas fills the drawing's frame;
-   the buttons sit under it. */
-part-3d {
+/* A 3D model (Hardware part pages, robot teardowns): the canvas fills the
+   drawing's frame; the Motion button and hint sit under it. */
+:is(part-3d, robot-3d) {
   display: block;
 }
-part-3d .part-canvas {
+:is(part-3d, robot-3d) .part-canvas {
   display: block;
   width: 100%;
   aspect-ratio: 4 / 3;
   touch-action: pan-y; /* a vertical swipe still scrolls the page */
   cursor: grab;
 }
-part-3d .part-canvas:active {
+:is(part-3d, robot-3d) .part-canvas:active {
   cursor: grabbing;
 }
-part-3d .part-canvas:focus-visible {
+:is(part-3d, robot-3d) .part-canvas:focus-visible {
   outline: 3px solid var(--line);
   outline-offset: 3px;
 }
-part-3d .part-controls {
+:is(part-3d, robot-3d) .part-controls {
   display: flex;
   align-items: center;
   gap: 12px;
   margin-top: 10px;
 }
-part-3d .part-controls .btn[aria-pressed="true"] {
+:is(part-3d, robot-3d) .part-controls .btn[aria-pressed="true"] {
   box-shadow: none;
   transform: translate(2px, 2px);
 }
-part-3d .part-hint {
+:is(part-3d, robot-3d) .part-hint {
   margin: 0;
   font-size: 13px;
+}
+
+/* A robot's numbered labels, following its parts (robot-3d.ts). */
+:is(part-3d, robot-3d) .part-stage {
+  position: relative;
+}
+robot-3d .part-canvas {
+  aspect-ratio: 16 / 10;
+}
+robot-3d .robot-labels {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+robot-3d .robot-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  display: grid;
+  place-items: center;
+  min-width: 26px;
+  height: 26px;
+  border: 2px solid var(--line);
+  background: var(--surface);
+  color: var(--ink);
+  font: 700 13px var(--mono);
+}
+robot-3d .robot-label.hot {
+  background: var(--ink);
+  color: var(--surface);
+}
+@media (max-width: 560px) {
+  robot-3d .robot-label {
+    min-width: 20px;
+    height: 20px;
+    font-size: 11px;
+  }
 }

@@ -15,6 +15,9 @@ import {
   Spherical,
   Vector3,
   WebGLRenderer,
+  type Material,
+  type Mesh,
+  type Object3D,
 } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 import type { Materials, PartModel, PartRecipe } from "./kit";
@@ -50,6 +53,8 @@ export class PartViewer {
   private t = 0;
   private last = 0;
   playing = false;
+  /** Called after every frame drawn (labels follow the model with it). */
+  onDraw: (() => void) | undefined;
 
   constructor(
     canvas: HTMLCanvasElement,
@@ -123,13 +128,44 @@ export class PartViewer {
     this.request();
   }
 
+  /** The model, for its callouts. */
+  get parts(): PartModel {
+    return this.model;
+  }
+
+  /** Where a point of the model is on the canvas, in CSS pixels, and
+   * whether it faces the viewer's side of the model's centre. */
+  project(p: [number, number, number]) {
+    const v = this.model.root
+      .localToWorld(new Vector3(...p))
+      .project(this.camera);
+    const canvas = this.renderer.domElement;
+    return {
+      x: ((v.x + 1) / 2) * canvas.clientWidth,
+      y: ((1 - v.y) / 2) * canvas.clientHeight,
+    };
+  }
+
+  /** Draws the meshes under `objects` in `material` (or back in their own,
+   * for undefined). */
+  paint(objects: Object3D[], material: Material | undefined): void {
+    for (const o of objects)
+      o.traverse((c) => {
+        const mesh = c as Mesh;
+        if (!mesh.isMesh) return;
+        mesh.userData["own"] ??= mesh.material;
+        mesh.material = material ?? (mesh.userData["own"] as Material);
+      });
+    this.request();
+  }
+
   play(on: boolean): void {
     this.playing = on;
     this.last = performance.now();
     this.request();
   }
 
-  private request(): void {
+  request(): void {
     if (this.frame === 0)
       this.frame = requestAnimationFrame((now) => this.draw(now));
   }
@@ -145,6 +181,7 @@ export class PartViewer {
     const moving = this.controls.update();
     this.resize();
     this.renderer.render(this.scene, this.camera);
+    this.onDraw?.();
     if (this.playing || moving) this.request();
   }
 

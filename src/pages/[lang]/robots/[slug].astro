@@ -6,6 +6,8 @@
 import { render } from "astro:content";
 import Base from "../../../layouts/Base.astro";
 import SourceList from "../../../components/SourceList.astro";
+import Loader from "../../../components/Loader.astro";
+import { ROBOT_MODEL_KEYS } from "../../../three/robot-keys";
 import { getAtlas, getRoadmaps, getRobots } from "../../../lib/atlas";
 import { languages, localePath, t, type Lang } from "../../../lib/i18n";
 import type { MessageKey } from "../../../i18n/en";
@@ -60,6 +62,13 @@ const svg = robot.svg
     `<svg role="img" aria-label="${escapeAttr(robot.figureAlt)}" `,
   );
 const base = import.meta.env.BASE_URL;
+// The 3D model where the robot has one (the user, 2026-11-16: 3D on the
+// dedicated pages); the drawing stays inside it for no JS or no WebGL. Each
+// part's role tells the model which colour lights it up.
+const has3d = ROBOT_MODEL_KEYS.has(robot.data.slug);
+const roleAttrs = Object.fromEntries(
+  robot.data.callouts.map((c) => [`data-role-${c.n}`, c.role]),
+);
 ---
 
 <Base lang={lang} title={robot.title} description={robot.summary}>
@@ -79,7 +88,23 @@ const base = import.meta.env.BASE_URL;
       <h1>{robot.title}</h1>
       <p class="summary">{robot.summary}</p>
 
-      <figure class="drawing grid-bg" set:html={svg} />
+      {has3d ? (
+        <figure class="drawing three grid-bg">
+          <robot-3d
+            model={robot.data.slug}
+            label={robot.figureAlt}
+            {...roleAttrs}
+          >
+            <p class="part-loading" role="status">
+              <Loader />
+              {t(lang, "part3d.loading")}
+            </p>
+            <Fragment set:html={svg} />
+          </robot-3d>
+        </figure>
+      ) : (
+        <figure class="drawing grid-bg" set:html={svg} />
+      )}
 
       <section class="parts" aria-labelledby="parts">
         <h2 id="parts">{t(lang, "robots.parts")}</h2>
@@ -186,6 +211,29 @@ const base = import.meta.env.BASE_URL;
 </Base>
 
 <style>
+  /* The 3D model: while its code loads, a note holds its place and the
+     drawing inside waits unseen; the drawing shows only if 3D can't run. */
+  .drawing.three {
+    padding: 12px;
+  }
+  :global(html.js) robot-3d:not([data-mode]) {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 16 / 10;
+  }
+  :global(html.js) robot-3d:not([data-mode]) > :global(svg),
+  .part-loading {
+    display: none;
+  }
+  :global(html.js) robot-3d:not([data-mode]) > .part-loading {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    margin: 0;
+    font-size: 14px;
+    color: var(--muted);
+  }
   .page {
     max-width: 1240px;
     display: grid;
@@ -446,14 +494,21 @@ const base = import.meta.env.BASE_URL;
 </style>
 
 <script>
-  // Pointing at a part in the list fills its number in the drawing.
+  // Pointing at a part in the list fills its number in the drawing, or
+  // lights the part up in the 3D model.
+  type Robot3D = HTMLElement & { highlight?: (n: number | null) => void };
+  const model = document.querySelector<Robot3D>("robot-3d");
   for (const li of document.querySelectorAll<HTMLElement>("[data-part]")) {
-    const callout = document.querySelector(
-      `.drawing [data-callout="${li.dataset["part"]}"]`,
-    );
-    if (!callout) continue;
-    const on = () => callout.classList.add("hot");
-    const off = () => callout.classList.remove("hot");
+    const n = Number(li.dataset["part"]);
+    const callout = document.querySelector(`.drawing [data-callout="${n}"]`);
+    const on = () => {
+      callout?.classList.add("hot");
+      model?.highlight?.(n);
+    };
+    const off = () => {
+      callout?.classList.remove("hot");
+      model?.highlight?.(null);
+    };
     li.addEventListener("mouseenter", on);
     li.addEventListener("mouseleave", off);
     li.addEventListener("focusin", on);
