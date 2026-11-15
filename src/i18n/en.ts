@@ -303,6 +303,21 @@ export const en = {
   "demo.induction.in": "Moving in",
   "demo.induction.out": "Moving out",
   "demo.induction.still": "Still",
+  "demo.unit.hz": "Hz",
+  "demo.pwm.title": "PWM: switching to an in-between speed",
+  "demo.pwm.view":
+    "Plot over three switching periods: the voltage jumping between 0 and 12 V as a square wave, its average as a dashed line, and the motor's speed rising and falling",
+  "demo.pwm.legend":
+    "Square wave: the voltage, fully on or fully off, from a 12 V supply. Dashed: its average. Thick line: the motor's speed as a share of its full speed; this motor takes about 0.05 s to respond.",
+  "demo.pwm.duty": "Duty cycle",
+  "demo.pwm.freq": "Switching frequency",
+  "demo.pwm.avg": "Average voltage",
+  "demo.pwm.speed": "Motor speed",
+  "demo.pwm.ripple": "Speed ripple",
+  "demo.pwm.on": "On time each period",
+  "demo.pwm.axisT": "t (ms)",
+  "demo.pwm.axisV": "voltage (V)",
+  "demo.pwm.axisS": "speed (%)",
   "footer.license": "Code: MIT. Text: CC BY-SA 4.0.",
   "footer.source": "Source on GitHub",
 } as const;

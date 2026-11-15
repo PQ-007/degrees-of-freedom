@@ -275,3 +275,49 @@ test.describe("F6 Electromagnetism", () => {
     expect(axe.violations.map((v) => v.id)).toEqual([]);
   });
 });
+
+test.describe("F7 Electronics basics", () => {
+  test("the duty cycle sets the average; faster switching smooths the speed", async ({
+    page,
+  }) => {
+    await page.goto("en/node/electronics-basics/#try");
+    const demo = page.locator("pwm-demo");
+    const out = demo.locator(".sim-readouts");
+    await expect(out).toContainText("Average voltage6.0 V");
+    await demo.getByLabel("Duty cycle").fill("25");
+    await expect(out).toContainText("Average voltage3.0 V");
+    await expect(out).toContainText("Motor speed25%");
+    await demo.getByLabel("Switching frequency").fill("0");
+    const slow = parseFloat(
+      (await out.locator("dd").nth(2).textContent()) ?? "0",
+    );
+    await demo.getByLabel("Switching frequency").fill("7");
+    const fast = parseFloat(
+      (await out.locator("dd").nth(2).textContent()) ?? "0",
+    );
+    expect(slow).toBeGreaterThan(50);
+    expect(fast).toBeLessThan(1);
+  });
+
+  test("the schematic is described, and the page passes axe on a phone", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto("mn/node/electronics-basics/#try");
+    await page.locator("pwm-demo .demo-plot").waitFor();
+    await expect(page.locator(".fig svg")).toHaveAttribute(
+      "aria-label",
+      /батарей/,
+    );
+    await page.locator("details.deeper summary").click();
+    await expect(page.locator("details.deeper .katex-display")).toHaveCount(4);
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+    const axe = await new AxeBuilder({ page }).analyze();
+    expect(axe.violations.map((v) => v.id)).toEqual([]);
+  });
+});

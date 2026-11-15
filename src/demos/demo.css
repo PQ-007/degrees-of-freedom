@@ -568,3 +568,8 @@
   font-weight: 700;
   fill: var(--ink);
 }
+
+/* PWM: the square wave and the motor's speed share one plot. */
+.demo-view-pwm {
+  aspect-ratio: 660 / 330;
+}

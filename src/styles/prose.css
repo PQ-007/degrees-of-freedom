@@ -54,7 +54,9 @@
     euler-demo,
     noise-demo,
     fit-demo,
-    lever-demo
+    lever-demo,
+    pwm-demo,
+    induction-demo
   ) {
   display: block;
 }
