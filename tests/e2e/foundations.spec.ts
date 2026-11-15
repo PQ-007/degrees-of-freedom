@@ -226,3 +226,52 @@ test.describe("F5 Mechanics", () => {
     expect(axe.violations.map((v) => v.id)).toEqual([]);
   });
 });
+
+test.describe("F6 Electromagnetism", () => {
+  test("the coil's voltage: none when still, double with double the turns", async ({
+    browser,
+    baseURL,
+  }) => {
+    const context = await browser.newContext({
+      ...(baseURL ? { baseURL } : {}),
+      reducedMotion: "reduce",
+    });
+    const page = await context.newPage();
+    await page.goto("en/node/electromagnetism/#try");
+    const demo = page.locator("induction-demo");
+    const out = demo.locator(".sim-readouts");
+    // Reduced motion: it starts paused, and a still magnet makes no voltage.
+    await expect(demo.getByRole("button", { name: "Play" })).toBeVisible();
+    await expect(out).toContainText("MagnetStill");
+    await expect(out).toContainText("Voltage now0.000 V");
+    await expect(out).toContainText("Largest voltage0.112 V");
+    await demo.getByLabel("Turns of wire").fill("400");
+    await expect(out).toContainText("Largest voltage0.223 V");
+    await demo.getByRole("button", { name: "Play" }).click();
+    await expect(demo.getByRole("button", { name: "Pause" })).toBeVisible();
+    await expect(out).toContainText(/Moving (in|out)/);
+    await context.close();
+  });
+
+  test("the motor figure is described, and the page passes axe on a phone", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto("mn/node/electromagnetism/#try");
+    await page.locator("induction-demo .demo-plot").first().waitFor();
+    await expect(page.locator(".fig svg")).toHaveAttribute(
+      "aria-label",
+      /гогцоо/,
+    );
+    await page.locator("details.deeper summary").click();
+    await expect(page.locator("details.deeper .katex-display")).toHaveCount(4);
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+    const axe = await new AxeBuilder({ page }).analyze();
+    expect(axe.violations.map((v) => v.id)).toEqual([]);
+  });
+});

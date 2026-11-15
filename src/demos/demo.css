@@ -530,3 +530,41 @@
 .demo-plot.is-sagging .arm {
   stroke-dasharray: 14 8;
 }
+
+/* The coil and magnet (induction): the coil's back halves faint, its front
+   halves ink; the magnet's N pole in the data colour, labelled. */
+.demo-view-scene {
+  aspect-ratio: 660 / 200;
+}
+.demo-view-trace {
+  aspect-ratio: 660 / 190;
+}
+.demo-plot .coil {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 3;
+}
+.demo-plot .coil-back {
+  fill: none;
+  stroke: var(--muted);
+  stroke-width: 1.5;
+}
+.demo-plot .lead {
+  fill: none;
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.demo-plot .pole-n {
+  fill: var(--d, var(--ink));
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.demo-plot .pole-s {
+  fill: var(--surface);
+  stroke: var(--ink);
+  stroke-width: 2;
+}
+.demo-plot .pole {
+  font-weight: 700;
+  fill: var(--ink);
+}

@@ -292,6 +292,21 @@ export const mn: Record<MessageKey, string> = {
   "demo.lever.holds": "Барина",
   "demo.lever.sags": "Хэт хүнд: гар унжина",
   "demo.lever.any": "Ямар ч жин (босоо)",
+  "demo.unit.v": "В",
+  "demo.induction.title": "Ороомгоор гарах соронз",
+  "demo.induction.view":
+    "Тэнхлэгийнхээ дагуу орж гарч савлах саваа соронзтой утасны ороомог",
+  "demo.induction.plot": "Сүүлийн 4 секундын ороомгийн хүчдэлийн график",
+  "demo.induction.legend":
+    "Соронз ороомог руу орж, гарч савлана. Шугам нь ороомгийн хүчдэл: соронз хөдөлж байх үед л гарч, орох ба гарах үед тэмдгээ солино. Загвар: жижиг хүчтэй соронз, 3.6 см диаметртэй ороомог.",
+  "demo.induction.speed": "Секундэд савлах тоо",
+  "demo.induction.turns": "Ороодосын тоо",
+  "demo.induction.now": "Одоогийн хүчдэл",
+  "demo.induction.peak": "Хамгийн их хүчдэл",
+  "demo.induction.state": "Соронз",
+  "demo.induction.in": "Орж байна",
+  "demo.induction.out": "Гарч байна",
+  "demo.induction.still": "Хөдөлгөөнгүй",
   "footer.license": "Код: MIT. Бичвэр: CC BY-SA 4.0.",
   "footer.source": "GitHub дээрх эх код",
 };

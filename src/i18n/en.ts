@@ -288,6 +288,21 @@ export const en = {
   "demo.lever.holds": "Holds it",
   "demo.lever.sags": "Too heavy: the arm sags",
   "demo.lever.any": "Any weight (straight up)",
+  "demo.unit.v": "V",
+  "demo.induction.title": "A magnet through a coil",
+  "demo.induction.view":
+    "A coil of wire, with a bar magnet swinging in and out along its axis",
+  "demo.induction.plot": "Plot of the coil's voltage over the last 4 seconds",
+  "demo.induction.legend":
+    "The magnet swings in and out of the coil. The trace is the coil's voltage: it appears only while the magnet moves, and flips sign between moving in and moving out. The model: a small, strong magnet and a coil 3.6 cm across.",
+  "demo.induction.speed": "Swings per second",
+  "demo.induction.turns": "Turns of wire",
+  "demo.induction.now": "Voltage now",
+  "demo.induction.peak": "Largest voltage",
+  "demo.induction.state": "Magnet",
+  "demo.induction.in": "Moving in",
+  "demo.induction.out": "Moving out",
+  "demo.induction.still": "Still",
   "footer.license": "Code: MIT. Text: CC BY-SA 4.0.",
   "footer.source": "Source on GitHub",
 } as const;
