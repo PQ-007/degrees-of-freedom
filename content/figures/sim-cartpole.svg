@@ -1,0 +1,18 @@
+<!-- Home, Simulations row: the cart-pole of M5 Classical control. A cart on
+     a rail with a pole hinged on top, leaning; the pole (the "swing" group)
+     rocks on hover (look.css). No words, so it suits every language. -->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 160">
+  <line x1="14" y1="134" x2="226" y2="134" class="thick"/>
+  <line x1="24" y1="126" x2="24" y2="142" class="thin"/>
+  <line x1="216" y1="126" x2="216" y2="142" class="thin"/>
+  <rect x="86" y="96" width="68" height="28" rx="3" class="soft thick"/>
+  <circle cx="102" cy="127" r="7" class="soft thick"/>
+  <circle cx="138" cy="127" r="7" class="soft thick"/>
+  <g class="swing" style="transform-origin: 120px 96px">
+    <line x1="120" y1="96" x2="146" y2="22" class="thick"/>
+    <circle cx="146" cy="22" r="9" class="accent-fill thick"/>
+  </g>
+  <circle cx="120" cy="96" r="4.5" class="soft thick"/>
+  <path d="M172,110 L200,110" class="thin"/>
+  <path d="M200,110 L192,105 L192,115 Z" class="thin"/>
+</svg>

@@ -120,3 +120,21 @@ test.describe("cart-pole demo", () => {
     await expect(p.getByLabel("P (пропорционал)")).toBeVisible();
   });
 });
+
+test("the home page's Simulations row leads to the cart-pole", async ({
+  page: p,
+}) => {
+  for (const [lang, name] of [
+    ["en", "Balance a pole"],
+    ["mn", "Саваа тэнцвэржүүлэх"],
+  ] as const) {
+    await p.goto(`${lang}/`);
+    const row = p.locator("#simulations");
+    await expect(row.locator("svg")).toHaveCount(1);
+    await row.getByRole("link", { name: new RegExp(name) }).click();
+    await expect(p).toHaveURL(
+      new RegExp(`${lang}/node/classical-control/#try$`),
+    );
+    await expect(p.locator("mujoco-scene")).toBeVisible();
+  }
+});

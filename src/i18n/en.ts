@@ -25,6 +25,12 @@ export const en = {
   "home.status":
     "The roadmap is up: every topic, what it needs and what it unlocks. The pages fill in from here.",
   "home.cta": "Open the roadmap",
+  "home.sims.title": "Simulations",
+  "home.sims.lead":
+    "Real physics running in your browser: press Run simulation, then change the controller and watch what happens.",
+  "home.sims.cartpole": "Balance a pole",
+  "home.sims.cartpoleLine":
+    "MuJoCo in 3D: a cart keeps a pole upright with a PID controller (M5).",
   "tiers.label": "The seven tiers, from T0 Foundations up",
   "tier.0": "Foundations",
   "tier.1": "Components",
