@@ -13,7 +13,6 @@ export const mn: Record<MessageKey, string> = {
   "nav.tree": "Roadmap",
   "nav.hardware": "Техник хангамж",
   "nav.robots": "Роботууд",
-  "nav.builds": "Build-ууд",
   "nav.search": "Хайх",
   "theme.toDark": "Бараан",
   "theme.toLight": "Цагаан",
@@ -84,7 +83,10 @@ export const mn: Record<MessageKey, string> = {
   "node.hardware": "Техник хангамж",
   "robots.title": "Роботууд",
   "robots.lead":
-    "Роботын төрлүүдийг задалж үзэх нь: тус бүр юунаас бүтдэг, яагаад.",
+    "Жинхэнэ роботууд хэрхэн ажилладаг, мөн өөрөө бүтээж болох роботууд.",
+  "robots.how": "Роботууд хэрхэн ажилладаг вэ",
+  "robots.howLead":
+    "Роботын төрлүүдийг задалж үзэх нь: хэсэг бүр юу хийдэг, аль сэдэв түүнийг заадаг.",
   "robots.glance": "Товчхондоо",
   "robots.parts": "Дугаарласан хэсгүүд",
   "robots.topics": "Гол сэдвүүд",
@@ -108,6 +110,8 @@ export const mn: Record<MessageKey, string> = {
   "builds.title": "Build-ууд",
   "builds.lead":
     "Бодитоор бүтээх роботууд, хялбараас хэцүү рүү. Тус бүр roadmap-ийн сэдвүүдийг ажил хэрэг болгоно.",
+  "builds.moved": "Build-ууд одоо Роботууд хуудсанд байна.",
+  "builds.movedLink": "Build-ууд руу очих",
   "build.difficulty": "Хүндрэл",
   "build.time": "Хугацаа",
   "build.uses": "Ашиглах сэдвүүд",

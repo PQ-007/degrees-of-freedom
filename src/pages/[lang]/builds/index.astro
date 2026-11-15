@@ -1,62 +1,38 @@
 ---
-// All Builds, easy to hard. More arrive as they are written (CONTENT_PLAN.md §6).
+// The Builds moved onto the Robots page (the user, 2026-11-15: "combine
+// robots and builds tab"). This address stays so old links still work: it
+// forwards to the Builds row, and says where they went for anyone without
+// JavaScript.
 import Base from "../../../layouts/Base.astro";
-import { getBuilds } from "../../../lib/atlas";
-import { languages, t, type Lang } from "../../../lib/i18n";
+import { languages, localePath, t, type Lang } from "../../../lib/i18n";
 
 export function getStaticPaths() {
   return languages.map((lang) => ({ params: { lang } }));
 }
 
 const lang = Astro.params.lang as Lang;
-const builds = await getBuilds(lang);
+const target = localePath(import.meta.env.BASE_URL, lang, "robots/#builds");
 ---
 
 <Base lang={lang} title={t(lang, "builds.title")}>
-  <div class="wrap page">
+  <div class="wrap page" data-forward={target}>
     <h1>{t(lang, "builds.title")}</h1>
-    <p class="lead">{t(lang, "builds.lead")}</p>
-    <ul class="list">
-      {builds.map((r) => (
-        <li>
-          <a class="card" href={r.url}>
-            <span class="id">{r.build.id}</span>
-            <h2>{r.title}</h2>
-            <p>{r.summary}</p>
-          </a>
-        </li>
-      ))}
-    </ul>
+    <p>
+      {t(lang, "builds.moved")}
+      <a href={target}>{t(lang, "builds.movedLink")} →</a>
+    </p>
   </div>
 </Base>
+
+<script>
+  const to =
+    document.querySelector<HTMLElement>("[data-forward]")?.dataset["forward"];
+  if (to) location.replace(to);
+</script>
 
 <style>
   .page {
     padding-top: 40px;
     padding-bottom: 64px;
-  }
-  h1 {
-    font-size: clamp(2rem, 5vw, 3rem);
-  }
-  .lead {
-    font-size: 1.1rem;
-    margin: 0 0 28px;
-  }
-  .list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-    gap: 20px;
-  }
-  .card h2 {
-    font-size: 1.25rem;
-    margin: 10px 0 6px;
-  }
-  .card p {
-    margin: 0;
-    color: var(--muted);
-    font-size: 15px;
   }
 </style>

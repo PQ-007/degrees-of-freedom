@@ -54,14 +54,25 @@ test.describe("Build page", () => {
     await expect(page.locator("li#src-osha-lithium")).toContainText("OSHA");
   });
 
-  test("the Builds page and header lead here", async ({ page }) => {
+  test("the Robots tab's Builds row leads here, and /builds/ forwards to it", async ({
+    page,
+  }) => {
     await page.setViewportSize({ width: 1280, height: 800 });
     await page.goto("mn/");
+    const nav = page.getByRole("navigation", { name: "Сайт" });
+    await expect(nav.getByRole("link")).toHaveCount(4);
+    await nav.getByRole("link", { name: "Роботууд" }).click();
     await page
-      .getByRole("navigation", { name: "Сайт" })
-      .getByRole("link", { name: "Build-ууд" })
+      .locator("#builds")
+      .getByRole("link", { name: /B08 · Rocker-bogie ровер/ })
       .click();
-    await page.getByRole("link", { name: /B08\s*Rocker-bogie ровер/ }).click();
     await expect(page).toHaveURL(/\/mn\/builds\/rocker-bogie-rover\/$/);
+    // The Robots tab stays current on a Build's page.
+    await expect(nav.getByRole("link", { name: "Роботууд" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    await page.goto("en/builds/");
+    await expect(page).toHaveURL(/\/en\/robots\/#builds$/);
   });
 });

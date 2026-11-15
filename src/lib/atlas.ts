@@ -373,12 +373,18 @@ export interface BuildPage {
   build: Build;
   title: string;
   summary: string;
+  /** The card's drawing, content/figures/build-<slug>.svg (inlined). */
+  svg: string;
   url: string;
   entry: CollectionEntry<"buildPages">;
 }
 
 let buildsChecked:
-  | Promise<{ builds: Build[]; pages: CollectionEntry<"buildPages">[] }>
+  | Promise<{
+      builds: Build[];
+      pages: CollectionEntry<"buildPages">[];
+      svgs: Map<string, string>;
+    }>
   | undefined;
 
 function loadBuilds() {
@@ -405,19 +411,36 @@ function loadBuilds() {
           .map((p) => p.id.split("/")[0] ?? ""),
       ),
     );
+    // Each Build has a card drawing for the Robots page.
+    const svgs = new Map<string, string>();
+    for (const b of builds) {
+      try {
+        svgs.set(
+          b.slug,
+          readFileSync(
+            join(process.cwd(), "content/figures", `build-${b.slug}.svg`),
+            "utf8",
+          ),
+        );
+      } catch {
+        errors.push(
+          `builds/${b.slug}.yaml has no card drawing: add content/figures/build-${b.slug}.svg`,
+        );
+      }
+    }
     if (errors.length > 0) {
       throw new Error(
         `The Builds have ${errors.length} problem(s):\n- ${errors.join("\n- ")}`,
       );
     }
-    return { builds, pages };
+    return { builds, pages, svgs };
   })();
   return buildsChecked;
 }
 
 /** Every Build, in ID order, with its text in `lang`. */
 export async function getBuilds(lang: Lang): Promise<BuildPage[]> {
-  const { builds, pages } = await loadBuilds();
+  const { builds, pages, svgs } = await loadBuilds();
   const base = import.meta.env.BASE_URL;
   return builds.map((build) => {
     const entry = pages.find((p) => p.id === `${lang}/${build.slug}`);
@@ -426,6 +449,7 @@ export async function getBuilds(lang: Lang): Promise<BuildPage[]> {
       build,
       title: entry.data.title,
       summary: entry.data.summary,
+      svg: svgs.get(build.slug) ?? "",
       url: localePath(base, lang, `builds/${build.slug}/`),
       entry,
     };

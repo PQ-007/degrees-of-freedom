@@ -11,7 +11,6 @@ export const en = {
   "nav.tree": "Roadmap",
   "nav.hardware": "Hardware",
   "nav.robots": "Robots",
-  "nav.builds": "Builds",
   "nav.search": "Search",
   "theme.toDark": "Dark",
   "theme.toLight": "Light",
@@ -81,8 +80,10 @@ export const en = {
   "rating.5": "very high",
   "node.hardware": "Hardware",
   "robots.title": "Robots",
-  "robots.lead":
-    "Kinds of robots taken apart: what each one is made of, and why.",
+  "robots.lead": "How real robots work, and robots you can build yourself.",
+  "robots.how": "How robots work",
+  "robots.howLead":
+    "Kinds of robots taken apart: what each part does, and which topic teaches it.",
   "robots.glance": "At a glance",
   "robots.parts": "The numbered parts",
   "robots.topics": "Key topics",
@@ -106,6 +107,8 @@ export const en = {
   "builds.title": "Builds",
   "builds.lead":
     "Real robots to make, from easy to hard. Each one puts topics from the roadmap to work.",
+  "builds.moved": "The Builds are now on the Robots page.",
+  "builds.movedLink": "Go to the Builds",
   "build.difficulty": "Difficulty",
   "build.time": "Time",
   "build.uses": "Topics you'll use",

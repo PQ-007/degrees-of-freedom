@@ -1,7 +1,12 @@
 ---
-// All robot teardowns. More arrive as they are written (CONTENT_PLAN.md §5).
+// Robots (the user, 2026-11-15: "combine robots and builds tab"): one page
+// with two rows of picture cards, like Hardware. First the teardowns (how
+// kinds of robots work), then the Builds (robots to make, easy to hard). The
+// old /builds/ address forwards to the Builds row (#builds). More arrive as
+// they are written (CONTENT_PLAN.md §5–6).
 import Base from "../../../layouts/Base.astro";
-import { getRobots } from "../../../lib/atlas";
+import Carousel from "../../../components/Carousel.astro";
+import { getBuilds, getRobots } from "../../../lib/atlas";
 import { languages, t, type Lang } from "../../../lib/i18n";
 
 export function getStaticPaths() {
@@ -10,23 +15,40 @@ export function getStaticPaths() {
 
 const lang = Astro.params.lang as Lang;
 const robots = await getRobots(lang);
+const builds = await getBuilds(lang);
+// On a card the teardown drawing shows without its numbered callouts.
+const bare = (svg: string) =>
+  svg.replace(/<g class="callouts">[\s\S]*<\/g>\s*(?=<\/svg>)/, "");
 ---
 
 <Base lang={lang} title={t(lang, "robots.title")}>
   <div class="wrap page">
     <h1>{t(lang, "robots.title")}</h1>
     <p class="lead">{t(lang, "robots.lead")}</p>
-    <ul class="list">
-      {robots.map((r) => (
-        <li>
-          <a class="card" href={r.url}>
-            <span class="id">{r.data.id}</span>
-            <h2>{r.title}</h2>
-            <p>{r.summary}</p>
-          </a>
-        </li>
-      ))}
-    </ul>
+    <Carousel
+      id="teardowns"
+      lang={lang}
+      heading={t(lang, "robots.how")}
+      summary={t(lang, "robots.howLead")}
+      items={robots.map((r) => ({
+        url: r.url,
+        title: `${r.data.id} · ${r.title}`,
+        summary: r.summary,
+        svg: bare(r.svg),
+      }))}
+    />
+    <Carousel
+      id="builds"
+      lang={lang}
+      heading={t(lang, "builds.title")}
+      summary={t(lang, "builds.lead")}
+      items={builds.map((b) => ({
+        url: b.url,
+        title: `${b.build.id} · ${b.title}`,
+        summary: b.summary,
+        svg: b.svg,
+      }))}
+    />
   </div>
 </Base>
 
@@ -41,22 +63,18 @@ const robots = await getRobots(lang);
   .lead {
     font-size: 1.1rem;
     margin: 0 0 28px;
+    max-width: 46rem;
   }
-  .list {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
-    gap: 20px;
+  /* A teardown drawing is drawn large (800 wide); on a card its lines keep
+     their screen width instead of shrinking with it. */
+  .page :global(#teardowns .art svg *) {
+    vector-effect: non-scaling-stroke;
+    stroke-width: 1.6;
   }
-  .card h2 {
-    font-size: 1.25rem;
-    margin: 10px 0 6px;
+  .page :global(#teardowns .art svg .thin) {
+    stroke-width: 1.1;
   }
-  .card p {
-    margin: 0;
-    color: var(--muted);
-    font-size: 15px;
+  .page :global(#teardowns .art svg .thick) {
+    stroke-width: 2.5;
   }
 </style>

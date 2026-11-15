@@ -78,7 +78,11 @@ const base = import.meta.env.BASE_URL;
     data-progress={t(lang, "build.progress")}
   >
     <nav class="crumbs" aria-label="Breadcrumb">
-      <a href={localePath(base, lang, "builds/")}>{t(lang, "builds.title")}</a>
+      <a href={localePath(base, lang, "robots/")}>{t(lang, "robots.title")}</a>
+      <span aria-hidden="true">›</span>
+      <a href={localePath(base, lang, "robots/#builds")}>
+        {t(lang, "builds.title")}
+      </a>
       <span aria-hidden="true">›</span>
       <span class="id">{build.id}</span>
     </nav>

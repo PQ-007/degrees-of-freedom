@@ -70,7 +70,7 @@ test.describe("robot teardown", () => {
       .getByRole("navigation", { name: "Site" })
       .getByRole("link", { name: "Robots" })
       .click();
-    await page.getByRole("link", { name: /R5\s*Planetary rover/ }).click();
+    await page.getByRole("link", { name: /R5 · Planetary rover/ }).click();
     await expect(page).toHaveURL(/\/en\/robots\/planetary-rover\/$/);
     await expect(page.locator("section.sources li")).toHaveCount(8);
     await expect(page.locator("li#src-perseverance-power")).toContainText(
