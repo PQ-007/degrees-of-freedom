@@ -208,6 +208,17 @@ export function transformAtlasRefs(tree: MdNode, refs: AtlasRefs): string[] {
         });
         continue;
       }
+      // Code blocks: plain, one colour (no syntax highlighting: colour is for
+      // tiers and data only), and focusable, since a long line scrolls
+      // sideways on a phone.
+      if (child.type === "code") {
+        const lang = (child as MdNode & { lang?: string | null }).lang;
+        next.push({
+          type: "html",
+          value: `<pre class="code" tabindex="0"><code${lang ? ` class="language-${escapeHtml(lang)}"` : ""}>${escapeHtml(child.value ?? "")}</code></pre>`,
+        });
+        continue;
+      }
       const fig = child.type === "paragraph" ? figure(child, refs) : undefined;
       if (fig) {
         next.push(fig);

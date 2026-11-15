@@ -20,6 +20,9 @@ export default defineConfig({
     routing: { prefixDefaultLocale: true, redirectToDefaultLocale: false },
   },
   markdown: {
+    // No syntax highlighting: colour is kept for tiers and data (CLAUDE.md
+    // rule 1); remark-atlas writes code blocks as plain, focusable <pre>.
+    syntaxHighlight: false,
     // remark-math finds $…$ and $$…$$; remark-atlas renders them with KaTeX
     // and handles citations, links, figures (src/lib/remark-atlas.ts).
     remarkPlugins: [remarkMath, [remarkAtlas, { base, root }]],

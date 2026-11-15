@@ -76,6 +76,27 @@ describe("node links", () => {
   });
 });
 
+describe("code blocks", () => {
+  it("render plain, escaped and focusable, with the language as a class", () => {
+    const tree: MdNode & { children: MdNode[] } = {
+      type: "root",
+      children: [
+        {
+          type: "code",
+          lang: "cpp",
+          value: "if (a < b && [[C4]]) {}",
+        } as MdNode,
+      ],
+    };
+    expect(transformAtlasRefs(tree, refs)).toEqual([]);
+    expect(tree.children[0]).toEqual({
+      type: "html",
+      value:
+        '<pre class="code" tabindex="0"><code class="language-cpp">if (a &lt; b &amp;&amp; [[C4]]) {}</code></pre>',
+    });
+  });
+});
+
 describe("term links", () => {
   it("link to the glossary entry, with the term or given text and the definition as a title", () => {
     const tree = para("An [[~encoder|encoder]] counts. [[~encoder]].");
