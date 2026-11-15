@@ -368,6 +368,12 @@ export const en = {
   "demo.drive.right": "to the right",
   "demo.drive.straight": "none: straight on",
   "demo.drive.inPlace": "0: spins in place",
+  "part3d.left": "Turn left",
+  "part3d.right": "Turn right",
+  "part3d.reset": "Front view",
+  "part3d.motion": "Motion",
+  "part3d.hint":
+    "A 3D model: drag it to turn it, or use the buttons. Motion starts and stops its moving part.",
   "footer.license": "Code: MIT. Text: CC BY-SA 4.0.",
   "footer.source": "Source on GitHub",
 } as const;

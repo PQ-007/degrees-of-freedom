@@ -372,6 +372,12 @@ export const mn: Record<MessageKey, string> = {
   "demo.drive.right": "баруун тийш",
   "demo.drive.straight": "байхгүй: шулуун",
   "demo.drive.inPlace": "0: байрандаа эргэнэ",
+  "part3d.left": "Зүүн тийш эргүүлэх",
+  "part3d.right": "Баруун тийш эргүүлэх",
+  "part3d.reset": "Урдаас харах",
+  "part3d.motion": "Хөдөлгөөн",
+  "part3d.hint":
+    "3D загвар: чирж эргүүлэх эсвэл товчлууруудыг ашиглана уу. «Хөдөлгөөн» хөдөлдөг хэсгийг нь эхлүүлж, зогсооно.",
   "footer.license": "Код: MIT. Бичвэр: CC BY-SA 4.0.",
   "footer.source": "GitHub дээрх эх код",
 };

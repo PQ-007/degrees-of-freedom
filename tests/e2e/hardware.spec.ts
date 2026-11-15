@@ -193,3 +193,55 @@ test.describe("Hardware", () => {
     await expect(page.locator(".wrap.page")).toHaveClass(/\bsense\b/);
   });
 });
+
+test.describe("3D models on part pages", () => {
+  test("a motor's page shows its 3D model with keyboard controls, and passes axe", async ({
+    page,
+  }) => {
+    await page.goto("en/hardware/motors/stepper/");
+    const part = page.locator("part-3d");
+    await expect(part).toHaveAttribute("data-mode", /^(3d|drawing)$/, {
+      timeout: 15_000,
+    });
+    if ((await part.getAttribute("data-mode")) === "3d") {
+      await expect(part.locator("canvas")).toHaveAttribute(
+        "aria-label",
+        /stepper/,
+      );
+      const motion = part.getByRole("button", { name: "Motion" });
+      await expect(motion).toHaveAttribute("aria-pressed", "true");
+      await motion.press("Enter");
+      await expect(motion).toHaveAttribute("aria-pressed", "false");
+      await part.getByRole("button", { name: "Turn right →" }).click();
+      await part.getByRole("button", { name: "Front view" }).click();
+    } else {
+      // Without WebGL the drawing stays.
+      await expect(part.locator("svg")).toHaveCount(1);
+    }
+    const axe = await new AxeBuilder({ page }).analyze();
+    expect(axe.violations.map((v) => v.id)).toEqual([]);
+  });
+
+  test("under reduced motion the model starts still; cards keep their drawings", async ({
+    browser,
+    baseURL,
+  }) => {
+    const context = await browser.newContext({
+      baseURL: baseURL ?? "",
+      reducedMotion: "reduce",
+    });
+    const page = await context.newPage();
+    await page.goto("mn/hardware/motors/hobby-servo/");
+    const part = page.locator("part-3d");
+    await expect(part).toHaveAttribute("data-mode", /^(3d|drawing)$/, {
+      timeout: 15_000,
+    });
+    if ((await part.getAttribute("data-mode")) === "3d")
+      await expect(
+        part.getByRole("button", { name: "Хөдөлгөөн" }),
+      ).toHaveAttribute("aria-pressed", "false");
+    await expect(page.locator("#more .tile svg").first()).toBeVisible();
+    await expect(page.locator("#more part-3d")).toHaveCount(0);
+    await context.close();
+  });
+});

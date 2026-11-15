@@ -9,6 +9,7 @@ import Carousel from "../../../../components/Carousel.astro";
 import CompareTable from "../../../../components/CompareTable.astro";
 import SourceList from "../../../../components/SourceList.astro";
 import { getHardware } from "../../../../lib/atlas";
+import { PART_MODEL_KEYS } from "../../../../three/part-keys";
 import {
   format,
   languages,
@@ -46,6 +47,9 @@ const figure = type.svg.replace(
   /<svg\b/,
   `<svg role="img" aria-label="${type.figureAlt.replace(/"/g, "&quot;")}"`,
 );
+// A 3D model where the part has one (the user, 2026-11-16: 3D on the
+// dedicated pages only); the drawing stays inside it for no JS or no WebGL.
+const has3d = PART_MODEL_KEYS.has(key);
 const rowLinks = Object.fromEntries(
   category.types.map((ty) => [ty.key, ty.url]),
 );
@@ -63,7 +67,13 @@ const rowLinks = Object.fromEntries(
       </nav>
 
       <header class="hero">
-        <figure class="art line-art grid-bg" set:html={figure} />
+        {has3d ? (
+          <figure class="art line-art grid-bg three">
+            <part-3d model={key} label={type.figureAlt} set:html={figure} />
+          </figure>
+        ) : (
+          <figure class="art line-art grid-bg" set:html={figure} />
+        )}
         <div>
           <h1>{type.title}</h1>
           <p class="summary">{type.summary}</p>
@@ -133,7 +143,7 @@ const rowLinks = Object.fromEntries(
   /* The drawing first, big, beside the name. */
   .hero {
     display: grid;
-    grid-template-columns: minmax(0, 360px) minmax(0, 1fr);
+    grid-template-columns: minmax(0, 420px) minmax(0, 1fr);
     gap: 28px;
     align-items: center;
     margin: 18px 0 24px;
@@ -143,6 +153,9 @@ const rowLinks = Object.fromEntries(
     padding: 16px 20px;
     border: 2px solid var(--line);
     background-color: var(--surface);
+  }
+  .art.three {
+    padding: 12px;
   }
   h1 {
     font-size: clamp(2rem, 5vw, 2.8rem);

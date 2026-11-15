@@ -661,3 +661,33 @@
   stroke: var(--ink);
   stroke-width: 2.5;
 }
+
+/* A part's 3D model (Hardware pages): the canvas fills the drawing's frame;
+   the buttons sit under it. */
+part-3d {
+  display: block;
+}
+part-3d .part-canvas {
+  display: block;
+  width: 100%;
+  aspect-ratio: 4 / 3;
+  touch-action: pan-y; /* a vertical swipe still scrolls the page */
+  cursor: grab;
+}
+part-3d .part-canvas:active {
+  cursor: grabbing;
+}
+part-3d .part-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 10px;
+}
+part-3d .part-controls .btn[aria-pressed="true"] {
+  box-shadow: none;
+  transform: translate(2px, 2px);
+}
+part-3d .part-hint {
+  margin: 8px 0 0;
+  font-size: 13px;
+}
