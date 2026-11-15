@@ -30,21 +30,13 @@ const siteName = t(lang, "site.name");
 const fullTitle = title ? `${title} · ${siteName}` : siteName;
 const other = otherLang(lang);
 const pathname = Astro.url.pathname;
-// Robots holds both the teardowns and the Builds (the user, 2026-11-15:
-// "combine robots and builds tab"), so it is the current tab on either.
 const nav = [
   { href: localePath(base, lang, "tree/"), label: t(lang, "nav.tree") },
   { href: localePath(base, lang, "hardware/"), label: t(lang, "nav.hardware") },
-  {
-    href: localePath(base, lang, "robots/"),
-    label: t(lang, "nav.robots"),
-    also: localePath(base, lang, "builds/"),
-  },
+  { href: localePath(base, lang, "robots/"), label: t(lang, "nav.robots") },
   { href: localePath(base, lang, "search/"), label: t(lang, "nav.search") },
 ];
-const current = (item: { href: string; also?: string }) =>
-  pathname.startsWith(item.href) ||
-  (item.also !== undefined && pathname.startsWith(item.also));
+const current = (item: { href: string }) => pathname.startsWith(item.href);
 ---
 
 <!doctype html>

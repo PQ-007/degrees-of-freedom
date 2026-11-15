@@ -51,7 +51,7 @@ Radio signals take minutes to travel between Earth and Mars: about 3 minutes whe
 
 ## Software and loop rates {#software}
 
-The rover runs loops nested inside each other. The fastest keep each motor at its commanded speed and angle. Above them, a driving loop looks at the ground, [[~hazard-avoidance|plans a short path between hazards]], and moves. The slowest loop runs through Earth: people review what the rover did, plan the next day, and send the commands, which arrive each Martian morning.[@perseverance-telecom] [[S1]] explains how such layers fit together.
+The rover runs loops nested inside each other. The fastest keep each motor at its commanded speed and angle. Above them, a driving loop looks at the ground, [[~hazard-avoidance|plans a short path between hazards]], and moves. The slowest loop runs through Earth: people review what the rover did, plan the next day's drive as a list of [[~waypoint|waypoints]],[@perseverance-ai-drive] and send the commands, which arrive each Martian morning.[@perseverance-telecom] [[S1]] explains how such layers fit together.
 
 ## Control and key algorithms {#control}
 
@@ -81,4 +81,4 @@ Checked 14 November 2026
 
 ## How to start building a small one {#start}
 
-A small rocker-bogie rover is a good first big project: six small gearmotors, a linkage you can 3D-print or cut from sheet, a [[~microcontroller|microcontroller]], a battery and a camera. On the roadmap, start with [[F7]], [[C4]], [[L1]] and [[L3]], then [[M2]] and [[I3]]. Build 08, linked at the top of this page, walks through one step by step.
+A small rocker-bogie rover is a good first big project: six small gearmotors, a linkage you can 3D-print or cut from sheet, a [[~microcontroller|microcontroller]], a battery and a camera. On the roadmap, start with [[F7]], [[C4]], [[L1]] and [[L3]], then [[M2]] and [[I3]].

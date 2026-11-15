@@ -27,7 +27,7 @@ It works the other way round too. Change the magnetic field through a coil, for 
 
 ## Back EMF
 
-A spinning motor is a generator as well. It makes its own voltage against its supply, the [[~back-emf|back EMF]]: zero when the motor is still, and growing with its speed. So a motor draws its largest current when it first starts or when it is stalled, and more current when a load slows it down; run too slowly under load, it can overheat.[@back-emf] That burst of current at start-up is why a robot's microcontroller can reset when its motors switch on (one of [Build 08's](../../builds/rocker-bogie-rover/) common failures), and why motor drivers limit current ([[L3]], [[L4]]).
+A spinning motor is a generator as well. It makes its own voltage against its supply, the [[~back-emf|back EMF]]: zero when the motor is still, and growing with its speed. So a motor draws its largest current when it first starts or when it is stalled, and more current when a load slows it down; run too slowly under load, it can overheat.[@back-emf] That burst of current at start-up is why a robot's microcontroller can reset when its motors switch on, and why motor drivers limit current ([[L3]], [[L4]]).
 
 ## The Hall effect
 

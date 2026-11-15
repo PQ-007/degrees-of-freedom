@@ -16,7 +16,6 @@ export interface RoadmapStep {
 export interface Roadmap {
   slug: string;
   robot?: string | undefined;
-  build?: string | undefined;
   stages: { key: string; title: Localized; steps: RoadmapStep[] }[];
   later: { node: string; why: Localized }[];
 }
@@ -34,7 +33,6 @@ export function checkRoadmap(
   roadmap: Roadmap,
   needsOf: ReadonlyMap<string, readonly string[]>,
   robotIds: ReadonlySet<string>,
-  buildIds: ReadonlySet<string>,
   languages: readonly string[],
   pageLangs: readonly string[],
 ): string[] {
@@ -47,9 +45,6 @@ export function checkRoadmap(
       errors.push(
         `${at} has no ${lang} text: add content/roadmaps/${lang}/${roadmap.slug}.md`,
       );
-  }
-  if (roadmap.build && !buildIds.has(roadmap.build)) {
-    errors.push(`${at} ends in Build ${roadmap.build}, which doesn't exist`);
   }
   if (roadmap.robot && !robotIds.has(roadmap.robot)) {
     errors.push(`${at} links robot ${roadmap.robot}, which has no teardown`);

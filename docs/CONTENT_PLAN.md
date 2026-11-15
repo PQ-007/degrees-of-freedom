@@ -15,9 +15,9 @@ So Degrees of Freedom is a **structured atlas of robotics** with a learning path
 1. **What is robotics, and what do I need to know?** → Foundations + the Tech Tree.
 2. **What are my options for each part?** (motors, controllers, power, sensors, compute, software) → Compare pages, side by side.
 3. **How does it all connect?** (sensor → software → algorithm → driver → motor) → The Signal Chain.
-4. **How are real robots built, and how do I start building one?** → Robot teardowns, Roadmaps per robot type, a ladder of Builds.
+4. **How are real robots built, and how do I start building one?** → Robot teardowns and Roadmaps per robot type.
 
-Each part has docs (reading), interactive demos (trying), and optional real Builds (building).
+Each part has docs (reading) and interactive demos (trying). (A ladder of hands-on Builds was planned and removed by the user on 2026-11-16; see §6.)
 
 ### Sitemap
 
@@ -34,8 +34,7 @@ Home
 ├── Robots                           ← teardowns of robot types (humanoid,
 │                                       quadruped, rover, drone, arm, ...)
 ├── Roadmaps                         ← "I want to build X": a highlighted path
-│                                       through the tree + builds
-├── Builds                           ← a ladder of real builds, easy → hard
+│                                       through the tree
 └── Glossary · Sources
 ```
 
@@ -245,7 +244,7 @@ Each robot type gets a teardown page in the same template, so they can be compar
 9. Control and key algorithms.
 10. The hard problems for this type.
 11. Real examples (cited, dated).
-12. How to start building a small one → its Roadmap and Builds.
+12. How to start building a small one → its Roadmap.
 
 **Robot types**
 
@@ -266,11 +265,11 @@ Each robot type gets a teardown page in the same template, so they can be compar
 | R13 | Swarm robots | Many simple robots, local rules, emergent behavior |
 | R14 | Home and service robots | Cost limits, cluttered spaces, interaction |
 
-## 6. Roadmaps and Builds
+## 6. Roadmaps
 
 ### Roadmaps
 
-A roadmap is a goal-specific path through the Tech Tree: it highlights the nodes you need (must / helpful / later) and the order. Each ends in a Build.
+A roadmap is a goal-specific path through the Tech Tree: it highlights the nodes you need (must / helpful / later) and the order.
 
 | Roadmap | Key nodes beyond Foundations |
 |---|---|
@@ -283,24 +282,9 @@ A roadmap is a goal-specific path through the Tech Tree: it highlights the nodes
 | Humanoid | Quadruped roadmap + M8, M9, I8, I10, I12, S7 |
 | Robotics software / AI | S1–S3, P5–P6, I9–I12 |
 
-### Builds: the ladder
+### Builds (removed)
 
-Real builds from easy to hard. Each Build page (titled "Build 05: Self-balancing robot"): goal, nodes used, block diagram, component categories (with a link to the Compare page for picking), wiring and power plan, firmware/software outline, the Signal Chain for this build, test checklist, common failures, safety notes, and "make it harder" extensions. Specific parts and prices are suggested as examples only and checked when written.
-
-| # | Build | Learns |
-|---|---|---|
-| B01 | Blink → button → servo sweep | Microcontroller basics, PWM |
-| B02 | Line follower | Sensors → control loop → motors in one MCU |
-| B03 | Obstacle-avoiding differential-drive robot | Motor drivers, distance sensing, state machines |
-| B04 | Wheel speed PID with encoders | Closed loop, tuning, odometry |
-| B05 | Self-balancing two-wheel robot | IMU fusion, fast control loop, inverted pendulum |
-| B06 | 3–4 DOF servo arm | Kinematics, IK, trajectories |
-| B07 | ROS 2 rover with lidar/camera | Software architecture, SLAM, navigation |
-| B08 | Rocker-bogie rover | Mechanism design, terrain, outdoor autonomy |
-| B09 | Quadcopter from a flight controller | BLDC, ESCs, flight control loops, safety |
-| B10 | Small servo quadruped | Gaits, leg kinematics |
-| B11 | BLDC quasi-direct-drive leg / quadruped | FOC, torque control, MPC/RL in simulation → real |
-| B12 | Humanoid upper body or small biped | Whole-body thinking, balance, many-joint integration |
+A ladder of twelve hands-on Builds (B01–B12) was planned here, and B08 Rocker-bogie rover was written. On 2026-11-16 the user removed the Builds section entirely; the site keeps teardowns, roadmaps and demos.
 
 ## 7. Templates
 
@@ -313,7 +297,7 @@ Real builds from easy to hard. Each Build page (titled "Build 05: Self-balancing
 5. **How it connects:** inputs from and outputs to neighboring nodes; its place in the Signal Chain.
 6. Where it shows up in real robots (links to teardowns).
 7. Try it: an interactive demo.
-8. Build it: a bench exercise or a link to a Build (optional).
+8. Build it: a bench exercise (optional).
 9. Common mistakes.
 10. Go deeper: books, papers, courses.
 11. Sources.
@@ -349,7 +333,6 @@ Same rule as Sand to Tetris: every date, number and claim about a real robot or 
 | Compare pages | 15 |
 | Robot teardowns | 14 |
 | Roadmaps | 8 |
-| Builds | 12 |
 | Demos | ~60 |
 
 ## 11. Suggested release order
@@ -359,7 +342,7 @@ Same rule as Sand to Tetris: every date, number and claim about a real robot or 
 3. **Hardware:** Tier 1 + Compare X1–X8 (motors, power, sensors, compute, buses, drivers).
 4. **Low level + control:** Tier 2, Tier 3 core (M1–M5, M10), X9.
 5. **Three flagship teardowns + roadmaps:** Mars rover, quadruped, humanoid.
-6. Then perception, intelligence, systems, remaining teardowns and Builds.
+6. Then perception, intelligence, systems and the remaining teardowns.
 
 ## 12. Decisions
 
@@ -372,5 +355,5 @@ Decided by the user, 2026-11-14:
 
 Still open:
 
-1. **Hands-on code:** should some nodes include in-browser coding exercises (PID, Kalman, A*, IK), or keep the site to reading + demos + real Builds?
+1. **Hands-on code:** should some nodes include in-browser coding exercises (PID, Kalman, A*, IK), or keep the site to reading + demos?
 2. **Flagship robots:** start with Mars rover, quadruped and humanoid, or different ones?

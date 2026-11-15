@@ -222,7 +222,7 @@ describe("the real content", () => {
 
   it("every citation and node link in every page resolves, and both languages cite the same sources", () => {
     const citedBy: Record<string, Record<string, string[]>> = {};
-    for (const dir of ["nodes", "hardware", "robots", "roadmaps", "builds"]) {
+    for (const dir of ["nodes", "hardware", "robots", "roadmaps"]) {
       for (const lang of ["en", "mn"]) {
         const loaded = loadRefs(root, lang);
         for (const f of readdirSync(`${root}content/${dir}/${lang}`, {

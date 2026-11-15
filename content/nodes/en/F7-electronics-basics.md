@@ -15,7 +15,7 @@ Between the battery and the motors sits a small world of circuits: power for the
 
 ## Power
 
-The power a part uses is the voltage across it times the current through it, P = IV, and a resistor turns all of it into heat.[@electric-power] That is why a resistor, a regulator or a motor driver carrying a large current gets hot, and why parts are rated for how many watts they can shed.
+The power a part uses is the voltage across it times the current through it, P = IV, and a resistor turns all of it into heat.[@electric-power] That is why a resistor, a [[~voltage-regulator|regulator]] or a motor driver carrying a large current gets hot, and why parts are rated for how many watts they can shed.
 
 ## The parts on every board
 

@@ -109,7 +109,7 @@ test.describe("Hardware", () => {
     expect(axe.violations.map((v) => v.id)).toEqual([]);
   });
 
-  test("topic and Build pages link the parts' pages", async ({ page }) => {
+  test("topic pages link the parts' pages", async ({ page }) => {
     await page.goto("en/node/electric-motors/");
     const row = page
       .locator(".meta dt", { hasText: "Hardware" })
@@ -121,11 +121,6 @@ test.describe("Hardware", () => {
     ]);
     await row.getByRole("link", { name: "Stepper motor" }).click();
     await expect(page).toHaveURL(/\/en\/hardware\/motors\/stepper\/$/);
-    await page.goto("en/builds/rocker-bogie-rover/");
-    await page
-      .getByRole("link", { name: "Hardware: Brushed DC gearmotor" })
-      .click();
-    await expect(page).toHaveURL(/\/en\/hardware\/motors\/gearmotor\/$/);
   });
 
   test("hovering a card plays its drawing's motion; reduced motion keeps it still", async ({

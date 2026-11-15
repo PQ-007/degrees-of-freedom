@@ -1,12 +1,10 @@
 ---
-// Robots (the user, 2026-11-15: "combine robots and builds tab"): one page
-// with two rows of picture cards, like Hardware. First the teardowns (how
-// kinds of robots work), then the Builds (robots to make, easy to hard). The
-// old /builds/ address forwards to the Builds row (#builds). More arrive as
-// they are written (CONTENT_PLAN.md §5–6).
+// Robots: kinds of robots taken apart, as a row of picture cards like
+// Hardware. (The Builds that shared this page were removed by the user on
+// 2026-11-16.) More arrive as they are written (CONTENT_PLAN.md §5).
 import Base from "../../../layouts/Base.astro";
 import Carousel from "../../../components/Carousel.astro";
-import { getBuilds, getRobots } from "../../../lib/atlas";
+import { getRobots } from "../../../lib/atlas";
 import { languages, t, type Lang } from "../../../lib/i18n";
 
 export function getStaticPaths() {
@@ -15,7 +13,6 @@ export function getStaticPaths() {
 
 const lang = Astro.params.lang as Lang;
 const robots = await getRobots(lang);
-const builds = await getBuilds(lang);
 // On a card the teardown drawing shows without its numbered callouts.
 const bare = (svg: string) =>
   svg.replace(/<g class="callouts">[\s\S]*<\/g>\s*(?=<\/svg>)/, "");
@@ -29,24 +26,11 @@ const bare = (svg: string) =>
       id="teardowns"
       lang={lang}
       heading={t(lang, "robots.how")}
-      summary={t(lang, "robots.howLead")}
       items={robots.map((r) => ({
         url: r.url,
         title: `${r.data.id} · ${r.title}`,
         summary: r.summary,
         svg: bare(r.svg),
-      }))}
-    />
-    <Carousel
-      id="builds"
-      lang={lang}
-      heading={t(lang, "builds.title")}
-      summary={t(lang, "builds.lead")}
-      items={builds.map((b) => ({
-        url: b.url,
-        title: `${b.build.id} · ${b.title}`,
-        summary: b.summary,
-        svg: b.svg,
       }))}
     />
   </div>

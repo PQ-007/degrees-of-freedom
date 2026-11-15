@@ -16,7 +16,7 @@ On flat, firm ground, wheels are the fastest and most efficient way to move.[@lo
 - **[[~differential-drive|Differential drive]]:** two driven wheels on one axle, plus a caster to keep the robot level. It steers by turning its wheels at different speeds and can spin in place. It is perhaps the simplest wheeled robot.[@mr-diff-drive]
 - **Car-like (Ackermann) steering:** two steered front wheels and two fixed rear ones. The front wheels turn by different angles so that none of them slips, and the car has a tightest turn it can make.[@mr-ackermann]
 - **[[~omnidirectional|Omnidirectional]] wheels:** omniwheels and mecanum wheels carry free rollers round their rims, so the robot can slide sideways and move in any direction. With their small rollers they work best on hard, flat floors.[@mr-wheel-types]
-- **[[~rocker-bogie|Rocker-bogie]]:** six wheels on a linkage that lets every wheel follow the ground. Perseverance uses it on Mars to drive over rocks about as big as its wheels.[@perseverance-components] See the [planetary rover](../../robots/planetary-rover/) and [Build 08](../../builds/rocker-bogie-rover/).
+- **[[~rocker-bogie|Rocker-bogie]]:** six wheels on a linkage that lets every wheel follow the ground. Perseverance uses it on Mars to drive over rocks about as big as its wheels.[@perseverance-components] See the [planetary rover](../../robots/planetary-rover/).
 
 ## Try it: steering with two wheels {#try}
 

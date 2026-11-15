@@ -5,7 +5,6 @@ import { languages, localePath, type Lang } from "./i18n";
 import { readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { parse } from "yaml";
-import { checkBuild, type Build } from "./builds";
 import { checkChain, type Stage } from "./chain";
 import { checkCompare, type CompareTable } from "./compare";
 import { checkHardware, figureName, type HardwareCategory } from "./hardware";
@@ -322,20 +321,17 @@ function loadRoadmaps() {
   roadmapsChecked ??= (async () => {
     const { nodes } = await load();
     const { robots } = await loadRobots();
-    const { builds } = await loadBuilds();
     const roadmaps = (await getCollection("roadmapData")).map(
       (e) => e.data as Roadmap,
     );
     const pages = await getCollection("roadmapPages");
     const needsOf = new Map(nodes.map((n) => [n.id, n.needs]));
     const robotIds = new Set(robots.map((r) => r.id));
-    const buildIds = new Set(builds.map((b) => b.id));
     const errors = roadmaps.flatMap((r) =>
       checkRoadmap(
         r,
         needsOf,
         robotIds,
-        buildIds,
         languages,
         pages
           .filter((p) => p.id.endsWith(`/${r.slug}`))
@@ -364,93 +360,6 @@ export async function getRoadmaps(lang: Lang): Promise<RoadmapPage[]> {
       title: entry.data.title,
       summary: entry.data.summary,
       url: localePath(base, lang, `roadmaps/${roadmap.slug}/`),
-      entry,
-    };
-  });
-}
-
-export interface BuildPage {
-  build: Build;
-  title: string;
-  summary: string;
-  /** The card's drawing, content/figures/build-<slug>.svg (inlined). */
-  svg: string;
-  url: string;
-  entry: CollectionEntry<"buildPages">;
-}
-
-let buildsChecked:
-  | Promise<{
-      builds: Build[];
-      pages: CollectionEntry<"buildPages">[];
-      svgs: Map<string, string>;
-    }>
-  | undefined;
-
-function loadBuilds() {
-  buildsChecked ??= (async () => {
-    const { nodes } = await load();
-    const { robots } = await loadRobots();
-    const { categories } = await loadHardware();
-    const builds = (await getCollection("buildData"))
-      .map((e) => e.data as Build)
-      .sort((a, b) => a.id.localeCompare(b.id));
-    const pages = await getCollection("buildPages");
-    const ids = {
-      nodes: new Set(nodes.map((n) => n.id)),
-      hardware: new Set(categories.flatMap((c) => c.types.map((t) => t.key))),
-      robots: new Set(robots.map((r) => r.id)),
-    };
-    const errors = builds.flatMap((b) =>
-      checkBuild(
-        b,
-        ids,
-        languages,
-        pages
-          .filter((p) => p.id.endsWith(`/${b.slug}`))
-          .map((p) => p.id.split("/")[0] ?? ""),
-      ),
-    );
-    // Each Build has a card drawing for the Robots page.
-    const svgs = new Map<string, string>();
-    for (const b of builds) {
-      try {
-        svgs.set(
-          b.slug,
-          readFileSync(
-            join(process.cwd(), "content/figures", `build-${b.slug}.svg`),
-            "utf8",
-          ),
-        );
-      } catch {
-        errors.push(
-          `builds/${b.slug}.yaml has no card drawing: add content/figures/build-${b.slug}.svg`,
-        );
-      }
-    }
-    if (errors.length > 0) {
-      throw new Error(
-        `The Builds have ${errors.length} problem(s):\n- ${errors.join("\n- ")}`,
-      );
-    }
-    return { builds, pages, svgs };
-  })();
-  return buildsChecked;
-}
-
-/** Every Build, in ID order, with its text in `lang`. */
-export async function getBuilds(lang: Lang): Promise<BuildPage[]> {
-  const { builds, pages, svgs } = await loadBuilds();
-  const base = import.meta.env.BASE_URL;
-  return builds.map((build) => {
-    const entry = pages.find((p) => p.id === `${lang}/${build.slug}`);
-    if (!entry) throw new Error(`${build.id} has no ${lang} page`); // checkBuild rules this out
-    return {
-      build,
-      title: entry.data.title,
-      summary: entry.data.summary,
-      svg: svgs.get(build.slug) ?? "",
-      url: localePath(base, lang, `builds/${build.slug}/`),
       entry,
     };
   });

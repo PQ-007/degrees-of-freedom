@@ -23,7 +23,6 @@ describe("interface strings", () => {
     "site.name",
     "nav.tree",
     "tree.title",
-    "build.roadmap",
     "demo.unit.deg",
     "demo.euler.preset.tau",
   ]);

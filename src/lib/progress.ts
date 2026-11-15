@@ -1,7 +1,7 @@
 // What the learner has ticked, kept in this browser only (localStorage, as in
-// Sand to Tetris; no accounts). Two lists: learned topics (roadmap checkboxes
-// and the node page's "Learned" share it) and done Build steps ("B08:3").
-// Pages stay in sync with each other and across open tabs.
+// Sand to Tetris; no accounts): learned topics (roadmap checkboxes and the
+// node page's "Learned" share it). Pages stay in sync with each other and
+// across open tabs.
 
 function store(key: string) {
   const event = `dof-change:${key}`;
@@ -46,5 +46,3 @@ const learnedStore = store("dof-learned");
 export const learned = learnedStore.read;
 export const setLearned = learnedStore.set;
 export const onLearnedChange = learnedStore.onChange;
-
-export const buildSteps = store("dof-build-steps");

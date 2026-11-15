@@ -8,7 +8,7 @@ Draft 2, 2026-11-14. The content is in `CONTENT_PLAN.md`; this file covers the t
 - **Simulation:** MuJoCo running in the browser (WebAssembly), wherever a demo needs real physics (the user, 2026-11-14).
 - **Look:** restrained neo-brutalism on Sand to Tetris's black and white, with cyberpunk accent colours only in fixed, meaningful places, a deep dark theme, and the review changes (hard shadows on what you press, grey in dark mode, unboxed reading column, little uppercase mono, separate data colours, compact tree nodes, drafting grid). Agreed by the user, 2026-11-14. Details in §4.
 - **Project name:** **Degrees of Freedom** (DOF), replacing "Sand to Robot" (the user, 2026-11-14). The repo and folder follow: `degrees-of-freedom`.
-- **Section name:** the hands-on section is **Builds** (was "Projects"; the user, 2026-11-14). Build IDs are `B01`–`B12`.
+- **Section name:** the hands-on section was **Builds** (was "Projects"; the user, 2026-11-14); the user removed Builds entirely on 2026-11-16.
 
 ## 1. What the site has to do
 
@@ -227,7 +227,7 @@ Not started: an empty square. Reading: a half-filled square. Learned: a filled s
 ### Responsive and accessible (same rules as Sand to Tetris)
 
 - No sideways page scroll at 360 px; wide tables, the tree and sim scenes scroll or scale inside their own frame.
-- Side panels fold into bars below ~1200 px (nav) and ~900 px (ToC); the header nav and language button fold into a Menu below 1100 px (the nav links no longer fit). Header (the user, 2026-11-14/15): Roadmap (the tech-tree page, renamed), Hardware (in place of Compare), Robots (teardowns and Builds as two rows of picture cards; the Builds tab was merged into it on 2026-11-15), Search. The Roadmaps tab was removed because its page repeated the robot one (a robot's roadmap is reached from its teardown and topics); the Signal chain tab was removed because F0, Hardware and the topics now cover its ground, and it is linked from the Hardware page, F0 and each topic that is one of its stages.
+- Side panels fold into bars below ~1200 px (nav) and ~900 px (ToC); the header nav and language button fold into a Menu below 1100 px (the nav links no longer fit). Header (the user, 2026-11-14/15): Roadmap (the tech-tree page, renamed), Hardware (in place of Compare), Robots (teardowns as a row of picture cards; the Builds tab was merged into it on 2026-11-15, and Builds were removed entirely on 2026-11-16), Search. The Roadmaps tab was removed because its page repeated the robot one (a robot's roadmap is reached from its teardown and topics); the Signal chain tab was removed because F0, Hardware and the topics now cover its ground, and it is linked from the Hardware page, F0 and each topic that is one of its stages.
 - Everything works from the keyboard, including the tree, demos and sim controls; every diagram has an `aria-label`, every state a text label; `prefers-reduced-motion` respected (sims start paused, hover shifts are turned off).
 - Playwright checks every page type × language × theme × 360/390/768/1024 px, plus axe and a contrast check of every token pair in use.
 
@@ -242,7 +242,7 @@ Not started: an empty square. Reading: a half-filled square. Learned: a filled s
 | M4 | Foundations (F0–F9) written, with demos and figures | Tier 0 is complete in English and Mongolian |
 | M5 | Tier 1 + Compare X1–X8 | Hardware section complete |
 | M6 | Signal Chain + three flagship teardowns + their roadmaps (with the RL-policy quadruped demo) | The "how it connects" story works end to end |
-| M7+ | Tiers 2–6, remaining compare pages, robots, Builds | Following `CONTENT_PLAN.md` §11 |
+| M7+ | Tiers 2–6, remaining compare pages, robots | Following `CONTENT_PLAN.md` §11 |
 
 ## 6. Decided 2026-11-14 (the user)
 

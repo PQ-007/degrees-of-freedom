@@ -7,7 +7,6 @@
 
 slug: mars-rover
 robot: R5
-build: B08
 
 stages:
   - key: foundations

@@ -11,4 +11,4 @@ The folded **Later** topics are for when your rover works and you want it to map
 
 ## Then build it {#build}
 
-Build 08, a small rocker-bogie rover (linked at the top of this page), puts most of the must topics to work: six gearmotors, a microcontroller, a battery and distance sensors or a camera. The planetary rover teardown shows what a full-size one is made of.
+A small rocker-bogie rover puts most of the must topics to work: six gearmotors, a microcontroller, a battery and distance sensors or a camera. The planetary rover teardown shows what a full-size one is made of.
