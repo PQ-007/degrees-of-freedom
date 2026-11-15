@@ -19,6 +19,7 @@ const pages = [
   { name: "node-f9", path: "{lang}/node/how-computers-work/" },
   { name: "node-c1", path: "{lang}/node/mechanisms-and-structure/" },
   { name: "node-c2", path: "{lang}/node/transmissions/" },
+  { name: "node-c3", path: "{lang}/node/locomotion-mechanisms/" },
   { name: "node-sim", path: "{lang}/node/classical-control/" },
   { name: "signal-chain", path: "{lang}/signal-chain/" },
   { name: "hardware-index", path: "{lang}/hardware/" },

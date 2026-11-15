@@ -1,0 +1,107 @@
+<!-- C3: six ways to move, from above. Left to right, top to bottom: a
+     differential drive (two driven wheels and a caster; it can spin in
+     place, accent arrow), a car with Ackermann steering (the front wheels
+     turned, the inner one more), mecanum wheels (rollers at 45°; it can
+     slide sideways, accent arrow), tracks, a four-legged walker (its feet in
+     the accent colour), and a quadrotor (neighbouring rotors spin opposite
+     ways, accent arrows). Wordless; the caption is in the page's text. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="400" viewBox="0 0 400 540" class="fig-locomotion">
+  <defs>
+    <marker id="lo-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="5" markerHeight="5" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" class="accent-fill" style="stroke:none"/>
+    </marker>
+  </defs>
+  <line x1="200" y1="14" x2="200" y2="526" class="dash"/>
+  <line x1="14" y1="180" x2="386" y2="180" class="dash"/>
+  <line x1="14" y1="360" x2="386" y2="360" class="dash"/>
+  <rect x="68.0" y="60.0" width="64" height="64" class="soft thick"/>
+  <rect x="52.0" y="72.0" width="14" height="40" class="ink-fill"/>
+  <rect x="134.0" y="72.0" width="14" height="40" class="ink-fill"/>
+  <circle cx="100" cy="114" r="6" class="thin"/>
+  <path d="M100,48 L94,58 L106,58 Z" class="ink-fill"/>
+  <path d="M130,34 A66,66 0 0 1 164,82" class="accent" marker-end="url(#lo-arrow)"/>
+  <path d="M70,150 A66,66 0 0 1 36,102" class="accent" marker-end="url(#lo-arrow)"/>
+  <rect x="270.0" y="34.0" width="60" height="116" class="soft thick"/>
+  <rect x="258.0" y="116.0" width="12" height="28" class="ink-fill"/>
+  <rect x="330.0" y="116.0" width="12" height="28" class="ink-fill"/>
+  <rect x="258.0" y="40.0" width="12" height="28" class="ink-fill" transform="rotate(-28 264 54)"/>
+  <rect x="330.0" y="40.0" width="12" height="28" class="ink-fill" transform="rotate(-18 336 54)"/>
+  <path d="M300,26 L294,36 L306,36 Z" class="ink-fill"/>
+  <path d="M288,18 Q274,6 250,8" class="accent" marker-end="url(#lo-arrow)"/>
+  <rect x="68.0" y="232.0" width="64" height="80" class="soft thick"/>
+  <rect x="50.0" y="224.0" width="16" height="36" class="soft thick"/>
+  <line x1="52.0" y1="236.0" x2="64.0" y2="224.0" class="thin"/>
+  <line x1="52.0" y1="244.0" x2="64.0" y2="232.0" class="thin"/>
+  <line x1="52.0" y1="252.0" x2="64.0" y2="240.0" class="thin"/>
+  <line x1="52.0" y1="260.0" x2="64.0" y2="248.0" class="thin"/>
+  <rect x="50.0" y="284.0" width="16" height="36" class="soft thick"/>
+  <line x1="52.0" y1="284.0" x2="64.0" y2="296.0" class="thin"/>
+  <line x1="52.0" y1="292.0" x2="64.0" y2="304.0" class="thin"/>
+  <line x1="52.0" y1="300.0" x2="64.0" y2="312.0" class="thin"/>
+  <line x1="52.0" y1="308.0" x2="64.0" y2="320.0" class="thin"/>
+  <rect x="134.0" y="224.0" width="16" height="36" class="soft thick"/>
+  <line x1="136.0" y1="224.0" x2="148.0" y2="236.0" class="thin"/>
+  <line x1="136.0" y1="232.0" x2="148.0" y2="244.0" class="thin"/>
+  <line x1="136.0" y1="240.0" x2="148.0" y2="252.0" class="thin"/>
+  <line x1="136.0" y1="248.0" x2="148.0" y2="260.0" class="thin"/>
+  <rect x="134.0" y="284.0" width="16" height="36" class="soft thick"/>
+  <line x1="136.0" y1="296.0" x2="148.0" y2="284.0" class="thin"/>
+  <line x1="136.0" y1="304.0" x2="148.0" y2="292.0" class="thin"/>
+  <line x1="136.0" y1="312.0" x2="148.0" y2="300.0" class="thin"/>
+  <line x1="136.0" y1="320.0" x2="148.0" y2="308.0" class="thin"/>
+  <path d="M100,220 L94,230 L106,230 Z" class="ink-fill"/>
+  <line x1="70" y1="334" x2="130" y2="334" class="accent" marker-start="url(#lo-arrow)" marker-end="url(#lo-arrow)"/>
+  <rect x="274.0" y="230.0" width="52" height="84" class="soft thick"/>
+  <rect x="248" y="216" width="24" height="112" rx="12" class="soft thick"/>
+  <line x1="248" y1="228" x2="272" y2="228" class="thin"/>
+  <line x1="248" y1="238" x2="272" y2="238" class="thin"/>
+  <line x1="248" y1="248" x2="272" y2="248" class="thin"/>
+  <line x1="248" y1="258" x2="272" y2="258" class="thin"/>
+  <line x1="248" y1="268" x2="272" y2="268" class="thin"/>
+  <line x1="248" y1="278" x2="272" y2="278" class="thin"/>
+  <line x1="248" y1="288" x2="272" y2="288" class="thin"/>
+  <line x1="248" y1="298" x2="272" y2="298" class="thin"/>
+  <line x1="248" y1="308" x2="272" y2="308" class="thin"/>
+  <line x1="248" y1="318" x2="272" y2="318" class="thin"/>
+  <rect x="328" y="216" width="24" height="112" rx="12" class="soft thick"/>
+  <line x1="328" y1="228" x2="352" y2="228" class="thin"/>
+  <line x1="328" y1="238" x2="352" y2="238" class="thin"/>
+  <line x1="328" y1="248" x2="352" y2="248" class="thin"/>
+  <line x1="328" y1="258" x2="352" y2="258" class="thin"/>
+  <line x1="328" y1="268" x2="352" y2="268" class="thin"/>
+  <line x1="328" y1="278" x2="352" y2="278" class="thin"/>
+  <line x1="328" y1="288" x2="352" y2="288" class="thin"/>
+  <line x1="328" y1="298" x2="352" y2="298" class="thin"/>
+  <line x1="328" y1="308" x2="352" y2="308" class="thin"/>
+  <line x1="328" y1="318" x2="352" y2="318" class="thin"/>
+  <path d="M300,222 L294,232 L306,232 Z" class="ink-fill"/>
+  <line x1="300" y1="210" x2="300" y2="190" class="accent" marker-end="url(#lo-arrow)"/>
+  <rect x="78.0" y="404.0" width="44" height="96" class="soft thick"/>
+  <path d="M78,416 L52,420 L44,398" class="thick" style="fill:none"/>
+  <circle cx="44" cy="398" r="6" class="accent-fill"/>
+  <path d="M78,488 L52,484 L44,506" class="thick" style="fill:none"/>
+  <circle cx="44" cy="506" r="6" class="accent-fill"/>
+  <path d="M122,416 L148,420 L156,398" class="thick" style="fill:none"/>
+  <circle cx="156" cy="398" r="6" class="accent-fill"/>
+  <path d="M122,488 L148,484 L156,506" class="thick" style="fill:none"/>
+  <circle cx="156" cy="506" r="6" class="accent-fill"/>
+  <path d="M100,396 L94,406 L106,406 Z" class="ink-fill"/>
+  <line x1="300" y1="452" x2="350" y2="402" class="thick"/>
+  <line x1="300" y1="452" x2="250" y2="402" class="thick"/>
+  <line x1="300" y1="452" x2="250" y2="502" class="thick"/>
+  <line x1="300" y1="452" x2="350" y2="502" class="thick"/>
+  <circle cx="350" cy="402" r="26" class="soft thin"/>
+  <circle cx="350" cy="402" r="4" class="ink-fill"/>
+  <path d="M333.1,395.8 A18,18 0 0 1 363.8,390.4" class="accent" marker-end="url(#lo-arrow)"/>
+  <circle cx="250" cy="402" r="26" class="soft thin"/>
+  <circle cx="250" cy="402" r="4" class="ink-fill"/>
+  <path d="M263.8,390.4 A18,18 0 0 0 233.1,395.8" class="accent" marker-end="url(#lo-arrow)"/>
+  <circle cx="250" cy="502" r="26" class="soft thin"/>
+  <circle cx="250" cy="502" r="4" class="ink-fill"/>
+  <path d="M233.1,495.8 A18,18 0 0 1 263.8,490.4" class="accent" marker-end="url(#lo-arrow)"/>
+  <circle cx="350" cy="502" r="26" class="soft thin"/>
+  <circle cx="350" cy="502" r="4" class="ink-fill"/>
+  <path d="M363.8,490.4 A18,18 0 0 0 333.1,495.8" class="accent" marker-end="url(#lo-arrow)"/>
+  <rect x="285.0" y="437.0" width="30" height="30" class="soft thick"/>
+  <path d="M300,428 L294,438 L306,438 Z" class="ink-fill"/>
+</svg>

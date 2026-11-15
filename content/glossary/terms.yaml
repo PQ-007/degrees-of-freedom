@@ -405,6 +405,24 @@
     en: The small play between gear teeth. The output can move a little before the gears catch, which makes precise positioning harder.
     mn: Арааны шүднүүдийн хоорондох бага зэргийн чөлөө. Араа зуугдахаас өмнө гаралт бага зэрэг хөдөлж чаддаг тул нарийн байрлал барихад хэцүү болгодог.
   see: [gear-ratio]
+- id: differential-drive
+  node: C3
+  term:
+    en: Differential drive
+    mn: Differential drive
+  def:
+    en: Steering with two driven wheels on one axle and no steering joint. Equal speeds go straight, different speeds curve, opposite speeds spin the robot in place.
+    mn: Нэг тэнхлэг дээрх хоёр хөтлөгч дугуйгаар, жолооны үегүйгээр жолоодох. Адил хурдтай бол шулуун, өөр хурдтай бол муруй, эсрэг хурдтай бол робот байрандаа эргэнэ.
+  see: [omnidirectional]
+- id: omnidirectional
+  node: C3
+  term:
+    en: Omnidirectional
+    mn: Бүх чиглэлт
+  def:
+    en: Able to move in any direction on the ground, sideways included, without turning first. Omniwheels and mecanum wheels make a robot omnidirectional.
+    mn: Эхлээд эргэлгүйгээр хажуу тийш ч гэсэн газар дээр дурын чиглэлд хөдөлж чадах. Omni дугуй ба mecanum дугуй роботыг бүх чиглэлт болгодог.
+  see: [differential-drive]
 - id: rocker-bogie
   node: C3
   term:

@@ -1202,3 +1202,65 @@
     - title: "Ball screw efficiency (THK FAQ)"
       url: https://www.thk.com/eu/en/products/faq/ball_screw/-/0089/modal.html
   checked: web, 2026-11-15
+
+- id: mr-wheel-types
+  claim: >-
+    Wheeled mobile robots are omnidirectional or nonholonomic. Conventional
+    wheels roll without sideways slip, so a car-like robot can't move directly
+    sideways, yet it can still reach any position and heading on an open
+    plane. Omniwheels and mecanum wheels have free rollers round the rim that
+    allow sideways sliding, so the chassis can move in any direction; they
+    are not steered, need at least three wheels, and with their small rollers
+    work best on hard, flat ground.
+  sources:
+    - title: "Modern Robotics: Mechanics, Planning, and Control, sections 13.1 and 13.2 (K. M. Lynch and F. C. Park, Cambridge University Press, 2017; free preprint from the authors)"
+      url: https://hades.mech.northwestern.edu/index.php/Modern_Robotics
+  checked: web (the preprint PDF), 2026-11-15
+
+- id: mr-diff-drive
+  claim: >-
+    A differential-drive robot has two independently driven wheels on the
+    same axis plus casters or sliders that keep it level; it is perhaps the
+    simplest wheeled robot, can spin in place by turning its wheels opposite
+    ways, and its body turns at r(u_R − u_L)/2d while moving forward at
+    r(u_R + u_L)/2. Casters are often not suited to outdoor use.
+  sources:
+    - title: "Modern Robotics: Mechanics, Planning, and Control, section 13.3.1.2 (K. M. Lynch and F. C. Park, Cambridge University Press, 2017; free preprint from the authors)"
+      url: https://hades.mech.northwestern.edu/index.php/Modern_Robotics
+  checked: web (the preprint PDF), 2026-11-15
+
+- id: mr-ackermann
+  claim: >-
+    A car has two steered front wheels and two fixed rear wheels; Ackermann
+    steering turns the front wheels by different angles so that all wheels
+    roll without slipping, about a centre of rotation on the line through the
+    rear wheels. A car has a minimum turning radius.
+  sources:
+    - title: "Modern Robotics: Mechanics, Planning, and Control, section 13.3.1.3 (K. M. Lynch and F. C. Park, Cambridge University Press, 2017; free preprint from the authors)"
+      url: https://hades.mech.northwestern.edu/index.php/Modern_Robotics
+  checked: web (the preprint PDF), 2026-11-15
+
+- id: locomotion-review
+  claim: >-
+    A review comparing ground robots' locomotion rates wheels high in speed
+    and energy efficiency but low in obstacle crossing, stair climbing and on
+    soft or uneven ground; tracks good on soft and uneven ground thanks to
+    their large contact surface, but slower and using more energy than
+    wheels; legs high in obstacle crossing, stairs and uneven ground, but low
+    in energy efficiency (static walking) and high in mechanical and control
+    complexity.
+  sources:
+    - title: "L. Bruzzone and G. Quaglia, Review article: locomotion systems for ground mobile robots in unstructured environments, Mechanical Sciences 3, 49–62, 2012 (open access)"
+      url: https://ms.copernicus.org/articles/3/49/2012/
+  checked: web (the PDF, section 3.2 and table 2), 2026-11-15
+
+- id: quadcopter-rotors
+  claim: >-
+    A quadcopter's four rotors are arranged in a cross, two spinning
+    clockwise and two anticlockwise; the opposing rotation cancels the
+    turning torque, and controlling each rotor's speed changes the drone's
+    altitude, pitch, roll and yaw.
+  sources:
+    - title: "Quadcopter physical characteristics (MathWorks, Aerospace Blockset documentation)"
+      url: https://www.mathworks.com/help/aeroblks/quadcopter-physical-characteristics.html
+  checked: web, 2026-11-15

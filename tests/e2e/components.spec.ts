@@ -94,3 +94,50 @@ test.describe("C2 Transmissions", () => {
     expect(axe.violations.map((v) => v.id)).toEqual([]);
   });
 });
+
+test.describe("C3 Locomotion mechanisms", () => {
+  test("equal speeds go straight, opposite speeds spin in place, one stopped wheel pivots", async ({
+    page,
+  }) => {
+    await page.goto("en/node/locomotion-mechanisms/#try");
+    const demo = page.locator("drive-demo");
+    const out = demo.locator(".sim-readouts");
+    await expect(out).toContainText("Turning radius0.45 m, to the left");
+    const left = demo.getByLabel("Left wheel speed");
+    const right = demo.getByLabel("Right wheel speed");
+    await left.fill("0.3");
+    await expect(out).toContainText("Turning radiusnone: straight on");
+    await expect(demo.locator(".icr line")).toHaveCount(0);
+    await left.fill("-0.3");
+    await expect(out).toContainText("Turning radius0: spins in place");
+    await expect(out).toContainText("Forward speed0.00 m/s");
+    await left.fill("0");
+    await expect(out).toContainText("Turning radius0.15 m, to the left");
+    await expect(demo.locator(".icr line")).toHaveCount(2);
+    await left.fill("0.3");
+    await right.fill("0");
+    await expect(out).toContainText("Turning radius0.15\u00a0m, to the right");
+  });
+
+  test("the drawings are described, and the page passes axe on a phone", async ({
+    page,
+  }) => {
+    await page.setViewportSize({ width: 360, height: 800 });
+    await page.goto("mn/node/locomotion-mechanisms/#try");
+    await page.locator("drive-demo .demo-drive").waitFor();
+    await expect(page.locator(".fig svg")).toHaveAttribute(
+      "aria-label",
+      /дрон/,
+    );
+    await page.locator("details.deeper summary").click();
+    await expect(page.locator("details.deeper .katex-display")).toHaveCount(3);
+    const overflow = await page.evaluate(
+      () =>
+        document.documentElement.scrollWidth -
+        document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+    const axe = await new AxeBuilder({ page }).analyze();
+    expect(axe.violations.map((v) => v.id)).toEqual([]);
+  });
+});
