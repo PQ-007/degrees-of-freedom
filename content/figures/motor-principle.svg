@@ -1,0 +1,30 @@
+<!-- F6: how a motor turns, seen along the motor's axis. Between the N and
+     S poles the field B runs left to right. A loop of wire, seen edge-on,
+     carries current out of the page on its left wire (dot) and into the page
+     on its right wire (cross). The field pushes the left wire up and the
+     right wire down (F), turning the loop clockwise about its axis. Maths-only
+     labels; the caption is in the page's text. -->
+<svg xmlns="http://www.w3.org/2000/svg" width="560" viewBox="0 0 560 280" class="fig-motor">
+  <rect x="20" y="60" width="90" height="160" rx="4" class="soft thick"/>
+  <text x="56" y="146">N</text>
+  <rect x="450" y="60" width="90" height="160" rx="4" class="soft thick"/>
+  <text x="488" y="146">S</text>
+  <line x1="118" y1="84" x2="431.0" y2="84.0" class="thin"/><path d="M442,84 L431.0,90.0 L431.0,78.0 Z" class="ink-fill"/>
+  <line x1="118" y1="240" x2="431.0" y2="240.0" class="thin"/><path d="M442,240 L431.0,246.1 L431.0,233.9 Z" class="ink-fill"/>
+  <text x="424" y="76">B</text>
+  <line x1="201.7" y1="156.6" x2="358.3" y2="123.4" class="accent"/>
+  <circle cx="280" cy="140" r="5" class="ink-fill"/>
+  <circle cx="201.7" cy="156.6" r="13" class="soft thick"/>
+  <circle cx="201.7" cy="156.6" r="3.5" class="ink-fill"/>
+  <circle cx="358.3" cy="123.4" r="13" class="soft thick"/>
+  <line x1="350.3" y1="115.4" x2="366.3" y2="131.4" class="thick"/>
+  <line x1="350.3" y1="131.4" x2="366.3" y2="115.4" class="thick"/>
+  <text x="171.7" y="186.6">I</text>
+  <text x="378.3" y="153.4">I</text>
+  <line x1="202" y1="142" x2="202.0" y2="98.0" class="thick"/><path d="M202,87 L208.1,98.0 L195.9,98.0 Z" class="ink-fill"/>
+  <text x="209.7" y="100.6">F</text>
+  <line x1="358" y1="138" x2="358.0" y2="182.0" class="thick"/><path d="M358,193 L351.9,182.0 L364.1,182.0 Z" class="ink-fill"/>
+  <text x="366.3" y="185.4">F</text>
+  <path d="M246,100 A52,52 0 0 1 314,100" class="thick"/>
+  <path d="M314,100 L302,98 L311,109 Z" class="ink-fill"/>
+</svg>

@@ -62,6 +62,24 @@
     en: The force between touching surfaces that resists sliding. It usually takes more force to start something sliding than to keep it sliding.
     mn: Шүргэлцэж буй гадаргуунуудын хоорондох, гулсалтыг эсэргүүцэх хүч. Ихэвчлэн гулсуулж эхлэхэд гулсуулсаар байхаас илүү их хүч хэрэгтэй.
   see: [inertia]
+- id: induction
+  node: F6
+  term:
+    en: Electromagnetic induction
+    mn: Цахилгаан соронзон индукц
+  def:
+    en: A voltage made in a coil when the magnetic field through it changes, as when a magnet moves in or out. The faster the change and the more turns, the bigger the voltage.
+    mn: Ороомгоор нэвтрэх соронзон орон өөрчлөгдөхөд, жишээ нь соронз орж гарахад ороомогт үүсэх хүчдэл. Өөрчлөлт хурдан, ороодос олон байх тусам хүчдэл их.
+  see: [back-emf]
+- id: back-emf
+  node: F6
+  term:
+    en: Back EMF
+    mn: Эсрэг ЦХХ (back EMF)
+  def:
+    en: The voltage a spinning motor makes against its own supply. It is zero at rest and grows with speed, so a motor draws the most current when it starts or stalls.
+    mn: Эргэж буй хөдөлгүүрийн өөрийн тэжээлийн эсрэг үүсгэх хүчдэл. Зогсож байхад тэг, хурдтай хамт өсдөг тул хөдөлгүүр асах эсвэл зогсох үедээ хамгийн их гүйдэл татдаг.
+  see: [induction, motor-driver]
 - id: ground
   node: F7
   term:

@@ -699,3 +699,76 @@
     - title: "CODATA value: standard acceleration of gravity (NIST)"
       url: https://physics.nist.gov/cgi-bin/cuu/Value?gn
   checked: web, 2026-11-15
+
+- id: current-def
+  claim: >-
+    Electrical current is the rate at which charge flows, I = dQ/dt; one
+    ampere is one coulomb of charge passing per second.
+  sources:
+    - title: "University Physics Volume 2, section 9.1: Electrical Current (OpenStax)"
+      url: https://openstax.org/books/university-physics-volume-2/pages/9-1-electrical-current
+  checked: web, 2026-11-15
+
+- id: magnetic-force-wire
+  claim: >-
+    A straight wire carrying current I in a uniform magnetic field B feels a
+    force F = I l × B, of magnitude I l B sin θ, its direction given by a
+    right-hand rule.
+  sources:
+    - title: "University Physics Volume 2, section 11.4: Magnetic Force on a Current-Carrying Conductor (OpenStax)"
+      url: https://openstax.org/books/university-physics-volume-2/pages/11-4-magnetic-force-on-a-current-carrying-conductor
+  checked: web, 2026-11-15
+
+- id: current-loop-motor
+  claim: >-
+    A current loop in a magnetic field feels a torque of magnitude
+    N I A B sin θ; motors are the most common application of magnetic force on
+    current-carrying wires: the torque turns a shaft, and reversing the
+    current at set points keeps it turning one way, converting electrical
+    energy into mechanical work.
+  sources:
+    - title: "University Physics Volume 2, section 11.5: Force and Torque on a Current Loop (OpenStax)"
+      url: https://openstax.org/books/university-physics-volume-2/pages/11-5-force-and-torque-on-a-current-loop
+  checked: web, 2026-11-15
+
+- id: faraday-law
+  claim: >-
+    Faraday's law: the emf induced in a coil of N turns is ε = −N dΦ/dt, where
+    the magnetic flux Φ measures the field through the coil's area; the
+    faster the flux changes, the greater the emf. An emf is induced when a bar
+    magnet is pushed into or out of a coil.
+  sources:
+    - title: "University Physics Volume 2, section 13.1: Faraday's Law (OpenStax)"
+      url: https://openstax.org/books/university-physics-volume-2/pages/13-1-faradays-law
+  checked: web, 2026-11-15
+
+- id: lenz-law
+  claim: >-
+    Lenz's law: the induced emf drives a current that always opposes the
+    change in magnetic flux.
+  sources:
+    - title: "University Physics Volume 2, section 13.2: Lenz's Law (OpenStax)"
+      url: https://openstax.org/books/university-physics-volume-2/pages/13-2-lenzs-law
+  checked: web, 2026-11-15
+
+- id: back-emf
+  claim: >-
+    A running motor generates its own emf, the back emf, which opposes the
+    emf driving it; it is zero when the motor is not turning and grows in
+    proportion to its angular velocity, so the motor draws its maximum current
+    when it is on but not turning; under a load it slows, the back emf drops
+    and more current flows, and too low a speed can overheat it.
+  sources:
+    - title: "University Physics Volume 2, section 13.6: Electric Generators and Back Emf (OpenStax)"
+      url: https://openstax.org/books/university-physics-volume-2/pages/13-6-electric-generators-and-back-emf
+  checked: web, 2026-11-15
+
+- id: hall-effect
+  claim: >-
+    In the Hall effect, a magnetic field deflects the moving charges in a
+    current-carrying strip, producing a voltage across it; the Hall effect can
+    be used to measure magnetic fields.
+  sources:
+    - title: "University Physics Volume 2, section 11.6: The Hall Effect (OpenStax)"
+      url: https://openstax.org/books/university-physics-volume-2/pages/11-6-the-hall-effect
+  checked: web, 2026-11-15
